@@ -1,0 +1,13 @@
+ktor:
+  deployment:
+    port: 8080
+  application:
+    modules:
+      - main.SerializationKt.configureSerialization
+      - main.ExposedKt.configureExposed
+      - main.RoutingKt.configureRouting
+      - main.AppKt.configureApp
+postgres:
+  url: jdbc:postgresql://localhost:5432/BSI
+  user: postgres
+  password: 1234
