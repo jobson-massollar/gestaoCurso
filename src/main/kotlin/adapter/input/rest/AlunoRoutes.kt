@@ -32,6 +32,6 @@ fun Routing.alunoRoutes() {
     }
 
     get("/alunos/{matricula}") {
-        val matricula = call.parameters["matricula"] ?: ""
+        //val matricula = call.parameters["matricula"] ?: ""
     }
 }

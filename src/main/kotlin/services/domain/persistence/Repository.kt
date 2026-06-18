@@ -43,7 +43,7 @@ abstract class Repository<T: Entity, S: IDAO<V>, V: EntityDTO>: IRepository<T> {
     override fun findAll(): List<T> =
         toEntityList(dao.findAll())
 
-    protected fun toEntityList(dtos: List<out V>): List<T> = dtos.map {
+    protected fun toEntityList(dtos: List<V>): List<T> = dtos.map {
         val c = createEntity(it)
         c.id = it.id
         c

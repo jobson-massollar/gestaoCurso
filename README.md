@@ -1,4 +1,4 @@
-# gestao
+# Gestao
 
 This project was created using the [Ktor Project Generator](https://start.ktor.io).
 
@@ -12,14 +12,14 @@ Here are some useful links to get you started:
 
 Here's a list of features included in this project:
 
-| Name                                                                                  | Description                                                                        |
-|---------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
-| [Static Content](https://start.ktor.io/p/io.ktor/server-static-content)               | Serves static files from defined locations                                         |
-| [Content Negotiation](https://start.ktor.io/p/io.ktor/server-content-negotiation)     | Provides automatic content conversion according to Content-Type and Accept headers |
+| Name                                                     | Description                                                                        |
+|----------------------------------------------------------|------------------------------------------------------------------------------------|
+| [Static Content](https://start.ktor.io/p/io.ktor/server-static-content) | Serves static files from defined locations                                         |
+| [Content Negotiation](https://start.ktor.io/p/io.ktor/server-content-negotiation) | Provides automatic content conversion according to Content-Type and Accept headers |
 | [kotlinx.serialization](https://start.ktor.io/p/io.ktor/server-kotlinx-serialization) | Handles JSON serialization using kotlinx.serialization library                     |
-| [Exposed](https://start.ktor.io/p/org.jetbrains/server-exposed)                       | Adds Exposed database to your application                                          |
-| [PostgreSQL](https://start.ktor.io/p/org.jetbrains/server-postgres)                   | Adds Postgres database support                                                     |
-| [Mustache](https://start.ktor.io/p/io.ktor/server-mustache)                           | Serves HTML content using Mustache template engine                                 |
+| [Exposed](https://start.ktor.io/p/org.jetbrains/server-exposed) | Adds Exposed database to your application                                          |
+| [PostgreSQL](https://start.ktor.io/p/org.jetbrains/server-postgres) | Adds Postgres database support                                                     |
+| [HTMX](https://htmx.org/)  | Handles page requests and responses                                                |
 
 ## Building & Running
 

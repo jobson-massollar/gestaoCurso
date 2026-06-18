@@ -14,6 +14,6 @@ fun connectToDatabase(url: String, user: String, password: String) =
             transaction(it) { exec("SELECT 1") }
         }
         true
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         false
     }

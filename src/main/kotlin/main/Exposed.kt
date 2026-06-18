@@ -13,6 +13,6 @@ fun Application.configureExposed() {
     }
 
     if (! connectToDatabase(url, user, password)) {
-        throw IllegalArgumentException("Database connection errors: $url");
+        throw IllegalArgumentException("Database connection errors: $url")
     }
 }

@@ -30,7 +30,7 @@ fun FlowContent.alunosList(alunos: List<Aluno>, currentSorting: String, currentF
         name = "alunos"
         hiddenInput {
             name = "sort"
-            value = "$currentSorting"
+            value = currentSorting
         }
         div(classes = "mb-4 shadow-sm rounded-box border border-base-content/50 bg-base-200 flex items-center") {
             label(classes = "ml-4 mt-2 mb-2") { +"Alunos:" }
@@ -63,7 +63,7 @@ fun FlowContent.alunosList(alunos: List<Aluno>, currentSorting: String, currentF
                 name = "search"
                 size = "15"
                 maxLength = "15"
-                value = "$search"
+                value = search
                 autoFocus = true
                 onFocus = "this.selectionStart = this.selectionEnd = this.value.length;"
             }
@@ -89,11 +89,10 @@ fun FlowContent.alunosList(alunos: List<Aluno>, currentSorting: String, currentF
                 }
                 alunos.forEach {
                     tr(classes = "hover:bg-accent hover:text-base-100") {
-                        td { +"${it.matricula}" }
-                        td { +"${it.nome}" }
-                        td { +"${it.versao}" }
-                        td { +"${it.email}" }
-                        td { +"${it.evasao.take(40)}" }
+                        td { +it.matricula }
+                        td { +it.nome }
+                        td { +it.versao }
+                        td { +it.evasao.take(40) }
                         td(classes = "gap-4") {
                             smallButton("Detalhes", $"/alunos/${it.matricula}", "#main-container", !it.isAtivo)
                             smallButton("Histórico", $"/historico/${it.matricula}", "#main-container", !it.isAtivo)

@@ -18,7 +18,7 @@ fun FlowContent.historicoAluno(aluno: Aluno) {
                 }
             }
             tr {
-                for (s in inicio..fim) {
+                (inicio..fim).forEach {
                     td(classes = "border text-center") { +"todo" }
                 }
             }
