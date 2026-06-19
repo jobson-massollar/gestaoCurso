@@ -15,11 +15,12 @@ fun Routing.historicoRoutes() {
         val repoAluno = RepositoryFactory.get(AlunoRepository::class)
         val repoHistorico = RepositoryFactory.get(ItemHistoricoRepository::class)
         val aluno = repoAluno.findByMatricula(matricula)
-        val historico = repoHistorico.findAprovados(matricula).sortedBy { it.ano*10+it.periodo }
+        val historico = repoHistorico.findByMatricula(matricula).sortedBy { it.ano*10+it.periodo }
+        val histAprovados = repoHistorico.findAprovados(matricula).sortedBy { it.ano*10+it.periodo }
 
         if (aluno != null) {
             call.respondHtmlFragment(status = HttpStatusCode.OK) {
-                historicoAluno(aluno, historico)
+                historicoAluno(aluno, historico, histAprovados)
             }
         }
     }

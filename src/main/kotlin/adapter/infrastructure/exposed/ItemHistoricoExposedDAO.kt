@@ -1,10 +1,9 @@
 package adapter.infrastructure.exposed
 
-import kotlinx.html.Entities
 import model.APROVADO
 import model.APROVADO_SEM_NOTA
 import model.APROVEITAMENTO
-import model.DISPENSA
+import model.DISPENSA_SEM_NOTA
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
@@ -85,7 +84,7 @@ class ItemHistoricoExposedDAO: IItemHistoricoDAO {
                 .selectAll()
                 .where { ItensHistorico.matricula eq matricula and
                         ((ItensHistorico.situacao eq APROVADO) or
-                         (ItensHistorico.situacao eq DISPENSA) or
+                         (ItensHistorico.situacao eq DISPENSA_SEM_NOTA) or
                          (ItensHistorico.situacao eq APROVADO_SEM_NOTA) or
                          (ItensHistorico.situacao eq APROVEITAMENTO)) }
                 .map {
