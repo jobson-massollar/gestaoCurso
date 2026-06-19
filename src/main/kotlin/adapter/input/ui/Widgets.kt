@@ -8,6 +8,8 @@ import kotlinx.html.button
 import kotlinx.html.radioInput
 import kotlin.text.toInt
 
+fun Float.format(digits: Int) = "%.${digits}f".format(this)
+
 var HTMLTag.role: String
     get() = attributes["role"] ?: ""
     set(value) {

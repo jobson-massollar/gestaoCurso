@@ -1,7 +1,7 @@
 package adapter.input.rest
 
-import model.AlunoFilter
-import model.AlunoSorting
+import services.application.AlunoFilter
+import services.application.AlunoSorting
 
 const val ALUNO_SORTING_MATRICULA_ASC = "matricula"
 const val ALUNO_SORTING_MATRICULA_DESC = "-matricula"

@@ -1,6 +1,7 @@
-package model
+package services.application
 
 import main.collator
+import model.Aluno
 
 enum class AlunoSorting(val comparator: Comparator<Aluno>) {
     MATRICULA_ASCENDING(compareBy(collator) { it.matricula }),

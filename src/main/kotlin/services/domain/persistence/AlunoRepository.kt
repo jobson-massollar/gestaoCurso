@@ -1,20 +1,16 @@
 package services.domain.persistence
 
 import model.Aluno
-import model.AlunoFilter
+import services.application.AlunoFilter
 
-class AlunoRepository: Repository<Aluno, IAlunoDAO, AlunoDTO>() {
+class AlunoRepository: Repository<Aluno, IDAO.IAlunoDAO, AlunoDTO>() {
 
-    override val dao: IAlunoDAO = DAOFactory.getDAO(DAOFactory.Type.ALUNO)
-
-//    override fun createDTO(e: Aluno) = AlunoDTO.fromEntity(e)
-
-    override fun createEntity(dto: AlunoDTO) = AlunoDTO.toEntity(dto)
+    override val dao: IDAO.IAlunoDAO = DAOFactory.getDAO(DAOFactory.Type.ALUNO)
 
     fun findByFilter(filter: AlunoFilter, search: String) =
         when (filter) {
-            AlunoFilter.ALL -> toEntityList(dao.findAll(search))
-            AlunoFilter.ACTIVE -> toEntityList(dao.findAtivos(search))
+            AlunoFilter.ALL -> createEntityList(dao.findAll(search))
+            AlunoFilter.ACTIVE -> createEntityList(dao.findAtivos(search))
         }
 
     fun findByMatricula(matricula: String): Aluno? = createEntity(dao.findByMatricula(matricula) ?: return null)

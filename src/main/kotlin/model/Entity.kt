@@ -6,4 +6,6 @@ abstract class Entity {
     var id: Uuid? = null
 }
 
-abstract class EntityDTO(val id: Uuid?)
+abstract class EntityDTO<T:Entity>(val id: Uuid?) {
+    abstract fun toEntity(): T
+}

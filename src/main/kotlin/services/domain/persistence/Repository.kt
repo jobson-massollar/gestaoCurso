@@ -8,21 +8,25 @@ import kotlin.reflect.full.createInstance
 interface IRepository<T: Entity> {
 //    fun save(e: T)
 //    fun remove(e: T)
-    fun findAll(): List<T>
+//    fun findAll(): List<T>
 //    fun deleteAll()
 //    fun startBatchInsert(chunkSize: Int)
 //    fun batchInsert(e: T)
 //    fun endBatchInsert()
 }
 
-abstract class Repository<T: Entity, S: IDAO<V>, V: EntityDTO>: IRepository<T> {
+abstract class Repository<T: Entity, S: IDAO<T, V>, V: EntityDTO<T>>: IRepository<T> {
 
 //    private var chunkSize: Int = 0
 //    private var chunk: MutableList<V>? = null
 
     abstract val dao: S
-//    abstract fun createDTO(e: T): V
-    abstract fun createEntity(dto: V): T
+
+    fun createEntity(dto: V): T {
+        val c = dto.toEntity()
+        c.id = dto.id
+        return c
+    }
 
 //    override fun save(e: T) {
 //        if (e.id == null) {
@@ -40,13 +44,11 @@ abstract class Repository<T: Entity, S: IDAO<V>, V: EntityDTO>: IRepository<T> {
 //        }
 //    }
 
-    override fun findAll(): List<T> =
-        toEntityList(dao.findAll())
+//    override fun findAll(): List<T> =
+//        toEntityList(dao.findAll())
 
-    protected fun toEntityList(dtos: List<V>): List<T> = dtos.map {
-        val c = createEntity(it)
-        c.id = it.id
-        c
+    protected fun createEntityList(dtos: List<V>): List<T> = dtos.map {
+        it.toEntity()
     }.toList()
 
 

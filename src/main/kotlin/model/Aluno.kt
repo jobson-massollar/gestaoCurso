@@ -1,8 +1,12 @@
 package model
 
 import kotlinx.datetime.LocalDate
+import kotlin.math.min
 
 class Aluno private constructor(val matricula: String, val nome: String, val sexo: Char, val dataNasc: LocalDate?, val versao: String, val ingresso: String, val evasao: String, val dataEvasao: LocalDate?, val logradouro: String = "", val numero: String = "", val complemento: String = "", val bairro: String = "", val cidade: String = "", val cep: String = "", val telefone1: String = "", val telefone2: String = "", val email: String = ""): Entity() {
+
+    val semestreInicial = Semestre(matricula.take(4).toInt(), matricula[4].code - 48)
+    val semestreFinal = semestreInicial + (if (semestreInicial >= FIM_PANDEMIA) 17 else min(6, FIM_PANDEMIA - semestreInicial) + 17)
 
     companion object {
         fun of(matricula: String, nome: String, sexo: Char, dataNasc: LocalDate?, versao: String, ingresso: String, evasao: String, dataEvasao: LocalDate?, logradouro: String = "", numero: String = "", complemento: String = "", bairro: String = "", cidade: String = "", cep: String = "", telefone1: String = "", telefone2: String = "", email: String = "") =
