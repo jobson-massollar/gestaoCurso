@@ -1,3 +1,5 @@
+import org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier
+
 plugins {
     application
     alias(libs.plugins.kotlin.jvm)
@@ -36,4 +38,17 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.server.testHost)
+}
+
+dokka {
+    dokkaSourceSets.configureEach {
+        documentedVisibilities.set(
+            setOf(
+                VisibilityModifier.Public,
+                VisibilityModifier.Protected,
+                VisibilityModifier.Internal,
+                VisibilityModifier.Private
+            )
+        )
+    }
 }

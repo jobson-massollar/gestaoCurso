@@ -8,7 +8,6 @@ import model.ELETIVA
 import model.FIM_PANDEMIA
 import model.INICIO_PANDEMIA
 import model.ItemHistorico
-import model.MATRICULADO
 import model.OBRIGATORIA
 import model.OPTATIVA
 import model.Semestre
@@ -24,7 +23,7 @@ fun FlowContent.historicoAluno(aluno: Aluno,
     val aprovadasComplementares = aprovadas.filter  { it.tipo == COMPLEMENTAR }
     val aprovadasEletivas = aprovadas.filter  { it.tipo == ELETIVA }
 
-    cardDadosAluno(aluno)
+    cardDadosAluno(aluno, aprovadasObrigatorias, aprovadasOptativas, aprovadasComplementares, aprovadasEletivas)
 
     cardSemestres(aluno, historico)
 
@@ -47,14 +46,25 @@ fun FlowContent.historicoAluno(aluno: Aluno,
  * - Nome
  * - E-mail
  */
-private fun FlowContent.cardDadosAluno(aluno: Aluno) {
+private fun FlowContent.cardDadosAluno(
+    aluno: Aluno,
+    aprovadasObrigatorias: List<ItemHistorico>,
+    aprovadasOptativas: List<ItemHistorico>,
+    aprovadasComplementares: List<ItemHistorico>,
+    aprovadasEletivas: List<ItemHistorico>
+) {
 //    div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
 //
 //    }
     div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
         div(classes = "card-body") {
             h2(classes = "card-title") { +"${aluno.matricula} - ${aluno.nome}" }
-            p { +"Email: ${aluno.email}" }
+            p { +"✉: ${aluno.email}" }
+            hr(classes = "border-base-content/50") {  }
+            p { +"Obrigatórias: ${aprovadasObrigatorias.size} / ${aprovadasObrigatorias.sumOf { it.horas }}h" }
+            p { +"Optativas: ${aprovadasOptativas.size} / ${aprovadasOptativas.sumOf { it.horas }}h" }
+            p { +"Complementares: ${aprovadasComplementares.size} / ${aprovadasComplementares.sumOf { it.horas }}h" }
+            p { +"Eletivas: ${aprovadasEletivas.size} / ${aprovadasEletivas.sumOf { it.horas }}h" }
         }
     }
 }
@@ -64,6 +74,7 @@ private fun FlowContent.cardDadosAluno(aluno: Aluno) {
  * o último semestre possível. Para cada semestre apresenta informações conforme o [historico]:
  * - T para o semestre trancado
  * - An, Rn ou Mn para as n disciplinas aprovadas, reprovadas ou matriculadas, respectivamente
+ *
  * Além disso, os semestres que contam para a integralização são numerados como 1, 2, 3, ...
  */
 private fun FlowContent.cardSemestres(
@@ -184,10 +195,6 @@ private fun FlowContent.tableHistorico(title: String, historico: List<ItemHistor
         }
     }
 }
-
-
-
-
 
 private fun estiloSemestre(isPandemia: Boolean, label: String): String =
     when {
