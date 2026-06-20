@@ -1,6 +1,7 @@
 package services.domain.persistence
 
 import model.Aluno
+import model.Disciplina
 import model.Entity
 import model.EntityDTO
 import model.ItemHistorico
@@ -24,6 +25,12 @@ sealed interface IDAO<E: Entity, T: EntityDTO<E>> {
         fun findAll(): List<ItemHistoricoDTO>
         fun findAll(matricula: String): List<ItemHistoricoDTO>
         fun findAprovados(matricula: String): List<ItemHistoricoDTO>
+        fun findMatriculados(matricula: String): List<ItemHistoricoDTO>
+    }
+
+    interface IDisciplinaDAO: IDAO<Disciplina, DisciplinaDTO> {
+        fun findAll(): List<DisciplinaDTO>
+        fun findObrigatoriasFaltantes(matricula: String): List<DisciplinaDTO>
     }
 }
 
@@ -35,7 +42,7 @@ interface IDAOFactory {
 object DAOFactory: IDAOFactory {
 
     enum class Type {
-//        DISCIPLINA,
+        DISCIPLINA,
         ALUNO,
         HISTORICO,
 //        INSCRICAO,

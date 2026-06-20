@@ -19,7 +19,7 @@ object ExposedDAOFactory : IDAOFactory {
 
     override fun <T : IDAO<*, *>> getDAO(t: DAOFactory.Type): T =
         when (t) {
-//            DAOFactory.Type.DISCIPLINA -> DisciplinaExposedDAO() as T
+            DAOFactory.Type.DISCIPLINA -> DisciplinaExposedDAO() as T
             DAOFactory.Type.ALUNO -> AlunoExposedDAO() as T
             DAOFactory.Type.HISTORICO -> ItemHistoricoExposedDAO() as T
 //            DAOFactory.Type.INSCRICAO -> InscricaoExposedDAO() as T

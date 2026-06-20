@@ -69,7 +69,7 @@ fun FlowContent.alunosList(alunos: List<Aluno>, currentSorting: String, currentF
             }
             label(classes = "ml-auto mr-4") { +"Total: ${alunos.size}" }
         }
-        div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
+        div(classes = "→") {
             table(classes = "table table-zebra table-sm") {
                 thead {
                     tr {
@@ -92,6 +92,7 @@ fun FlowContent.alunosList(alunos: List<Aluno>, currentSorting: String, currentF
                         td { +it.matricula }
                         td { +it.nome }
                         td { +it.versao }
+                        td { +it.email }
                         td { +it.evasao.take(40) }
                         td(classes = "gap-4") {
                             smallButton("Detalhes", $"/alunos/${it.matricula}", "#main-container", !it.isAtivo)

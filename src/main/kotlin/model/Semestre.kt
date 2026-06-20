@@ -1,10 +1,23 @@
 package model
 
-val FIM_PANDEMIA = Semestre(2023, 1)
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+
+val INICIO_PANDEMIA = Semestre(2020, 1)
+val FIM_PANDEMIA = Semestre(2022, 2)
 
 class Semestre(private var _ano: Int, private var _semestre: Int): Comparable<Semestre> {
     val ano: Int get() = _ano
     val semestre: Int get() = _semestre
+
+    companion object {
+        val ATUAL by lazy {
+            val dt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+            Semestre(dt.year, if (dt.month.ordinal <= 6) 1 else 2)
+        }
+    }
 
     operator fun inc(): Semestre {
         _semestre++
@@ -49,28 +62,36 @@ class Semestre(private var _ano: Int, private var _semestre: Int): Comparable<Se
     }
 
     infix operator fun minus(other: Semestre): Int {
-        val n = _ano - other._ano + 1
+        val n = (_ano - other._ano + 1) * 2
 
-        return n + (if (_semestre == other._semestre) 0 else if (_semestre > other._semestre) 1 else -1)
+        return n + (if (_semestre > other._semestre) 0 else if (_semestre == other._semestre) -1 else -2)
     }
 
-//    operator fun rangeTo(other: Semestre): ClosedRange<Semestre> {
+    operator fun rangeTo(other: Semestre) = SemestreRange(Semestre(ano, semestre), Semestre(other.ano, other.semestre))
+//    : ClosedRange<Semestre> {
 //        return object: ClosedRange<Semestre> {
 //            override val start: Semestre = this@Semestre
 //            override val endInclusive: Semestre = other
 //        }
 //    }
 
-    operator fun rangeTo(other: Semestre): Iterator<Semestre> {
-        return object: Iterator<Semestre> {
-            val current = this@Semestre - 1
-            override fun next() = current.inc()
-            override fun hasNext() = current < other
-        }
-    }
-
     override fun compareTo(other: Semestre) =
         if (_ano == other._ano) _semestre - other._semestre else _ano - other._ano
 
     override fun toString() = "$_ano.$_semestre"
+}
+
+class SemestreRange(override val start: Semestre, override val endInclusive: Semestre) : ClosedRange<Semestre> {
+
+    operator fun iterator(): Iterator<Semestre> {
+        return object: Iterator<Semestre> {
+            val current = start
+            override fun next(): Semestre {
+                val next = Semestre(current.ano, current.semestre)
+                current.inc()
+                return next;
+            }
+            override fun hasNext() = current <= endInclusive
+        }
+    }
 }

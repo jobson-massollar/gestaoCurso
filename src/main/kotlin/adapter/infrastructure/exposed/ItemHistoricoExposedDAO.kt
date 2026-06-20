@@ -4,6 +4,7 @@ import model.APROVADO
 import model.APROVADO_SEM_NOTA
 import model.APROVEITAMENTO
 import model.DISPENSA_SEM_NOTA
+import model.MATRICULADO
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
@@ -87,6 +88,17 @@ class ItemHistoricoExposedDAO: IItemHistoricoDAO {
                          (ItensHistorico.situacao eq DISPENSA_SEM_NOTA) or
                          (ItensHistorico.situacao eq APROVADO_SEM_NOTA) or
                          (ItensHistorico.situacao eq APROVEITAMENTO)) }
+                .map {
+                    createDTO(it)
+                }.toList()
+        }
+
+    override fun findMatriculados(matricula: String): List<ItemHistoricoDTO> =
+        transaction {
+            ItensHistorico
+                .selectAll()
+                .where { ItensHistorico.matricula eq matricula and
+                         (ItensHistorico.situacao eq MATRICULADO) }
                 .map {
                     createDTO(it)
                 }.toList()

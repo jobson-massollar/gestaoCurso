@@ -11,4 +11,7 @@ class ItemHistoricoRepository: Repository<ItemHistorico, IDAO.IItemHistoricoDAO,
 
     fun findAprovados(matricula: String): List<ItemHistorico> =
         createEntityList(dao.findAprovados(matricula))
+
+    fun findMatriculados(matricula: String): List<ItemHistorico> =
+        createEntityList(dao.findMatriculados(matricula))
 }
