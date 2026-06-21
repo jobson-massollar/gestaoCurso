@@ -10,7 +10,7 @@ import model.INICIO_PANDEMIA
 import model.ItemHistorico
 import model.OBRIGATORIA
 import model.OPTATIVA
-import model.Semestre
+import model.Periodo
 
 fun FlowContent.historicoAluno(aluno: Aluno,
                                historico: List<ItemHistorico>,
@@ -25,7 +25,7 @@ fun FlowContent.historicoAluno(aluno: Aluno,
 
     cardDadosAluno(aluno, aprovadasObrigatorias, aprovadasOptativas, aprovadasComplementares, aprovadasEletivas)
 
-    cardSemestres(aluno, historico)
+    cardPeriodos(aluno, historico)
 
     tableDisciplinas("Obrigatórias que Faltam (${obrigatoriasFaltantes.size})", obrigatoriasFaltantes)
 
@@ -58,26 +58,30 @@ private fun FlowContent.cardDadosAluno(
 //    }
     div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
         div(classes = "card-body") {
-            h2(classes = "card-title") { +"${aluno.matricula} - ${aluno.nome}" }
+            h2(classes = "card-title") { +"${aluno.matricula} - ${aluno.nome} (${aluno.versao})" }
             p { +"✉: ${aluno.email}" }
             hr(classes = "border-base-content/50") {  }
             p { +"Obrigatórias: ${aprovadasObrigatorias.size} / ${aprovadasObrigatorias.sumOf { it.horas }}h" }
             p { +"Optativas: ${aprovadasOptativas.size} / ${aprovadasOptativas.sumOf { it.horas }}h" }
             p { +"Complementares: ${aprovadasComplementares.size} / ${aprovadasComplementares.sumOf { it.horas }}h" }
             p { +"Eletivas: ${aprovadasEletivas.size} / ${aprovadasEletivas.sumOf { it.horas }}h" }
+            hr(classes = "border-base-content/50") {  }
+            p { +"Trancamentos: ${aluno.trancamentos}"}
+            p { +"Prazo de extensão: ${aluno.prazoExtensao} período(s)"}
+            p { +"Período limite: ${aluno.periodoLimite.ano}.${aluno.periodoLimite.semestre}"}
         }
     }
 }
 
 /**
- * Apresenta o card com os semestres que o [aluno] tem para cursar, desde o semestre inicial até
- * o último semestre possível. Para cada semestre apresenta informações conforme o [historico]:
- * - T para o semestre trancado
+ * Apresenta o card com os períodos que o [aluno] tem para cursar, desde o período inicial até
+ * o último período possível. Para cada semestre apresenta informações conforme o [historico]:
+ * - T para o período trancado
  * - An, Rn ou Mn para as n disciplinas aprovadas, reprovadas ou matriculadas, respectivamente
  *
- * Além disso, os semestres que contam para a integralização são numerados como 1, 2, 3, ...
+ * Além disso, os períodos que contam para a integralização são numerados como 1, 2, 3, ...
  */
-private fun FlowContent.cardSemestres(
+private fun FlowContent.cardPeriodos(
     aluno: Aluno,
     historico: List<ItemHistorico>
 ) {
@@ -85,7 +89,7 @@ private fun FlowContent.cardSemestres(
         table(classes = "table") {
             thead {
                 tr(classes = "bg-base-300") {
-                    for (s in aluno.semestreInicial..aluno.semestreFinal) {
+                    for (s in aluno.periodoInicial..aluno.periodoFinal) {
                         th(classes = "text-center pl-2 pr-2") { +s.toString() }
                     }
                 }
@@ -96,11 +100,11 @@ private fun FlowContent.cardSemestres(
                 tr {
                     var i = mutableListOf(0)
                     val periodoPandemia = INICIO_PANDEMIA..FIM_PANDEMIA
-                    for (s in aluno.semestreInicial..aluno.semestreFinal) {
+                    for (s in aluno.periodoInicial..aluno.periodoFinal) {
                         val isPandemia = s in periodoPandemia
-                        val label = situacaoSemestre(s, historico.filter { it.ano == s.ano && it.periodo == s.semestre })
-                        numeracao.add(numeracaoSemestre(isPandemia, label, i))
-                        background.add(estiloSemestre(isPandemia, label))
+                        val label = situacaoPeriodo(s, historico.filter { it.ano == s.ano && it.periodo == s.semestre })
+                        numeracao.add(numeracaoPeriodo(isPandemia, label, i))
+                        background.add(estiloPeriodo(isPandemia, s > aluno.periodoLimite, label))
                         td(classes = "text-base text-center ${background.last()}") { +label }
                     }
                 }
@@ -196,23 +200,24 @@ private fun FlowContent.tableHistorico(title: String, historico: List<ItemHistor
     }
 }
 
-private fun estiloSemestre(isPandemia: Boolean, label: String): String =
+private fun estiloPeriodo(isPandemia: Boolean, isAcimaLImite: Boolean, label: String): String =
     when {
         isPandemia -> "bg-warning"
         label == "T" -> "bg-error"
+        isAcimaLImite -> ""
         label == "-" -> "bg-info"
         else -> "bg-success"
     }
 
-private fun numeracaoSemestre(isPandemia: Boolean, label: String, i: MutableList<Int>): String =
+private fun numeracaoPeriodo(isPandemia: Boolean, label: String, i: MutableList<Int>): String =
     when {
         isPandemia -> "P"
         label == "T" -> "-"
         else -> { i[0] = i[0] + 1; i[0].toString() }
     }
 
-private fun situacaoSemestre(semestre: Semestre, historico: List<ItemHistorico>): String {
-    if (historico.isEmpty()) return if (semestre > Semestre.ATUAL) "-" else "⚠"
+private fun situacaoPeriodo(periodo: Periodo, historico: List<ItemHistorico>): String {
+    if (historico.isEmpty()) return if (periodo > Periodo.ATUAL) "-" else "⚠"
     if (historico[0].isTrancamento) return "T"
 
     var m = 0

@@ -1,25 +1,24 @@
 package model
 
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 
-val INICIO_PANDEMIA = Semestre(2020, 1)
-val FIM_PANDEMIA = Semestre(2022, 2)
+val INICIO_PANDEMIA = Periodo(2020, 1)
+val FIM_PANDEMIA = Periodo(2022, 2)
 
-class Semestre(private var _ano: Int, private var _semestre: Int): Comparable<Semestre> {
+class Periodo(private var _ano: Int, private var _semestre: Int): Comparable<Periodo> {
     val ano: Int get() = _ano
     val semestre: Int get() = _semestre
 
     companion object {
         val ATUAL by lazy {
             val dt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            Semestre(dt.year, if (dt.month.ordinal <= 6) 1 else 2)
+            Periodo(dt.year, if (dt.month.ordinal <= 6) 1 else 2)
         }
     }
 
-    operator fun inc(): Semestre {
+    operator fun inc(): Periodo {
         _semestre++
         if (_semestre > 2) {
             _semestre = 1
@@ -28,7 +27,7 @@ class Semestre(private var _ano: Int, private var _semestre: Int): Comparable<Se
         return this
     }
 
-    operator fun dec(): Semestre {
+    operator fun dec(): Periodo {
         _semestre--
         if (_semestre < 1) {
             _semestre = 2
@@ -49,25 +48,25 @@ class Semestre(private var _ano: Int, private var _semestre: Int): Comparable<Se
         }
     }
 
-    infix operator fun plus(n: Int): Semestre {
-        val s = Semestre(_ano, _semestre)
+    infix operator fun plus(n: Int): Periodo {
+        val s = Periodo(_ano, _semestre)
         s += n
         return s
     }
 
-    infix operator fun minus(n: Int): Semestre {
-        val s = Semestre(_ano, _semestre)
+    infix operator fun minus(n: Int): Periodo {
+        val s = Periodo(_ano, _semestre)
         s -= n
         return s
     }
 
-    infix operator fun minus(other: Semestre): Int {
+    infix operator fun minus(other: Periodo): Int {
         val n = (_ano - other._ano + 1) * 2
 
         return n + (if (_semestre > other._semestre) 0 else if (_semestre == other._semestre) -1 else -2)
     }
 
-    operator fun rangeTo(other: Semestre) = SemestreRange(Semestre(ano, semestre), Semestre(other.ano, other.semestre))
+    operator fun rangeTo(other: Periodo) = PeriodoRange(Periodo(ano, semestre), Periodo(other.ano, other.semestre))
 //    : ClosedRange<Semestre> {
 //        return object: ClosedRange<Semestre> {
 //            override val start: Semestre = this@Semestre
@@ -75,19 +74,19 @@ class Semestre(private var _ano: Int, private var _semestre: Int): Comparable<Se
 //        }
 //    }
 
-    override fun compareTo(other: Semestre) =
+    override fun compareTo(other: Periodo) =
         if (_ano == other._ano) _semestre - other._semestre else _ano - other._ano
 
     override fun toString() = "$_ano.$_semestre"
 }
 
-class SemestreRange(override val start: Semestre, override val endInclusive: Semestre) : ClosedRange<Semestre> {
+class PeriodoRange(override val start: Periodo, override val endInclusive: Periodo) : ClosedRange<Periodo> {
 
-    operator fun iterator(): Iterator<Semestre> {
-        return object: Iterator<Semestre> {
+    operator fun iterator(): Iterator<Periodo> {
+        return object: Iterator<Periodo> {
             val current = start
-            override fun next(): Semestre {
-                val next = Semestre(current.ano, current.semestre)
+            override fun next(): Periodo {
+                val next = Periodo(current.ano, current.semestre)
                 current.inc()
                 return next;
             }

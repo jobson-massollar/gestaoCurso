@@ -95,25 +95,28 @@ class AlunoExposedDAO: IAlunoDAO {
         }
     }
 
-    private fun createDTO(table: AlunosBase, row: ResultRow): AlunoDTO = AlunoDTO(
-        row[table.id],
-        row[table.matricula],
-        row[table.nome],
-        row[table.sexo],
-        row[table.dataNasc],
-        row[table.versao],
-        row[table.ingresso],
-        row[table.evasao],
-        row[table.dataEvasao],
-        row[table.logradouro],
-        row[table.numero],
-        row[table.complemento],
-        row[table.bairro],
-        row[table.cidade],
-        row[table.cep],
-        row[table.telefone1],
-        row[table.telefone2],
-        row[table.email]
+    private fun createDTO(alunos: AlunosBase, row: ResultRow): AlunoDTO =
+        AlunoDTO(
+        row[alunos.id],
+        row[alunos.matricula],
+        row[alunos.nome],
+        row[alunos.sexo],
+        row[alunos.dataNascimento],
+        row[alunos.versao],
+        row[alunos.ingresso],
+        row[alunos.logradouro],
+        row[alunos.numero],
+        row[alunos.complemento],
+        row[alunos.bairro],
+        row[alunos.cidade],
+        row[alunos.cep],
+        row[alunos.telefone1],
+        row[alunos.telefone2],
+        row[alunos.email],
+        row[alunos.evasao],
+        row[alunos.dataEvasao],
+        row[alunos.trancamentos],
+        row[alunos.prazoExtensao]
     )
 
 //    override fun deleteAll() {
