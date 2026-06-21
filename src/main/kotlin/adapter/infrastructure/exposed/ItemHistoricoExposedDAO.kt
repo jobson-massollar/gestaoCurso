@@ -3,6 +3,7 @@ package adapter.infrastructure.exposed
 import model.APROVADO
 import model.APROVADO_SEM_NOTA
 import model.APROVEITAMENTO
+import model.DISPENSA_COM_NOTA
 import model.DISPENSA_SEM_NOTA
 import model.MATRICULADO
 import org.jetbrains.exposed.v1.core.ResultRow
@@ -86,6 +87,7 @@ class ItemHistoricoExposedDAO: IItemHistoricoDAO {
                 .where { ItensHistorico.matricula eq matricula and
                         ((ItensHistorico.situacao eq APROVADO) or
                          (ItensHistorico.situacao eq DISPENSA_SEM_NOTA) or
+                         (ItensHistorico.situacao eq DISPENSA_COM_NOTA) or
                          (ItensHistorico.situacao eq APROVADO_SEM_NOTA) or
                          (ItensHistorico.situacao eq APROVEITAMENTO)) }
                 .map {

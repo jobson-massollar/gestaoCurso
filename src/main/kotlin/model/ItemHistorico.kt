@@ -36,3 +36,27 @@ class ItemHistorico(val matricula: String, val ano: Int, val periodo: Int, val d
         return "[id=$id matricula=$matricula, ano=$ano, periodo=$periodo, periodo=$descPeriodo, versao=$versao, codigo=$codigo, nome=$nome, situacao=$situacao, descricao=$descricao, nota=$nota, creditos=$creditos, horas=$horas, tipo=$tipo]"
     }
 }
+
+val List<ItemHistorico>.obrigatorias: List<ItemHistorico>
+    get() = this.filter { it.tipo == OBRIGATORIA }
+
+val List<ItemHistorico>.optativas: List<ItemHistorico>
+    get() = this.filter { it.tipo == OPTATIVA }
+
+val List<ItemHistorico>.complementares: List<ItemHistorico>
+    get() = this.filter { it.tipo == COMPLEMENTAR }
+
+val List<ItemHistorico>.eletivas: List<ItemHistorico>
+    get() = this.filter { it.tipo == ELETIVA }
+
+val List<ItemHistorico>.aprovadas: List<ItemHistorico>
+    get() = this.filter { it.isAprovado }
+
+val List<ItemHistorico>.reprovadas: List<ItemHistorico>
+    get() = this.filter { it.isReprovado }
+
+val List<ItemHistorico>.matriculadas: List<ItemHistorico>
+    get() = this.filter { it.isMatriculado }
+
+fun List<ItemHistorico>.cursadas(periodo: Periodo): List<ItemHistorico> =
+    this.filter { it.ano == periodo.ano && it.periodo == periodo.semestre }

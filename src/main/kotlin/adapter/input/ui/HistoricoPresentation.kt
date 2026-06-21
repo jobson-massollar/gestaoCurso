@@ -11,6 +11,14 @@ import model.ItemHistorico
 import model.OBRIGATORIA
 import model.OPTATIVA
 import model.Periodo
+import model.aprovadas
+import model.complementares
+import model.cursadas
+import model.eletivas
+import model.matriculadas
+import model.obrigatorias
+import model.optativas
+import model.reprovadas
 
 fun FlowContent.historicoAluno(aluno: Aluno,
                                historico: List<ItemHistorico>,
@@ -18,10 +26,10 @@ fun FlowContent.historicoAluno(aluno: Aluno,
                                matriculadas: List<ItemHistorico>,
                                obrigatoriasFaltantes: List<Disciplina>) {
 
-    val aprovadasObrigatorias = aprovadas.filter  { it.tipo == OBRIGATORIA }
-    val aprovadasOptativas = aprovadas.filter  { it.tipo == OPTATIVA }
-    val aprovadasComplementares = aprovadas.filter  { it.tipo == COMPLEMENTAR }
-    val aprovadasEletivas = aprovadas.filter  { it.tipo == ELETIVA }
+    val aprovadasObrigatorias = aprovadas.obrigatorias
+    val aprovadasOptativas = aprovadas.optativas
+    val aprovadasComplementares = aprovadas.complementares
+    val aprovadasEletivas = aprovadas.eletivas
 
     cardDadosAluno(aluno, aprovadasObrigatorias, aprovadasOptativas, aprovadasComplementares, aprovadasEletivas)
 
@@ -102,7 +110,7 @@ private fun FlowContent.cardPeriodos(
                     val periodoPandemia = INICIO_PANDEMIA..FIM_PANDEMIA
                     for (s in aluno.periodoInicial..aluno.periodoFinal) {
                         val isPandemia = s in periodoPandemia
-                        val label = situacaoPeriodo(s, historico.filter { it.ano == s.ano && it.periodo == s.semestre })
+                        val label = situacaoPeriodo(s, historico.cursadas(s))
                         numeracao.add(numeracaoPeriodo(isPandemia, label, i))
                         background.add(estiloPeriodo(isPandemia, s > aluno.periodoLimite, label))
                         td(classes = "text-base text-center ${background.last()}") { +label }
@@ -220,15 +228,9 @@ private fun situacaoPeriodo(periodo: Periodo, historico: List<ItemHistorico>): S
     if (historico.isEmpty()) return if (periodo > Periodo.ATUAL) "-" else "⚠"
     if (historico[0].isTrancamento) return "T"
 
-    var m = 0
-    var a = 0
-    var r = 0
-
-    historico.forEach {
-        if (it.isAprovado) a++
-        else if (it.isReprovado) r++
-        else if (it.isMatriculado) m++
-    }
+    val m = historico.matriculadas.size
+    val a = historico.aprovadas.size
+    val r = historico.reprovadas.size
 
     return buildString {
         var s = ""
@@ -240,6 +242,7 @@ private fun situacaoPeriodo(periodo: Periodo, historico: List<ItemHistorico>): S
             append("${s}${a}A")
             s = "/"
         }
-        if (r > 0) append("${s}${r}R")
+        if (r > 0)
+            append("${s}${r}R")
     }
 }
