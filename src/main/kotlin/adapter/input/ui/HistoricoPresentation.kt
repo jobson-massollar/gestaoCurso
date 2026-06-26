@@ -35,7 +35,7 @@ fun FlowContent.historicoAluno(aluno: Aluno,
 
     cardPeriodos(aluno, historico)
 
-    tableDisciplinas("Obrigatórias que Faltam (${obrigatoriasFaltantes.size})", obrigatoriasFaltantes)
+    tableDisciplinas("Obrigatórias que Faltam (${obrigatoriasFaltantes.size})", obrigatoriasFaltantes, matriculadas)
 
     tableHistorico("Matriculadas (${matriculadas.size})", matriculadas)
 
@@ -126,7 +126,7 @@ private fun FlowContent.cardPeriodos(
     }
 }
 
-private fun FlowContent.tableDisciplinas(title: String, disciplinas: List<Disciplina>) {
+private fun FlowContent.tableDisciplinas(title: String, disciplinas: List<Disciplina>, matriculadas: List<ItemHistorico>) {
     if (disciplinas.isEmpty()) return
     div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
         h2(classes = "m-2 text-base-content/50 font-bold") { +title }
@@ -136,6 +136,7 @@ private fun FlowContent.tableDisciplinas(title: String, disciplinas: List<Discip
                 tr(classes = "bg-base-300") {
                     th(classes = "text-center") { +"Código" }
                     th { +"Nome" }
+                    th(classes = "text-center") { +"Matriculada" }
                     th(classes = "text-center") { +"Período" }
                     th(classes = "text-center") { +"Horas" }
                 }
@@ -149,6 +150,9 @@ private fun FlowContent.tableDisciplinas(title: String, disciplinas: List<Discip
                             }
                             td {
                                 +it.nome
+                            }
+                            td(classes = "text-center") {
+                                +"${if (matriculadas.any { m -> m.codigo == it.codigo }) "✅" else "-"}"
                             }
                             td(classes = "text-center") {
                                 +"${it.periodo}"

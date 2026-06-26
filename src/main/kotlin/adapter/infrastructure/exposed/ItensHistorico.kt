@@ -2,7 +2,7 @@ package adapter.infrastructure.exposed
 
 import org.jetbrains.exposed.v1.core.Table
 
-object ItensHistorico: Table(name = "vw_itens_historico")  {
+object ItensHistorico: Table(name = "itens_historico")  {
     val id = uuid("id")
     val matricula = varchar("matricula", 14).index()
     val ano = integer("ano")
@@ -16,6 +16,6 @@ object ItensHistorico: Table(name = "vw_itens_historico")  {
     val nota = float("nota").nullable()
     val creditos = integer("creditos")
     val horas = integer("horas")
-    val tipo = varchar("tipo", 15)
+    val tipo = varchar("tipo", 60)
     override val primaryKey = PrimaryKey(ItensHistorico.id)
 }
