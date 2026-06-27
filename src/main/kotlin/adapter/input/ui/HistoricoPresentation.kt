@@ -1,43 +1,23 @@
 package adapter.input.ui
 
 import kotlinx.html.*
-import model.Aluno
-import model.COMPLEMENTAR
-import model.Disciplina
-import model.ELETIVA
-import model.FIM_PANDEMIA
-import model.INICIO_PANDEMIA
-import model.ItemHistorico
-import model.OBRIGATORIA
-import model.OPTATIVA
-import model.Periodo
-import model.aprovadas
-import model.complementares
-import model.cursadas
-import model.eletivas
-import model.matriculadas
-import model.obrigatorias
-import model.optativas
-import model.reprovadas
+import model.*
 
-fun FlowContent.historicoAluno(aluno: Aluno,
-                               historico: List<ItemHistorico>,
-                               aprovadas: List<ItemHistorico>,
-                               matriculadas: List<ItemHistorico>,
-                               obrigatoriasFaltantes: List<Disciplina>) {
+fun FlowContent.historicoAluno(aluno: Aluno) {
 
-    val aprovadasObrigatorias = aprovadas.obrigatorias
-    val aprovadasOptativas = aprovadas.optativas
-    val aprovadasComplementares = aprovadas.complementares
-    val aprovadasEletivas = aprovadas.eletivas
+    val aprovadasObrigatorias = aluno.aprovadas.obrigatorias
+    val aprovadasOptativas = aluno.aprovadas.optativas
+    val aprovadasComplementares = aluno.aprovadas.complementares
+    val aprovadasEletivas = aluno.aprovadas.eletivas
+    val obrigatoriasFaltantes = aluno.obrigatoriasFaltantes
 
     cardDadosAluno(aluno, aprovadasObrigatorias, aprovadasOptativas, aprovadasComplementares, aprovadasEletivas)
 
-    cardPeriodos(aluno, historico)
+    cardPeriodos(aluno)
 
-    tableDisciplinas("Obrigatórias que Faltam (${obrigatoriasFaltantes.size})", obrigatoriasFaltantes, matriculadas)
+    tableDisciplinas("Obrigatórias que Faltam (${obrigatoriasFaltantes.size})", obrigatoriasFaltantes, aluno.matriculadas)
 
-    tableHistorico("Matriculadas (${matriculadas.size})", matriculadas)
+    tableHistorico("Matriculadas (${aluno.matriculadas.size})", aluno.matriculadas)
 
     tableHistorico("Obrigatórias Cursadas (${aprovadasObrigatorias.size})", aprovadasObrigatorias)
 
@@ -77,22 +57,26 @@ private fun FlowContent.cardDadosAluno(
             p { +"Trancamentos: ${aluno.trancamentos}"}
             p { +"Prazo de extensão: ${aluno.prazoExtensao} período(s)"}
             p { +"Período limite: ${aluno.periodoLimite.ano}.${aluno.periodoLimite.semestre}"}
+            if (aluno.ehFormando || aluno.estaFormado) {
+                hr(classes = "border-base-content/50") { }
+                div(classes="alert bg-accent") {
+                    role = "alert"
+                    p(classes="text-base font-bold") { +if (aluno.estaFormado) "\uD83D\uDE00 Formado!" else "\uD83D\uDE42 Formando!"}
+                }
+            }
         }
     }
 }
 
 /**
  * Apresenta o card com os períodos que o [aluno] tem para cursar, desde o período inicial até
- * o último período possível. Para cada semestre apresenta informações conforme o [historico]:
+ * o último período possível. Para cada semestre apresenta informações:
  * - T para o período trancado
  * - An, Rn ou Mn para as n disciplinas aprovadas, reprovadas ou matriculadas, respectivamente
  *
  * Além disso, os períodos que contam para a integralização são numerados como 1, 2, 3, ...
  */
-private fun FlowContent.cardPeriodos(
-    aluno: Aluno,
-    historico: List<ItemHistorico>
-) {
+private fun FlowContent.cardPeriodos(aluno: Aluno) {
     div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
         table(classes = "table") {
             thead {
@@ -106,11 +90,11 @@ private fun FlowContent.cardPeriodos(
                 val numeracao: MutableList<String> = mutableListOf()
                 val background: MutableList<String> = mutableListOf()
                 tr {
-                    var i = mutableListOf(0)
+                    val i = mutableListOf(0)
                     val periodoPandemia = INICIO_PANDEMIA..FIM_PANDEMIA
                     for (s in aluno.periodoInicial..aluno.periodoFinal) {
                         val isPandemia = s in periodoPandemia
-                        val label = situacaoPeriodo(s, historico.cursadas(s))
+                        val label = situacaoPeriodo(s, aluno)
                         numeracao.add(numeracaoPeriodo(isPandemia, label, i))
                         background.add(estiloPeriodo(isPandemia, s > aluno.periodoLimite, label))
                         td(classes = "text-base text-center ${background.last()}") { +label }
@@ -152,7 +136,7 @@ private fun FlowContent.tableDisciplinas(title: String, disciplinas: List<Discip
                                 +it.nome
                             }
                             td(classes = "text-center") {
-                                +"${if (matriculadas.any { m -> m.codigo == it.codigo }) "✅" else "-"}"
+                                +if (matriculadas.any { m -> m.codigo == it.codigo }) "✅" else "-"
                             }
                             td(classes = "text-center") {
                                 +"${it.periodo}"
@@ -200,7 +184,7 @@ private fun FlowContent.tableHistorico(title: String, historico: List<ItemHistor
                                 +it.descricao.take(3)
                             }
                             td(classes = "text-right") {
-                                +"${it.nota?.format(2) ?: ""}"
+                                +(it.nota?.format(2) ?: "")
                             }
                             td(classes = "text-center") {
                                 +"${it.horas}"
@@ -228,13 +212,15 @@ private fun numeracaoPeriodo(isPandemia: Boolean, label: String, i: MutableList<
         else -> { i[0] = i[0] + 1; i[0].toString() }
     }
 
-private fun situacaoPeriodo(periodo: Periodo, historico: List<ItemHistorico>): String {
-    if (historico.isEmpty()) return if (periodo > Periodo.ATUAL) "-" else "⚠"
-    if (historico[0].isTrancamento) return "T"
+private fun situacaoPeriodo(periodo: Periodo, aluno: Aluno): String {
+    val historicoPeriodo = aluno.historico.cursadas(periodo)
 
-    val m = historico.matriculadas.size
-    val a = historico.aprovadas.size
-    val r = historico.reprovadas.size
+    if (historicoPeriodo.isEmpty()) return if (periodo > Periodo.ATUAL) "-" else "⚠"
+    if (historicoPeriodo[0].isTrancamento) return "T"
+
+    val m = historicoPeriodo.matriculadas.size
+    val a = historicoPeriodo.aprovadas.size
+    val r = historicoPeriodo.reprovadas.size
 
     return buildString {
         var s = ""

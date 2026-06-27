@@ -1,7 +1,5 @@
-package services.domain.persistence
+package model
 
-import model.Disciplina
-import model.EntityDTO
 import kotlin.uuid.Uuid
 
 class DisciplinaDTO(id: Uuid?, val versao: String, val codigo: String, val nome: String, val periodo: Int, val creditos: Int, val horas: Int, val tipo: String): EntityDTO<Disciplina>(id) {

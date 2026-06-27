@@ -12,6 +12,66 @@ class Aluno private constructor(val matricula: String, val nome: String, val sex
     val isAtivo = dataEvasao == null && evasao.take(3) != "ABA"
     //val migrou = versao == "2023/2" && matricula.take(4) < "20232"
 
+    val historico by lazy {
+        RepositoryFactory.get(ItemHistoricoRepository::class).findByMatricula(matricula)
+    }
+
+    val aprovadas by lazy {
+        historico.filter { it.isAprovado }
+    }
+
+    val matriculadas by lazy {
+        historico.filter { it.isMatriculado }
+    }
+
+    val reprovadas by lazy {
+        historico.filter { it.isReprovado }
+    }
+
+    val obrigatoriasFaltantes by lazy {
+        RepositoryFactory.get(DisciplinaRepository::class).findObrigatoriasFaltantes(matricula)
+    }
+
+    val estaFormado by lazy {
+        val grade = Grade.versao(versao)
+        val qtdObrigatorias = aprovadas.obrigatorias.size
+
+        if (qtdObrigatorias < grade.qtdObrigatorias)
+            false;
+        else {
+            val horasOptativas = aprovadas.optativas.sumOf { it.horas }
+            val eletivas = aprovadas.eletivas
+
+            if (grade is Grade.Grade2008) {
+                horasOptativas >= grade.horasOptativas && eletivas.sumOf { it.horas } >= grade.horasEletivas
+            }
+            else {
+                horasOptativas + eletivas.eletivasAproveitadas.horasEletivasAproveitadas >= grade.horasOptativas
+            }
+        }
+    }
+
+    val ehFormando by lazy {
+        val grade = Grade.versao(versao)
+        val qtdObrigatorias = aprovadas.obrigatorias.size
+        val qtdObrigatoriasMatr = matriculadas.obrigatorias.size
+
+        if (qtdObrigatorias + qtdObrigatoriasMatr < grade.qtdObrigatorias)
+            false
+        else {
+            val horasOptativas = aprovadas.optativas.sumOf { it.horas }
+            val horasOptativasMatr = matriculadas.optativas.sumOf { it.horas }
+            val eletivas = aprovadas.eletivas + matriculadas.eletivas
+
+            if (grade is Grade.Grade2008) {
+                horasOptativas + horasOptativasMatr >= grade.horasOptativas && eletivas.sumOf { it.horas } >= grade.horasEletivas
+            }
+            else {
+                horasOptativas + horasOptativasMatr + eletivas.eletivasAproveitadas.horasEletivasAproveitadas >= grade.horasOptativas
+            }
+        }
+    }
+
     companion object {
         fun of(matricula: String, nome: String, sexo: Char, dataNascimento: LocalDate?, versao: String, ingresso: String, logradouro: String, numero: String, complemento: String, bairro: String, cidade: String, cep: String, telefone1: String, telefone2: String, email: String, evasao: String, dataEvasao: LocalDate?, trancamentos: Int, prazoExtensao: Int) =
             Aluno(matricula, nome, sexo, dataNascimento, versao, ingresso, logradouro, numero, complemento, bairro, cidade, cep, telefone1, telefone2, email, evasao, dataEvasao, trancamentos, prazoExtensao)

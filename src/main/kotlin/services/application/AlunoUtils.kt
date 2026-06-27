@@ -12,7 +12,9 @@ enum class AlunoSorting(val comparator: Comparator<Aluno>) {
 
 enum class AlunoFilter {
     ALL,
-    ACTIVE
+    ACTIVE,
+    GRADUATED,
+    GRADUATING
 }
 
 

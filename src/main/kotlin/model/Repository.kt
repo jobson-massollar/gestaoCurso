@@ -1,19 +1,7 @@
-package services.domain.persistence
+package model
 
-import model.Entity
-import model.EntityDTO
-import kotlin.reflect.KClass
-import kotlin.reflect.full.createInstance
-
-interface IRepository<T: Entity> {
-//    fun save(e: T)
-//    fun remove(e: T)
-//    fun findAll(): List<T>
-//    fun deleteAll()
-//    fun startBatchInsert(chunkSize: Int)
-//    fun batchInsert(e: T)
-//    fun endBatchInsert()
-}
+import services.domain.persistence.IDAO
+import services.domain.persistence.IRepository
 
 abstract class Repository<T: Entity, S: IDAO<T, V>, V: EntityDTO<T>>: IRepository<T> {
 
@@ -84,19 +72,4 @@ abstract class Repository<T: Entity, S: IDAO<T, V>, V: EntityDTO<T>>: IRepositor
 //        }
 //        chunk = null
 //    }
-}
-
-interface IRepositoryFactory {
-    fun <T:Repository<*,*,*>> get(c: KClass<in T>): T
-}
-
-object RepositoryFactory : IRepositoryFactory {
-
-    private val repositories = HashMap<String, Repository<*, *, *>>()
-
-    override fun <T:Repository<*,*,*>> get(c: KClass<in T>): T {
-        if (! repositories.containsKey(c.java.name))
-            repositories[c.java.name] = c.createInstance() as T
-        return repositories[c.java.name] as T
-    }
 }

@@ -1,5 +1,7 @@
 package model
 
+import model.Grade.Grade2023
+
 const val APROVADO = 1
 const val REPROVADO_POR_NOTA = 2
 const val REPROVADO_POR_FALTA = 3
@@ -49,6 +51,15 @@ val List<ItemHistorico>.complementares: List<ItemHistorico>
 val List<ItemHistorico>.eletivas: List<ItemHistorico>
     get() = this.filter { it.tipo == ELETIVA }
 
+val List<ItemHistorico>.eletivasAproveitadas: List<ItemHistorico>
+    get() = this.filter { it.tipo == ELETIVA }.sortedByDescending { it.horas }.take(2)
+
+val List<ItemHistorico>.horasEletivasAproveitadas: Int
+    get() = minOf(this.sumOf { it.horas }, Grade2023.horasEletivas)
+
+fun List<ItemHistorico>.cursadas(periodo: Periodo): List<ItemHistorico> =
+    this.filter { it.ano == periodo.ano && it.periodo == periodo.semestre }
+
 val List<ItemHistorico>.aprovadas: List<ItemHistorico>
     get() = this.filter { it.isAprovado }
 
@@ -57,6 +68,3 @@ val List<ItemHistorico>.reprovadas: List<ItemHistorico>
 
 val List<ItemHistorico>.matriculadas: List<ItemHistorico>
     get() = this.filter { it.isMatriculado }
-
-fun List<ItemHistorico>.cursadas(periodo: Periodo): List<ItemHistorico> =
-    this.filter { it.ano == periodo.ano && it.periodo == periodo.semestre }

@@ -1,11 +1,6 @@
 package services.domain.persistence
 
-import model.Aluno
-import model.Disciplina
-import model.Entity
-import model.EntityDTO
-import model.ItemHistorico
-import kotlin.reflect.KClass
+import model.*
 
 sealed interface IDAO<E: Entity, T: EntityDTO<E>> {
 //    fun insert(dto: T)
@@ -24,8 +19,8 @@ sealed interface IDAO<E: Entity, T: EntityDTO<E>> {
     interface IItemHistoricoDAO: IDAO<ItemHistorico, ItemHistoricoDTO> {
         fun findAll(): List<ItemHistoricoDTO>
         fun findAll(matricula: String): List<ItemHistoricoDTO>
-        fun findAprovados(matricula: String): List<ItemHistoricoDTO>
-        fun findMatriculados(matricula: String): List<ItemHistoricoDTO>
+//        fun findAprovados(matricula: String): List<ItemHistoricoDTO>
+//        fun findMatriculados(matricula: String): List<ItemHistoricoDTO>
     }
 
     interface IDisciplinaDAO: IDAO<Disciplina, DisciplinaDTO> {

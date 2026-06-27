@@ -1,8 +1,6 @@
-package services.domain.persistence
+package model
 
 import kotlinx.datetime.LocalDate
-import model.Aluno
-import model.EntityDTO
 import kotlin.uuid.Uuid
 
 class AlunoDTO(id: Uuid?, val matricula: String, val nome: String, val sexo: Char, val dataNascimento: LocalDate?, val versao: String, val ingresso: String, val logradouro: String, val numero: String, val complemento: String, val bairro: String, val cidade: String, val cep: String, val telefone1: String, val telefone2: String, val email: String, val evasao: String, val dataEvasao: LocalDate?, val trancamentos: Int, val prazoExtensao: Int): EntityDTO<Aluno>(id) {

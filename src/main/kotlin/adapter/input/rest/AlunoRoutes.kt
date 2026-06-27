@@ -6,8 +6,8 @@ import io.ktor.http.*
 import io.ktor.server.html.*
 import io.ktor.server.routing.*
 import main.appLocale
-import services.domain.persistence.AlunoRepository
-import services.domain.persistence.RepositoryFactory
+import model.AlunoRepository
+import model.RepositoryFactory
 
 fun Routing.alunoRoutes() {
     get("/") {

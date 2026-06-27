@@ -10,6 +10,8 @@ const val ALUNO_SORTING_NOME_DESC = "-nome"
 
 val ALUNO_FILTER_ALL = AlunoFilter.ALL.name.lowercase()
 val ALUNO_FILTER_ACTIVE = AlunoFilter.ACTIVE.name.lowercase()
+val ALUNO_FILTER_GRADUATED = AlunoFilter.GRADUATED.name.lowercase()
+val ALUNO_FILTER_GRADUATING = AlunoFilter.GRADUATING.name.lowercase()
 
 fun getAlunoSortingByValue(value: String) =
     when (value) {

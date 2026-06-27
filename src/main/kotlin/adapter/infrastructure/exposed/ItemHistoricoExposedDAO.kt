@@ -1,19 +1,11 @@
 package adapter.infrastructure.exposed
 
-import model.APROVADO
-import model.APROVADO_SEM_NOTA
-import model.APROVEITAMENTO
-import model.DISPENSA_COM_NOTA
-import model.DISPENSA_SEM_NOTA
-import model.MATRICULADO
+import model.ItemHistoricoDTO
 import org.jetbrains.exposed.v1.core.ResultRow
-import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.core.or
-import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import services.domain.persistence.IDAO.IItemHistoricoDAO
-import services.domain.persistence.ItemHistoricoDTO
 
 class ItemHistoricoExposedDAO: IItemHistoricoDAO {
 //    override fun insert(dto: ItemHistoricoDTO) {
@@ -80,31 +72,31 @@ class ItemHistoricoExposedDAO: IItemHistoricoDAO {
                 }.toList()
         }
 
-    override fun findAprovados(matricula: String): List<ItemHistoricoDTO> =
-        transaction {
-            ItensHistorico
-                .selectAll()
-                .where { ItensHistorico.matricula eq matricula and
-                        ((ItensHistorico.situacao eq APROVADO) or
-                         (ItensHistorico.situacao eq DISPENSA_SEM_NOTA) or
-                         (ItensHistorico.situacao eq DISPENSA_COM_NOTA) or
-                         (ItensHistorico.situacao eq APROVADO_SEM_NOTA) or
-                         (ItensHistorico.situacao eq APROVEITAMENTO)) }
-                .map {
-                    createDTO(it)
-                }.toList()
-        }
-
-    override fun findMatriculados(matricula: String): List<ItemHistoricoDTO> =
-        transaction {
-            ItensHistorico
-                .selectAll()
-                .where { ItensHistorico.matricula eq matricula and
-                         (ItensHistorico.situacao eq MATRICULADO) }
-                .map {
-                    createDTO(it)
-                }.toList()
-        }
+//    override fun findAprovados(matricula: String): List<ItemHistoricoDTO> =
+//        transaction {
+//            ItensHistorico
+//                .selectAll()
+//                .where { ItensHistorico.matricula eq matricula and
+//                        ((ItensHistorico.situacao eq APROVADO) or
+//                         (ItensHistorico.situacao eq DISPENSA_SEM_NOTA) or
+//                         (ItensHistorico.situacao eq DISPENSA_COM_NOTA) or
+//                         (ItensHistorico.situacao eq APROVADO_SEM_NOTA) or
+//                         (ItensHistorico.situacao eq APROVEITAMENTO)) }
+//                .map {
+//                    createDTO(it)
+//                }.toList()
+//        }
+//
+//    override fun findMatriculados(matricula: String): List<ItemHistoricoDTO> =
+//        transaction {
+//            ItensHistorico
+//                .selectAll()
+//                .where { ItensHistorico.matricula eq matricula and
+//                         (ItensHistorico.situacao eq MATRICULADO) }
+//                .map {
+//                    createDTO(it)
+//                }.toList()
+//        }
 
 
     private fun createDTO(row: ResultRow): ItemHistoricoDTO =

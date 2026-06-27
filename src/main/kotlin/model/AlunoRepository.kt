@@ -1,7 +1,8 @@
-package services.domain.persistence
+package model
 
-import model.Aluno
 import services.application.AlunoFilter
+import services.domain.persistence.DAOFactory
+import services.domain.persistence.IDAO
 
 class AlunoRepository: Repository<Aluno, IDAO.IAlunoDAO, AlunoDTO>() {
 
@@ -11,6 +12,8 @@ class AlunoRepository: Repository<Aluno, IDAO.IAlunoDAO, AlunoDTO>() {
         when (filter) {
             AlunoFilter.ALL -> createEntityList(dao.findAll(search))
             AlunoFilter.ACTIVE -> createEntityList(dao.findAtivos(search))
+            AlunoFilter.GRADUATED -> createEntityList(dao.findAtivos(search)).filter { it.estaFormado }
+            AlunoFilter.GRADUATING -> createEntityList(dao.findAtivos(search)).filter { it.ehFormando }
         }
 
     fun findByMatricula(matricula: String): Aluno? = createEntity(dao.findByMatricula(matricula) ?: return null)

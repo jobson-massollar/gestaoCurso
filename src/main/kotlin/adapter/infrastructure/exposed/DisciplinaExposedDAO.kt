@@ -1,10 +1,10 @@
 package adapter.infrastructure.exposed
 
+import model.DisciplinaDTO
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.selectAll
-import services.domain.persistence.DisciplinaDTO
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import services.domain.persistence.IDAO.IDisciplinaDAO
 import kotlin.uuid.Uuid
 

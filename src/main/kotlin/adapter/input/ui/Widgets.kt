@@ -1,12 +1,11 @@
 package adapter.input.ui
 
-import io.ktor.htmx.HxSwap
-import io.ktor.htmx.html.hx
+import io.ktor.htmx.*
+import io.ktor.htmx.html.*
 import kotlinx.html.FlowContent
 import kotlinx.html.HTMLTag
 import kotlinx.html.button
 import kotlinx.html.radioInput
-import kotlin.text.toInt
 
 fun Float.format(digits: Int) = "%.${digits}f".format(this)
 
@@ -29,6 +28,7 @@ fun FlowContent.smallButton(label: String, url: String, container: String, disab
             target = container
             swap = HxSwap.innerHtml
             indicator = "#loading-spinner"
+            pushUrl = "true"
         }
         this.disabled = disabled
         +label

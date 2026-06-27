@@ -2,9 +2,7 @@ package adapter.infrastructure.exposed
 
 import services.domain.persistence.DAOFactory
 import services.domain.persistence.IDAO
-import services.domain.persistence.IDAO.IAlunoDAO
 import services.domain.persistence.IDAOFactory
-import kotlin.reflect.KClass
 
 object ExposedDAOFactory : IDAOFactory {
 //    override fun <T : IDAO<*,*>> get(c: KClass<in T>): T =

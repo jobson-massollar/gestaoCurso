@@ -50,6 +50,22 @@ fun FlowContent.alunosList(alunos: List<Aluno>, currentSorting: String, currentF
                 ALUNO_FILTER_ACTIVE
             )
             label(classes = "ml-2") { +"Ativos" }
+            radioButton(
+                "filter",
+                "/alunos",
+                "#main-container",
+                currentFilter,
+                ALUNO_FILTER_GRADUATING
+            )
+            label(classes = "ml-2") { +"Formandos" }
+            radioButton(
+                "filter",
+                "/alunos",
+                "#main-container",
+                currentFilter,
+                ALUNO_FILTER_GRADUATED
+            )
+            label(classes = "ml-2") { +"Formados" }
             label(classes = "ml-10") { +"Filtro" }
             searchInput(classes = "ml-2") {
                 attributes.hx {
@@ -57,7 +73,7 @@ fun FlowContent.alunosList(alunos: List<Aluno>, currentSorting: String, currentF
                     target = "#main-container"
                     swap = HxSwap.innerHtml
                     include = "closest form"
-                    trigger = "search, change, keyup delay:500ms changed"
+                    trigger = "search, change, keyup delay:700ms changed"
                     indicator = "#loading-spinner"
                 }
                 name = "search"
