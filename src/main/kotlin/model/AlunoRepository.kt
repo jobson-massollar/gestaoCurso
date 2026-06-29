@@ -8,7 +8,7 @@ class AlunoRepository: Repository<Aluno, IDAO.IAlunoDAO, AlunoDTO>() {
 
     override val dao: IDAO.IAlunoDAO = DAOFactory.getDAO(DAOFactory.Type.ALUNO)
 
-    fun findByFilter(filter: AlunoFilter, search: String) =
+    fun findByFilter(filter: AlunoFilter, search: String = "") =
         when (filter) {
             AlunoFilter.ALL -> createEntityList(dao.findAll(search))
             AlunoFilter.ACTIVE -> createEntityList(dao.findAtivos(search))

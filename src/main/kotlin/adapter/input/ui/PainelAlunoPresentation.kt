@@ -3,29 +3,29 @@ package adapter.input.ui
 import kotlinx.html.*
 import model.*
 
-fun FlowContent.historicoAluno(aluno: Aluno) {
+fun FlowContent.painelAluno(aluno: Aluno) {
 
-    val aprovadasObrigatorias = aluno.aprovadas.obrigatorias
-    val aprovadasOptativas = aluno.aprovadas.optativas
-    val aprovadasComplementares = aluno.aprovadas.complementares
-    val aprovadasEletivas = aluno.aprovadas.eletivas
-    val obrigatoriasFaltantes = aluno.obrigatoriasFaltantes
+    val aprovadasObrigatorias = aluno.itensAprovados.obrigatorias
+    val aprovadasOptativas = aluno.itensAprovados.optativas
+    val aprovadasComplementares = aluno.itensAprovados.complementares
+    val aprovadasEletivas = aluno.itensAprovados.eletivas
+    val obrigatoriasFaltantes = aluno.disciplinasObrigatoriasFaltantes
 
     cardDadosAluno(aluno, aprovadasObrigatorias, aprovadasOptativas, aprovadasComplementares, aprovadasEletivas)
 
     cardPeriodos(aluno)
 
-    tableDisciplinas("Obrigatórias que Faltam (${obrigatoriasFaltantes.size})", obrigatoriasFaltantes, aluno.matriculadas)
+    tableObrigatoriasFaltantes("Obrigatórias que Faltam (${obrigatoriasFaltantes.size})", obrigatoriasFaltantes, aluno.itensMatriculados)
 
-    tableHistorico("Matriculadas (${aluno.matriculadas.size})", aluno.matriculadas)
+    tableDisciplinas("Matriculadas (${aluno.itensMatriculados.size})", aluno.itensMatriculados)
 
-    tableHistorico("Obrigatórias Cursadas (${aprovadasObrigatorias.size})", aprovadasObrigatorias)
+    tableDisciplinas("Obrigatórias Cursadas (${aprovadasObrigatorias.size})", aprovadasObrigatorias)
 
-    tableHistorico("Optativas Cursadas (${aprovadasOptativas.size})", aprovadasOptativas)
+    tableDisciplinas("Optativas Cursadas (${aprovadasOptativas.size})", aprovadasOptativas)
 
-    tableHistorico("Complementares Cursadas (${aprovadasComplementares.size})", aprovadasComplementares)
+    tableDisciplinas("Complementares Cursadas (${aprovadasComplementares.size})", aprovadasComplementares)
 
-    tableHistorico("Eletivas Cursadas (${aprovadasEletivas.size})", aprovadasEletivas)
+    tableDisciplinas("Eletivas Cursadas (${aprovadasEletivas.size})", aprovadasEletivas)
 }
 
 /**
@@ -110,7 +110,7 @@ private fun FlowContent.cardPeriodos(aluno: Aluno) {
     }
 }
 
-private fun FlowContent.tableDisciplinas(title: String, disciplinas: List<Disciplina>, matriculadas: List<ItemHistorico>) {
+private fun FlowContent.tableObrigatoriasFaltantes(title: String, disciplinas: List<Disciplina>, matriculadas: List<ItemHistorico>) {
     if (disciplinas.isEmpty()) return
     div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
         h2(classes = "m-2 text-base-content/50 font-bold") { +title }
@@ -151,7 +151,7 @@ private fun FlowContent.tableDisciplinas(title: String, disciplinas: List<Discip
     }
 }
 
-private fun FlowContent.tableHistorico(title: String, historico: List<ItemHistorico>) {
+private fun FlowContent.tableDisciplinas(title: String, historico: List<ItemHistorico>) {
     if (historico.isEmpty()) return
     div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
         h2(classes = "m-2 text-base-content/50 font-bold") { +title }

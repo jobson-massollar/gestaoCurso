@@ -18,15 +18,19 @@ sealed interface IDAO<E: Entity, T: EntityDTO<E>> {
 
     interface IItemHistoricoDAO: IDAO<ItemHistorico, ItemHistoricoDTO> {
         fun findAll(): List<ItemHistoricoDTO>
-        fun findAll(matricula: String): List<ItemHistoricoDTO>
+        fun findByAluno(aluno: Aluno): List<ItemHistoricoDTO>
 //        fun findAprovados(matricula: String): List<ItemHistoricoDTO>
 //        fun findMatriculados(matricula: String): List<ItemHistoricoDTO>
     }
 
     interface IDisciplinaDAO: IDAO<Disciplina, DisciplinaDTO> {
         fun findAll(): List<DisciplinaDTO>
-        fun findObrigatoriasFaltantes(matricula: String): List<DisciplinaDTO>
+        fun findObrigatoriasFaltantes(aluno: Aluno): List<DisciplinaDTO>
+        fun findPreRequisitos(disciplina: Disciplina): List<DisciplinaDTO>
+        fun findByItemHistorico(itemHistorico: ItemHistorico): DisciplinaDTO
     }
+
+    interface IPreRequisitoDAO: IDAO<PreRequisito, PreRequisitoDTO>
 }
 
 interface IDAOFactory {
@@ -40,6 +44,7 @@ object DAOFactory: IDAOFactory {
         DISCIPLINA,
         ALUNO,
         HISTORICO,
+        PRE_REQUISITO
 //        INSCRICAO,
 //        DIARIO
     }

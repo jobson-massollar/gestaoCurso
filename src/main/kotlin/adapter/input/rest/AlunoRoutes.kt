@@ -1,7 +1,8 @@
 package adapter.input.rest
 
 import adapter.input.ui.MainPageTemplate
-import adapter.input.ui.alunosList
+import adapter.input.ui.tableAlunos
+import adapter.input.ui.painelAluno
 import io.ktor.http.*
 import io.ktor.server.html.*
 import io.ktor.server.routing.*
@@ -27,11 +28,19 @@ fun Routing.alunoRoutes() {
         val alunos = repo.findByFilter(getAlunoFilterByValue(filter), search).sortedWith(comparator)
 
         call.respondHtmlFragment(status = HttpStatusCode.OK) {
-            alunosList(alunos, sorting, filter, search)
+            tableAlunos(alunos, sorting, filter, search)
         }
     }
 
-    get("/alunos/{matricula}") {
-        //val matricula = call.parameters["matricula"] ?: ""
+    get("/alunos/painel/{matricula}") {
+        val matricula = call.parameters["matricula"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) {}
+
+        val aluno = RepositoryFactory.get(AlunoRepository::class).findByMatricula(matricula)
+
+        if (aluno != null) {
+            call.respondHtmlFragment(status = HttpStatusCode.OK) {
+                painelAluno(aluno)
+            }
+        }
     }
 }

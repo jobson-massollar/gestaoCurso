@@ -1,5 +1,6 @@
 package adapter.infrastructure.exposed
 
+import model.Aluno
 import model.ItemHistoricoDTO
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
@@ -62,11 +63,11 @@ class ItemHistoricoExposedDAO: IItemHistoricoDAO {
                 }.toList()
         }
 
-    override fun findAll(matricula: String): List<ItemHistoricoDTO> =
+    override fun findByAluno(aluno: Aluno): List<ItemHistoricoDTO> =
         transaction {
             ItensHistorico
                 .selectAll()
-                .where { ItensHistorico.matricula eq matricula }
+                .where { ItensHistorico.matricula eq aluno.matricula }
                 .map {
                     createDTO(it)
                 }.toList()

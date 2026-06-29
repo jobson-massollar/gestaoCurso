@@ -12,9 +12,7 @@ abstract class DisciplinasBase(tableName: String): Table(tableName)  {
     val tipo = varchar("tipo", 60)
 }
 
-object Disciplinas: DisciplinasBase("vw_disciplinas") {
-    val id = uuid("id")
-}
+object Disciplinas: DisciplinasBase("vw_disciplinas")
 
 object DisciplinasObrigatoriasFaltantes: DisciplinasBase("vw_obrigatorias_faltantes") {
     val matricula = varchar("matricula", 14)

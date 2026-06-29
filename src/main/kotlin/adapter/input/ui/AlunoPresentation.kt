@@ -6,7 +6,7 @@ import io.ktor.htmx.html.*
 import kotlinx.html.*
 import model.Aluno
 
-fun FlowOrPhrasingContent.sortingButton(sorting: String, container: String, svg: String) {
+private fun FlowOrPhrasingContent.sortingButton(sorting: String, container: String, svg: String) {
     button(classes = "btn btn-ghost btn-xs ml-2 pl-px pr-px base-content") {
         attributes.hx {
             get = "/alunos"
@@ -20,12 +20,12 @@ fun FlowOrPhrasingContent.sortingButton(sorting: String, container: String, svg:
     }
 }
 
-fun FlowOrPhrasingContent.sortingButtons(fieldAsc: String, fieldDesc: String) {
+private fun FlowOrPhrasingContent.sortingButtons(fieldAsc: String, fieldDesc: String) {
     sortingButton(fieldAsc, "#main-container", AZ_SORT_SVG)
     sortingButton(fieldDesc, "#main-container",ZA_SORT_SVG)
 }
 
-fun FlowContent.alunosList(alunos: List<Aluno>, currentSorting: String, currentFilter: String, search: String) {
+fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, currentFilter: String, search: String) {
     form {
         name = "alunos"
         hiddenInput {
@@ -85,7 +85,7 @@ fun FlowContent.alunosList(alunos: List<Aluno>, currentSorting: String, currentF
             }
             label(classes = "ml-auto mr-4") { +"Total: ${alunos.size}" }
         }
-        div(classes = "→") {
+        div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
             table(classes = "table table-zebra table-sm") {
                 thead {
                     tr {
@@ -111,7 +111,7 @@ fun FlowContent.alunosList(alunos: List<Aluno>, currentSorting: String, currentF
                         td { +it.email }
                         td { +it.evasao.take(40) }
                         td(classes = "gap-4") {
-                            smallButton("Detalhes", $"/alunos/${it.matricula}", "#main-container", !it.isAtivo)
+                            smallButton("Painel", $"/alunos/painel/${it.matricula}", "#main-container", !it.isAtivo)
                             smallButton("Histórico", $"/historico/${it.matricula}", "#main-container", !it.isAtivo)
                         }
                     }

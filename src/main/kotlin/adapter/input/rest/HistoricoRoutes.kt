@@ -1,6 +1,6 @@
 package adapter.input.rest
 
-import adapter.input.ui.historicoAluno
+import adapter.input.ui.painelAluno
 import io.ktor.http.*
 import io.ktor.server.html.*
 import io.ktor.server.routing.*
@@ -15,7 +15,7 @@ fun Routing.historicoRoutes() {
 
         if (aluno != null) {
             call.respondHtmlFragment(status = HttpStatusCode.OK) {
-                historicoAluno(aluno)
+                painelAluno(aluno)
             }
         }
     }

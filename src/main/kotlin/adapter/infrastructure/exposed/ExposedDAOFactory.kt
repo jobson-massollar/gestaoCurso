@@ -20,6 +20,7 @@ object ExposedDAOFactory : IDAOFactory {
             DAOFactory.Type.DISCIPLINA -> DisciplinaExposedDAO() as T
             DAOFactory.Type.ALUNO -> AlunoExposedDAO() as T
             DAOFactory.Type.HISTORICO -> ItemHistoricoExposedDAO() as T
+            DAOFactory.Type.PRE_REQUISITO -> PreRequisitoExposedDAO() as T
 //            DAOFactory.Type.INSCRICAO -> InscricaoExposedDAO() as T
 //            DAOFactory.Type.DIARIO -> ItemDiarioExposedDAO() as T
         }

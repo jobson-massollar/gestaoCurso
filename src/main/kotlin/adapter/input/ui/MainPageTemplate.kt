@@ -17,8 +17,8 @@ class MainPageTemplate: Template<HTML> {
             title { +"Gestão do BSI" }
             meta(name = "viewport", content = "width=device-width, initial-scale=1.0")
             meta(name="charset", content = "utf-8")
-            link(href="https://cdn.jsdelivr.net/npm/daisyui@5", rel="stylesheet", type = "text/css")
-            link(href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css", rel="stylesheet", type = "text/css")
+            link(href="https://cdn.jsdelivr.net/npm/daisyui@5.6", rel="stylesheet", type = "text/css")
+            link(href="https://cdn.jsdelivr.net/npm/daisyui@5.6/themes.css", rel="stylesheet", type = "text/css")
             script(src = "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4") {}
             script(src = "https://unpkg.com/htmx.org@2.0.7", crossorigin = ScriptCrossorigin.anonymous) {}
             script(src = "https://cdn.jsdelivr.net/npm/sweetalert2@11") {}
@@ -49,16 +49,13 @@ class MainPageTemplate: Template<HTML> {
                             tabIndex = -1
 
                             li {
-                                mainMenuItem("/alunos", "Alunos ativos")
+                                mainMenuItem("/alunos", "Alunos")
                             }
                             li {
-                                mainMenuItem("/estatisticas", "Estatísticas")
+                                mainMenuItem("/inscricoes/irregulares", "Inscrições irregulares")
                             }
                             li {
-                                mainMenuItem("/inscricoes", "Inscrições")
-                            }
-                            li {
-                                mainMenuItem("/disciplinas", "Disciplinas")
+                                mainMenuItem("/jubilamentos", "Jubilamentos")
                             }
                             li {
                                 a {

@@ -29,10 +29,25 @@ class ItemHistorico(val matricula: String, val ano: Int, val periodo: Int, val d
     val isTrancamento = situacao == TRANCAMENTO_GERAL
     val isMatriculado = situacao == MATRICULADO
 
+    val disciplina by lazy {
+        RepositoryFactory.get(DisciplinaRepository::class).findByItemHistorico(this);
+    }
+
     companion object {
         fun of (matricula: String, ano: Int, periodo: Int, descPeriodo: String, versao: String, codigo: String, nome: String, situacao: Int, descricao: String, nota: Float?, creditos: Int, horas: Int, tipo:String): ItemHistorico =
             ItemHistorico(matricula, ano, periodo, descPeriodo, versao, codigo, nome, situacao, descricao, nota, creditos, horas, tipo)
     }
+
+    override fun equals(other: Any?): Boolean =
+        if (other is ItemHistorico)
+            matricula == other.matricula &&
+            ano == other.ano &&
+            periodo == other.periodo &&
+            codigo == other.codigo
+        else
+            false
+
+    override fun hashCode(): Int = (matricula + ano.toString() + periodo.toString() + codigo).hashCode()
 
     override fun toString(): String {
         return "[id=$id matricula=$matricula, ano=$ano, periodo=$periodo, periodo=$descPeriodo, versao=$versao, codigo=$codigo, nome=$nome, situacao=$situacao, descricao=$descricao, nota=$nota, creditos=$creditos, horas=$horas, tipo=$tipo]"

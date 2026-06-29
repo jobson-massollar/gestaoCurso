@@ -1,7 +1,12 @@
 package adapter.infrastructure.exposed
 
+import model.Aluno
+import model.Disciplina
 import model.DisciplinaDTO
+import model.ItemHistorico
+import org.jetbrains.exposed.v1.core.JoinType
 import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
@@ -53,18 +58,45 @@ class DisciplinaExposedDAO: IDisciplinaDAO {
             Disciplinas
                 .selectAll()
                 .map {
-                    createDTO(it, Disciplinas, it[Disciplinas.id])
+                    createDTO(it, Disciplinas)
             }.toList()
         }
 
-    override fun findObrigatoriasFaltantes(matricula: String) =
+    override fun findObrigatoriasFaltantes(aluno: Aluno) =
         transaction {
             DisciplinasObrigatoriasFaltantes
                 .selectAll()
-                .where { DisciplinasObrigatoriasFaltantes.matricula eq matricula }
+                .where { DisciplinasObrigatoriasFaltantes.matricula eq aluno.matricula }
                 .map {
-                    createDTO(it, DisciplinasObrigatoriasFaltantes, null)
-            }.toList()
+                    createDTO(it, DisciplinasObrigatoriasFaltantes)
+                }.toList()
+        }
+
+    override fun findByItemHistorico(itemHistorico: ItemHistorico) =
+        transaction {
+            Disciplinas
+                .selectAll()
+                .where { (Disciplinas.versao eq itemHistorico.versao) and (Disciplinas.codigo eq itemHistorico.codigo) }
+                .limit(1)
+                .map {
+                    createDTO(it, Disciplinas)
+                }.first()
+        }
+
+    override fun findPreRequisitos(disciplina: Disciplina) =
+        transaction {
+            Disciplinas
+                .join(
+                    PreRequisitos,
+                    JoinType.INNER) {
+                        (Disciplinas.versao eq PreRequisitos.versao) and
+                        (Disciplinas.codigo eq PreRequisitos.codigoPreReq)
+                    }
+                .selectAll()
+                .where { PreRequisitos.codigo eq disciplina.codigo }
+                .map {
+                    createDTO(it, Disciplinas)
+                }
         }
 
     private fun createDTO(row: ResultRow, disciplinas: DisciplinasBase, id: Uuid? = null) =
