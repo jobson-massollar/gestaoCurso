@@ -1,21 +1,24 @@
 package adapter.input.rest
 
-import adapter.input.ui.painelAluno
-import io.ktor.http.*
-import io.ktor.server.html.*
-import io.ktor.server.routing.*
+import adapter.input.ui.historicoAluno
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.html.respondHtml
+import io.ktor.server.html.respondHtmlFragment
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
 import model.AlunoRepository
 import model.RepositoryFactory
 
-fun Routing.historicoRoutes() {
+fun Route.historicoRoutes() {
+
     get("/historico/{matricula}") {
-        val matricula = call.parameters["matricula"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) {}
+        val matricula = call.parameters["matricula"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) { }
 
         val aluno = RepositoryFactory.get(AlunoRepository::class).findByMatricula(matricula)
 
         if (aluno != null) {
             call.respondHtmlFragment(status = HttpStatusCode.OK) {
-                painelAluno(aluno)
+                historicoAluno(aluno)
             }
         }
     }

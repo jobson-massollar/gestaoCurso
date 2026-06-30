@@ -1,31 +1,40 @@
 package adapter.input.ui
 
 import kotlinx.html.*
+import main.collator
 import model.*
+import kotlin.comparisons.compareBy
 
 fun FlowContent.painelAluno(aluno: Aluno) {
+    val comparator: Comparator<ItemHistorico> = compareBy(collator) { it.nome }
+    val aprovadasObrigatorias = aluno.itensAprovados.obrigatorias.sortedWith(comparator)
+    val aprovadasOptativas = aluno.itensAprovados.optativas.sortedWith(comparator)
+    val aprovadasComplementares = aluno.itensAprovados.complementares.sortedWith(comparator)
+    val aprovadasEletivas = aluno.itensAprovados.eletivas.sortedWith(comparator)
+    val obrigatoriasFaltantes = aluno.disciplinasObrigatoriasFaltantes.sortedWith(compareBy(collator) { it.nome })
+    val matriculadas = aluno.itensMatriculados.sortedWith(comparator)
 
-    val aprovadasObrigatorias = aluno.itensAprovados.obrigatorias
-    val aprovadasOptativas = aluno.itensAprovados.optativas
-    val aprovadasComplementares = aluno.itensAprovados.complementares
-    val aprovadasEletivas = aluno.itensAprovados.eletivas
-    val obrigatoriasFaltantes = aluno.disciplinasObrigatoriasFaltantes
+    title("Painel do Aluno") {
+        cardDadosAluno(aluno, aprovadasObrigatorias, aprovadasOptativas, aprovadasComplementares, aprovadasEletivas)
 
-    cardDadosAluno(aluno, aprovadasObrigatorias, aprovadasOptativas, aprovadasComplementares, aprovadasEletivas)
+        cardPeriodos(aluno)
 
-    cardPeriodos(aluno)
+        tableObrigatoriasFaltantes(
+            "Obrigatórias que Faltam (${obrigatoriasFaltantes.size})",
+            obrigatoriasFaltantes,
+            aluno.itensMatriculados
+        )
 
-    tableObrigatoriasFaltantes("Obrigatórias que Faltam (${obrigatoriasFaltantes.size})", obrigatoriasFaltantes, aluno.itensMatriculados)
+        tableDisciplinas("Matriculadas (${matriculadas.size})", matriculadas)
 
-    tableDisciplinas("Matriculadas (${aluno.itensMatriculados.size})", aluno.itensMatriculados)
+        tableDisciplinas("Obrigatórias Cursadas (${aprovadasObrigatorias.size})", aprovadasObrigatorias)
 
-    tableDisciplinas("Obrigatórias Cursadas (${aprovadasObrigatorias.size})", aprovadasObrigatorias)
+        tableDisciplinas("Optativas Cursadas (${aprovadasOptativas.size})", aprovadasOptativas)
 
-    tableDisciplinas("Optativas Cursadas (${aprovadasOptativas.size})", aprovadasOptativas)
+        tableDisciplinas("Complementares Cursadas (${aprovadasComplementares.size})", aprovadasComplementares)
 
-    tableDisciplinas("Complementares Cursadas (${aprovadasComplementares.size})", aprovadasComplementares)
-
-    tableDisciplinas("Eletivas Cursadas (${aprovadasEletivas.size})", aprovadasEletivas)
+        tableDisciplinas("Eletivas Cursadas (${aprovadasEletivas.size})", aprovadasEletivas)
+    }
 }
 
 /**
@@ -41,9 +50,6 @@ private fun FlowContent.cardDadosAluno(
     aprovadasComplementares: List<ItemHistorico>,
     aprovadasEletivas: List<ItemHistorico>
 ) {
-//    div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
-//
-//    }
     div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
         div(classes = "card-body") {
             h2(classes = "card-title") { +"${aluno.matricula} - ${aluno.nome} (${aluno.versao})" }
@@ -118,32 +124,22 @@ private fun FlowContent.tableObrigatoriasFaltantes(title: String, disciplinas: L
         table(classes = "table table-zebra table-sm") {
             thead {
                 tr(classes = "bg-base-300") {
-                    th(classes = "text-center") { +"Código" }
-                    th { +"Nome" }
-                    th(classes = "text-center") { +"Matriculada" }
-                    th(classes = "text-center") { +"Período" }
-                    th(classes = "text-center") { +"Horas" }
+                    th(classes = "text-center w-1/10") { +"Código" }
+                    th(classes = "w-6/10") { +"Nome" }
+                    th(classes = "text-center w-1/10") { +"Matriculada" }
+                    th(classes = "text-center w-1/10") { +"Período" }
+                    th(classes = "text-center w-1/10") { +"Horas" }
                 }
             }
             tbody {
                 disciplinas
                     .forEach {
                         tr {
-                            td(classes = "text-center") {
-                                +it.codigo
-                            }
-                            td {
-                                +it.nome
-                            }
-                            td(classes = "text-center") {
-                                +if (matriculadas.any { m -> m.codigo == it.codigo }) "✅" else "-"
-                            }
-                            td(classes = "text-center") {
-                                +"${it.periodo}"
-                            }
-                            td(classes = "text-center") {
-                                +"${it.horas}"
-                            }
+                            td(classes = "text-center") { +it.codigo  }
+                            td { +it.nome }
+                            td(classes = "text-center") { +if (matriculadas.any { m -> m.codigo == it.codigo }) "✅" else "-" }
+                            td(classes = "text-center") { +"${it.periodo}" }
+                            td(classes = "text-center") { +"${it.horas}" }
                         }
                     }
             }
@@ -156,15 +152,15 @@ private fun FlowContent.tableDisciplinas(title: String, historico: List<ItemHist
     div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
         h2(classes = "m-2 text-base-content/50 font-bold") { +title }
         hr(classes = "border-base-content/50") {  }
-        table(classes = "table table-zebra table-sm") {
+        table(classes = "table table-zebra table-sm table-fixed") {
             thead {
                 tr(classes = "bg-base-300") {
-                    th(classes = "text-center") { +"Semestre" }
-                    th(classes = "text-center") { +"Código" }
-                    th { +"Nome" }
-                    th(classes = "text-center") { +"Situação" }
-                    th(classes = "text-right") { +"Nota" }
-                    th(classes = "text-center") { +"Horas" }
+                    th(classes = "text-center w-1/10") { +"Semestre" }
+                    th(classes = "text-center w-1/10") { +"Código" }
+                    th(classes = "w-5/10") { +"Nome" }
+                    th(classes = "text-center w-1/10") { +"Situação" }
+                    th(classes = "text-right w-1/10") { +"Nota" }
+                    th(classes = "text-center w-1/10") { +"Horas" }
                 }
             }
             tbody {

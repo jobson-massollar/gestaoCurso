@@ -5,6 +5,9 @@ import io.ktor.htmx.html.*
 import kotlinx.html.FlowContent
 import kotlinx.html.HTMLTag
 import kotlinx.html.button
+import kotlinx.html.div
+import kotlinx.html.h2
+import kotlinx.html.hr
 import kotlinx.html.radioInput
 
 fun Float.format(digits: Int) = "%.${digits}f".format(this)
@@ -21,8 +24,18 @@ var HTMLTag.tabIndex: Int
         attributes["tabindex"] = value.toString()
     }
 
+fun FlowContent.title(title: String, block: FlowContent.() -> Unit = {}) {
+    div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
+        div(classes = "card-body") {
+            h2(classes = "card-title") { +title }
+            hr(classes = "mb-2 border-base-content/50") {  }
+            block()
+        }
+    }
+}
+
 fun FlowContent.smallButton(label: String, url: String, container: String, disabled: Boolean = false) {
-    button(classes = "btn btn-ghost btn-xs") {
+    button(classes = "ms-2 btn btn-xs btn-primary") {
         attributes.hx {
             get = url
             target = container

@@ -1,17 +1,15 @@
 package adapter.input.rest
 
-import adapter.input.ui.tableAlunos
 import adapter.input.ui.tableInscricoes
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.html.respondHtmlFragment
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
-import main.appLocale
 import model.AlunoRepository
 import model.RepositoryFactory
 import services.application.AlunoFilter
 
-fun Route.inscricaoRoutes() {
+fun Route.inscricoesRoutes() {
 
     get("/inscricoes/irregulares") {
 //        val sorting = call.request.queryParameters["sort"] ?: ALUNO_SORTING_NOME_ASC

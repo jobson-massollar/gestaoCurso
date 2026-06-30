@@ -74,6 +74,14 @@ class Periodo(private var _ano: Int, private var _semestre: Int): Comparable<Per
 //        }
 //    }
 
+    override fun equals(other: Any?): Boolean =
+        if (other is Periodo)
+            ano == other.ano && semestre == other.semestre
+        else
+            false
+
+    override fun hashCode() = (ano * 10000 + semestre).hashCode()
+
     override fun compareTo(other: Periodo) =
         if (_ano == other._ano) _semestre - other._semestre else _ano - other._ano
 
