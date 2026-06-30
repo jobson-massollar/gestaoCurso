@@ -2,9 +2,15 @@ package main
 
 import adapter.infrastructure.exposed.ExposedDAOFactory
 import io.ktor.server.application.*
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.DateTimeFormat
+import kotlinx.datetime.format.char
+import kotlinx.datetime.toLocalDateTime
 import services.domain.persistence.DAOFactory
 import java.text.Collator
-import java.util.*
+import java.util.Locale
+import kotlin.time.Clock
 
 val appLocale: Locale = Locale.of("pt", "BR")
 
@@ -14,6 +20,21 @@ val collator: Collator = Collator.getInstance(appLocale).apply {
     // TERTIARY (Padrão) diferencia maiúsculas e acentos (ex: a < A < á)
     strength = Collator.PRIMARY
 }
+
+val dateTimeFormat: DateTimeFormat<LocalDateTime>
+    get() = LocalDateTime.Format {
+        year()
+        char('-')
+        monthNumber()
+        char('-')
+        day()
+        char(' ')
+        hour()
+        minute()
+        second()
+    }
+
+fun currentDateTime() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
 fun Application.configureApp() {
     DAOFactory.register(ExposedDAOFactory)

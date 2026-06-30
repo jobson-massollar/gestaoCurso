@@ -9,6 +9,9 @@ import io.ktor.server.html.respondHtmlFragment
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
+import kotlinx.datetime.format
+import main.currentDateTime
+import main.dateTimeFormat
 import model.Aluno
 import model.AlunoRepository
 import model.RepositoryFactory
@@ -26,7 +29,7 @@ fun Route.inscricoesRoutes() {
     get("/inscricoes/irregulares/download") {
 
         call.response.headers.apply {
-            append("Content-Disposition", "attachment; filename=\"inscricoes-irregulares.csv\"")
+            append("Content-Disposition", "attachment; filename=\"inscricoes-irregulares ${currentDateTime().format(dateTimeFormat)}.csv\"")
         }
 
         call.respondText(ContentType.Text.CSV, HttpStatusCode.OK) {

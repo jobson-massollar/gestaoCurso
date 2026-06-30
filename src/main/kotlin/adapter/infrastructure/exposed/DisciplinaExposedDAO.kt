@@ -76,7 +76,10 @@ class DisciplinaExposedDAO: IDisciplinaDAO {
         transaction {
             Disciplinas
                 .selectAll()
-                .where { (Disciplinas.versao eq itemHistorico.versao) and (Disciplinas.codigo eq itemHistorico.codigo) }
+                .where {
+                    (Disciplinas.versao eq itemHistorico.versao) and
+                    (Disciplinas.codigo eq itemHistorico.codigo)
+                }
                 .limit(1)
                 .map {
                     createDTO(it, Disciplinas)
@@ -93,7 +96,10 @@ class DisciplinaExposedDAO: IDisciplinaDAO {
                         (Disciplinas.codigo eq PreRequisitos.codigoPreReq)
                     }
                 .selectAll()
-                .where { PreRequisitos.codigo eq disciplina.codigo }
+                .where {
+                    (PreRequisitos.versao eq disciplina.versao) and
+                    (PreRequisitos.codigo eq disciplina.codigo)
+                }
                 .map {
                     createDTO(it, Disciplinas)
                 }

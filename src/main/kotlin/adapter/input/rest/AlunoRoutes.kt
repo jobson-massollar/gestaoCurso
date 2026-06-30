@@ -7,7 +7,10 @@ import io.ktor.http.*
 import io.ktor.server.html.*
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.*
+import kotlinx.datetime.format
 import main.appLocale
+import main.currentDateTime
+import main.dateTimeFormat
 import model.Aluno
 import model.AlunoRepository
 import model.RepositoryFactory
@@ -37,7 +40,7 @@ fun Routing.alunoRoutes() {
         val alunos = findAlunos(params.sorting, params.filter, params.search)
 
         call.response.headers.apply {
-            append("Content-Disposition", "attachment; filename=\"alunos.csv\"")
+            append("Content-Disposition", "attachment; filename=\"alunos ${currentDateTime().format(dateTimeFormat)}.csv\"")
         }
 
         call.respondText(ContentType.Text.CSV, HttpStatusCode.OK) {
