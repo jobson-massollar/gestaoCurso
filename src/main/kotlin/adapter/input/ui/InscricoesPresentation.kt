@@ -5,6 +5,7 @@ import kotlinx.html.div
 import kotlinx.html.li
 import kotlinx.html.p
 import kotlinx.html.table
+import kotlinx.html.tbody
 import kotlinx.html.td
 import kotlinx.html.th
 import kotlinx.html.thead
@@ -32,31 +33,33 @@ fun FlowContent.tableInscricoes(alunos: List<Aluno>) {
                         th { +" " }
                     }
                 }
-                alunos.forEach {
-                    tr(classes = "hover:bg-accent hover:text-base-100") {
-                        td(classes = "text-center") { +it.matricula }
-                        td { +it.nome }
-                        td(classes = "text-center") { +it.versao }
-                        td { +it.email }
-                        td(classes = "text-center") { +it.itensMatriculados.size.toString() }
-                        td {
-                            ul {
-                                if (it.disciplinasObrigatoriasACursar.isNotEmpty()) {
-                                    li { +"${it.disciplinasObrigatoriasACursar.size} obrigatórias" }
-                                }
-                                if (it.horasOptativasFaltantes > 0) {
-                                    li { +"${it.horasOptativasFaltantes}h de optativas" }
-                                }
-                                if (it.grade is Grade.Grade2008) {
-                                    if (it.horasEletivasFaltantes > 0) {
-                                        li { +"${it.horasEletivasFaltantes}h de eletivas" }
+                tbody {
+                    alunos.forEach {
+                        tr(classes = "hover:bg-accent hover:text-base-100") {
+                            td(classes = "text-center") { +it.matricula }
+                            td { +it.nome }
+                            td(classes = "text-center") { +it.versao }
+                            td { +it.email }
+                            td(classes = "text-center") { +it.itensMatriculados.size.toString() }
+                            td {
+                                ul {
+                                    if (it.disciplinasObrigatoriasACursar.isNotEmpty()) {
+                                        li { +"${it.disciplinasObrigatoriasACursar.size} obrigatórias" }
+                                    }
+                                    if (it.horasOptativasFaltantes > 0) {
+                                        li { +"${it.horasOptativasFaltantes}h de optativas" }
+                                    }
+                                    if (it.grade is Grade.Grade2008) {
+                                        if (it.horasEletivasFaltantes > 0) {
+                                            li { +"${it.horasEletivasFaltantes}h de eletivas" }
+                                        }
                                     }
                                 }
                             }
-                        }
-                        td(classes = "gap-4") {
-                            smallButton("Painel", $"/alunos/painel/${it.matricula}", "#main-container", !it.isAtivo)
-                            smallButton("Histórico", $"/historico/${it.matricula}", "#main-container", !it.isAtivo)
+                            td(classes = "gap-4") {
+                                smallButton("Painel", $"/alunos/painel/${it.matricula}", "#main-container", !it.isAtivo)
+                                smallButton("Histórico", $"/historico/${it.matricula}", "#main-container", !it.isAtivo)
+                            }
                         }
                     }
                 }

@@ -12,7 +12,6 @@ class Aluno private constructor(val matricula: String, val nome: String, val sex
     val periodoFinal = periodoInicial + periodosPandemia + 17 // 8 + 4 + 4 trancamentos
     val periodoLimite = periodoInicial + (11 + periodosPandemia + prazoExtensao + trancamentos)
     val isAtivo = dataEvasao == null && evasao.take(3) != "ABA"
-    //val migrou = versao == "2023/2" && matricula.take(4) < "20232"
 
     val historico by lazy {
         RepositoryFactory.get(ItemHistoricoRepository::class).findByMatricula(this)
@@ -122,6 +121,14 @@ class Aluno private constructor(val matricula: String, val nome: String, val sex
             horasOptativas + horasOptativasMatr < grade.horasOptativas || eletivas.sumOf { it.horas } < grade.horasEletivas
         else
             horasOptativas + horasOptativasMatr + eletivas.eletivasAproveitadas.horasEletivasAproveitadas < grade.horasOptativas
+    }
+
+    val jubiladoPorAbandono by lazy {
+        itensMatriculados.cursadas(Periodo.ATUAL).isEmpty() && ! estaTrancado
+    }
+
+    val jubiladoPorPrazo by lazy {
+        Periodo.ATUAL > periodoLimite && ! estaFormado
     }
 
     override fun equals(other: Any?): Boolean =

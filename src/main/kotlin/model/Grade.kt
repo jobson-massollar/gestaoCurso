@@ -4,7 +4,8 @@ sealed class Grade(val versao: String,
                    val qtdObrigatorias: Int,
                    val horasOptativas: Int,
                    val horasEletivas: Int,
-                   val horasComplementares: Int) {
+                   val horasComplementares: Int,
+                   val limiteTrancamentos: Int = 4) {
 
     companion object {
         fun versao(v: String) = if (v == Grade2008.versao) Grade2008 else Grade2023
