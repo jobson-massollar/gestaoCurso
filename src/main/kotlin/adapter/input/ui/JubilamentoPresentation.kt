@@ -14,7 +14,7 @@ import kotlinx.html.tr
 import model.Aluno
 
 fun FlowContent.tableJubilamentoPorAbandono(jubilados: List<Aluno>) {
-    div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
+    div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
         h2(classes = "m-2 text-base-content/50 font-bold") { +"Jubilamento por Abandono" }
         hr(classes = "border-base-content/50") { }
 

@@ -16,10 +16,11 @@ fun Route.historicoRoutes() {
 
         val aluno = RepositoryFactory.get(AlunoRepository::class).findByMatricula(matricula)
 
-        if (aluno != null) {
+        if (aluno != null)
             call.respondHtmlFragment(status = HttpStatusCode.OK) {
                 historicoAluno(aluno)
             }
-        }
+        else
+            call.respondHtml(HttpStatusCode.NotFound) {}
     }
 }

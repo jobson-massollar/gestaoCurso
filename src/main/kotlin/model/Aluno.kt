@@ -4,7 +4,25 @@ import kotlinx.datetime.LocalDate
 import kotlin.math.max
 import kotlin.math.min
 
-class Aluno private constructor(val matricula: String, val nome: String, val sexo: Char, val dataNascimento: LocalDate?, val versao: String, val ingresso: String, val logradouro: String, val numero: String, val complemento: String, val bairro: String, val cidade: String, val cep: String, val telefone1: String, val telefone2: String, val email: String, val evasao: String, val dataEvasao: LocalDate?, val trancamentos: Int, val prazoExtensao: Int): Entity() {
+class Aluno private constructor(val matricula: String,
+                                val nome: String,
+                                val sexo: Char,
+                                val dataNascimento: LocalDate?,
+                                val versao: String,
+                                val ingresso: String,
+                                val logradouro: String,
+                                val numero: String,
+                                val complemento: String,
+                                val bairro: String,
+                                val cidade: String,
+                                val cep: String,
+                                val telefone1: String,
+                                val telefone2: String,
+                                val email: String,
+                                val evasao: String,
+                                val dataEvasao: LocalDate?,
+                                val trancamentos: Int,
+                                val prazoExtensao: Int): Entity() {
 
     val grade = Grade.versao(versao)
     val periodoInicial = Periodo(matricula.take(4).toInt(), matricula[4].code - 48)
