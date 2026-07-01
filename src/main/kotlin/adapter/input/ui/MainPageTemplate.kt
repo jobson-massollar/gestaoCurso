@@ -52,6 +52,9 @@ class MainPageTemplate: Template<HTML> {
                                 mainMenuItem("/alunos", "Alunos")
                             }
                             li {
+                                mainMenuItem("/alunos/extensao", "Alunos com 11 ou mais períodos")
+                            }
+                            li {
                                 mainMenuItem("/inscricoes/irregulares", "Inscrições irregulares")
                             }
                             li {

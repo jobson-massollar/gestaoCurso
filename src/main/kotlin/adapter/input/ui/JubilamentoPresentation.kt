@@ -43,8 +43,8 @@ fun FlowContent.tableJubilamentoPorAbandono(jubilados: List<Aluno>) {
                         td { +it.email }
                         td(classes = "text-center") { +it.trancamentos.toString() }
                         td(classes = "gap-4") {
-                            smallButton("Painel", $"/alunos/painel/${it.matricula}", "#main-container", !it.isAtivo)
-                            smallButton("Histórico", $"/historico/${it.matricula}", "#main-container", !it.isAtivo)
+                            smallButton("Painel", $"/alunos/painel/${it.matricula}", "#main-container", !it.estaAtivo)
+                            smallButton("Histórico", $"/historico/${it.matricula}", "#main-container", !it.estaAtivo)
                         }
                     }
                 }
@@ -84,8 +84,8 @@ fun FlowContent.tableJubilamentoPorPrazo(jubilados: List<Aluno>) {
                         td { +it.email }
                         td(classes = "text-center") { +it.periodoLimite.toString() }
                         td(classes = "gap-4") {
-                            smallButton("Painel", $"/alunos/painel/${it.matricula}", "#main-container", !it.isAtivo)
-                            smallButton("Histórico", $"/historico/${it.matricula}", "#main-container", !it.isAtivo)
+                            smallButton("Painel", $"/alunos/painel/${it.matricula}", "#main-container", !it.estaAtivo)
+                            smallButton("Histórico", $"/historico/${it.matricula}", "#main-container", !it.estaAtivo)
                         }
                     }
                 }

@@ -122,8 +122,8 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                             td { +it.evasao.take(40) }
                         }
                         td(classes = "gap-4") {
-                            smallButton("Painel", $"/alunos/painel/${it.matricula}", "#main-container", !it.isAtivo)
-                            smallButton("Histórico", $"/historico/${it.matricula}", "#main-container", !it.isAtivo)
+                            smallButton("Painel", $"/alunos/painel/${it.matricula}", "#main-container", !it.estaAtivo)
+                            smallButton("Histórico", $"/historico/${it.matricula}", "#main-container", !it.estaAtivo)
                         }
                     }
                 }

@@ -1,8 +1,8 @@
 package adapter.input.ui
 
 import kotlinx.html.FlowContent
+import kotlinx.html.br
 import kotlinx.html.div
-import kotlinx.html.li
 import kotlinx.html.p
 import kotlinx.html.table
 import kotlinx.html.tbody
@@ -10,13 +10,13 @@ import kotlinx.html.td
 import kotlinx.html.th
 import kotlinx.html.thead
 import kotlinx.html.tr
-import kotlinx.html.ul
 import model.Aluno
-import model.Grade
+import model.Periodo
+import kotlin.collections.forEach
 
-fun FlowContent.tableInscricoes(alunos: List<Aluno>) {
+fun FlowContent.tableExtensao(alunos: List<Aluno>) {
     if (alunos.isEmpty()) {
-        p(classes = "text-base") { +"Nenhuma inscrição irregular foi encontrada!"}
+        p(classes = "text-base") { +"Nenhum aluno em período de extensão"}
         return
     }
 
@@ -28,8 +28,12 @@ fun FlowContent.tableInscricoes(alunos: List<Aluno>) {
                     th { +"Nome" }
                     th(classes = "text-center") { +"Currículo" }
                     th { +"E-mail" }
-                    th(classes = "text-center") { +"Inscrições" }
-                    th { +"Observações" }
+                    th(classes = "text-center") { +"Limite" }
+                    th(classes = "text-center") { +"Períodos" }
+                    th(classes = "text-center") {
+                        +"Extensão"
+                        br()
+                        +"(períodos)" }
                     th { +" " }
                 }
             }
@@ -40,14 +44,9 @@ fun FlowContent.tableInscricoes(alunos: List<Aluno>) {
                         td { +aluno.nome }
                         td(classes = "text-center") { +aluno.versao }
                         td { +aluno.email }
-                        td(classes = "text-center") { +aluno.itensMatriculados.size.toString() }
-                        td {
-                            ul {
-                                aluno.observacoes.forEach { obs ->
-                                    li { +obs }
-                                }
-                            }
-                        }
+                        td(classes = "text-center") { +(aluno.periodoLimite.toString() + if (aluno.periodoLimite < Periodo.ATUAL) " 🔴" else "") }
+                        td(classes = "text-center") { +aluno.ultimoPeriodoCursado.numero.toString() }
+                        td(classes = "text-center") { +aluno.prazoExtensao.toString() }
                         td(classes = "gap-4") {
                             smallButton("Painel", $"/alunos/painel/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
                             smallButton("Histórico", $"/historico/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
@@ -58,19 +57,3 @@ fun FlowContent.tableInscricoes(alunos: List<Aluno>) {
         }
     }
 }
-
-val Aluno.observacoes: List<String>
-    get() {
-        val observacoes = mutableListOf<String>()
-
-        if (disciplinasObrigatoriasACursar.isNotEmpty())
-            observacoes.add("${disciplinasObrigatoriasACursar.size} obrigatórias")
-
-        if (horasOptativasFaltantes > 0)
-            observacoes.add("${horasOptativasFaltantes}h de optativas")
-
-        if (grade is Grade.Grade2008 && horasEletivasFaltantes > 0)
-            observacoes.add("${horasEletivasFaltantes}h de eletivas")
-
-        return observacoes
-    }

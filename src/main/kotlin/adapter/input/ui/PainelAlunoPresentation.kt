@@ -93,22 +93,17 @@ private fun FlowContent.cardPeriodos(aluno: Aluno) {
                 }
             }
             tbody {
-                val numeracao: MutableList<String> = mutableListOf()
                 val background: MutableList<String> = mutableListOf()
                 tr {
-                    val i = mutableListOf(0)
-                    val periodoPandemia = INICIO_PANDEMIA..FIM_PANDEMIA
-                    for (s in aluno.periodoInicial..aluno.periodoFinal) {
-                        val isPandemia = s in periodoPandemia
-                        val label = situacaoPeriodo(s, aluno)
-                        numeracao.add(numeracaoPeriodo(isPandemia, label, i))
-                        background.add(estiloPeriodo(isPandemia, s > aluno.periodoLimite, label))
+                    aluno.statusPeriodos(Periodo.ATUAL).forEach { statusPeriodo ->
+                        val label = situacaoPeriodo(statusPeriodo, aluno)
+                        background.add(estiloPeriodo(statusPeriodo))
                         td(classes = "text-base text-center ${background.last()}") { +label }
                     }
                 }
                 tr {
-                    numeracao.forEachIndexed { i, label ->
-                        td(classes = "text-center ${background[i]}") { +label }
+                    aluno.statusPeriodos(Periodo.ATUAL).forEachIndexed { i, status ->
+                        td(classes = "text-center ${background[i]}") { +numeracaoPeriodo(status) }
                     }
                 }
             }
@@ -192,43 +187,46 @@ private fun FlowContent.tableDisciplinas(title: String, historico: List<ItemHist
     }
 }
 
-private fun estiloPeriodo(isPandemia: Boolean, isAcimaLImite: Boolean, label: String): String =
+private fun estiloPeriodo(status: StatusPeriodo): String =
     when {
-        isPandemia -> "bg-warning"
-        label == "T" -> "bg-error"
-        isAcimaLImite -> ""
-        label == "-" -> "bg-info"
+        status.isPandemia -> "bg-warning"
+        status.isAcimaLimite -> if (status is StatusPeriodo.ACursar) "" else "bg-red-400"
+        status is StatusPeriodo.Trancado -> "bg-error"
+        status is StatusPeriodo.ACursar -> "bg-info"
         else -> "bg-success"
     }
 
-private fun numeracaoPeriodo(isPandemia: Boolean, label: String, i: MutableList<Int>): String =
+private fun numeracaoPeriodo(status: StatusPeriodo): String =
     when {
-        isPandemia -> "P"
-        label == "T" -> "-"
-        else -> { i[0] = i[0] + 1; i[0].toString() }
+        status.isPandemia -> "P"
+        status is StatusPeriodo.Trancado -> "-"
+        else -> status.numero.toString()
     }
 
-private fun situacaoPeriodo(periodo: Periodo, aluno: Aluno): String {
-    val historicoPeriodo = aluno.historico.cursadas(periodo)
+private fun situacaoPeriodo(status: StatusPeriodo, aluno: Aluno): String =
+    when (status) {
+        is StatusPeriodo.ACursar -> "-"
+        is StatusPeriodo.Trancado -> "T"
+        is StatusPeriodo.NaoMatriculado -> "⚠"
+        is StatusPeriodo.Matriculado -> {
+            val historicoPeriodo = aluno.historico.cursadas(status.periodo)
 
-    if (historicoPeriodo.isEmpty()) return if (periodo > Periodo.ATUAL) "-" else "⚠"
-    if (historicoPeriodo[0].isTrancamento) return "T"
+            val m = historicoPeriodo.matriculadas.size
+            val a = historicoPeriodo.aprovadas.size
+            val r = historicoPeriodo.reprovadas.size
 
-    val m = historicoPeriodo.matriculadas.size
-    val a = historicoPeriodo.aprovadas.size
-    val r = historicoPeriodo.reprovadas.size
-
-    return buildString {
-        var s = ""
-        if (m > 0) {
-            append("${m}M")
-            s = "/"
+            buildString {
+                var s = ""
+                if (m > 0) {
+                    append("${m}M")
+                    s = "/"
+                }
+                if (a > 0) {
+                    append("${s}${a}A")
+                    s = "/"
+                }
+                if (r > 0)
+                    append("${s}${r}R")
+            }
         }
-        if (a > 0) {
-            append("${s}${a}A")
-            s = "/"
-        }
-        if (r > 0)
-            append("${s}${r}R")
     }
-}

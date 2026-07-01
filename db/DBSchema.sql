@@ -269,6 +269,7 @@ where T.codigo is null;
 
 /*----------------------------------------------------------------------------------
   Definição das horas de disciplinas complementares
+  Existem ATCs SEM horas!!!!
  ----------------------------------------------------------------------------------*/
 
 update itens_historico ih set horas = 90 where ih.codigo = 'ATC0021';
@@ -293,6 +294,7 @@ set tipo = T.tipo
     from (
 	select h.matricula, h.ano, h.periodo, h.codigo,
 	case
+	  when left(h.codigo, 3) = 'TRT' then 'Trancamento'
 	  when h.versao = '2023/2' and left(h.codigo, 3) = 'ATC' then 'Complementar'
 	  when d1.tipo is not null then d1.tipo
 	  when d2.tipo is not null and d2.codigo = 'HTD0058' then 'Eletiva'
