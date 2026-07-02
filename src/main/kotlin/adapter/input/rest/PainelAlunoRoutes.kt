@@ -14,9 +14,11 @@ fun Routing.painelAlunoRoutes() {
         val aluno = RepositoryFactory.get(AlunoRepository::class).findByMatricula(matricula)
 
         if (aluno != null) {
-            call.respondHtmlFragment(status = HttpStatusCode.OK) {
+            call.respondHTML(status = HttpStatusCode.OK) {
                 painelAluno(aluno)
             }
         }
+        else
+            call.respondHtml(HttpStatusCode.NotFound) {}
     }
 }

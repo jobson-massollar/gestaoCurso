@@ -9,7 +9,6 @@ import io.ktor.server.html.*
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.*
 import kotlinx.datetime.format
-import kotlinx.html.FlowContent
 import main.appLocale
 import main.currentDateTime
 import main.dateTimeFormat
@@ -30,28 +29,12 @@ fun Routing.alunoRoutes() {
         val params = getParameters(call)
         val alunos = findAlunos(params.sorting, params.filter, params.search)
 
-        val isHTMX = call.request.headers["HX-Request"] == "true"
-        val isBack = call.request.headers["HX-History-Restore-Request"] == "true"
-
-        val fragment: FlowContent.() -> Unit = {
+        call.respondHTML(status = HttpStatusCode.OK) {
             title(
                 "Alunos",
                 "/alunos/download?sort=${params.sorting}&filter=${params.filter}&search=${params.search}"
             ) {
                 tableAlunos(alunos, params.sorting, params.filter, params.search)
-            }
-        }
-
-        if (isHTMX && ! isBack) {
-            call.respondHtmlFragment(status = HttpStatusCode.OK, fragment)
-        }
-        else {
-            call.respondHtmlTemplate(MainPageTemplate(), status = HttpStatusCode.OK) {
-                pageBody {
-                    mainContent {
-                        fragment()
-                    }
-                }
             }
         }
     }
@@ -73,7 +56,7 @@ fun Routing.alunoRoutes() {
     get("/alunos/extensao") {
         val alunos = findAlunos()
 
-        call.respondHtmlFragment(status = HttpStatusCode.OK) {
+        call.respondHTML(status = HttpStatusCode.OK) {
             title("Alunos com 11 ou mais Períodos de Integralização", "/alunos/extensao/download") {
                 tableExtensao(alunos)
             }

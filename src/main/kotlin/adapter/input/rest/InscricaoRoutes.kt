@@ -20,7 +20,7 @@ import services.application.AlunoFilter
 fun Route.inscricoesRoutes() {
 
     get("/inscricoes/irregulares") {
-        call.respondHtmlFragment(status = HttpStatusCode.OK) {
+        call.respondHTML(status = HttpStatusCode.OK) {
             title("Inscrições Irregulares", "/inscricoes/irregulares/download") {
                 tableInscricoes(findAlunos())
             }

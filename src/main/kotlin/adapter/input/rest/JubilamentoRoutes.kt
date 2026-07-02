@@ -25,7 +25,7 @@ fun Route.jubilamentoRoutes() {
     get("/jubilamentos") {
         val jubilados = findJubilados()
 
-        call.respondHtmlFragment(status = HttpStatusCode.OK) {
+        call.respondHTML(status = HttpStatusCode.OK) {
             title("Jubilamentos", "/jubilamentos/download") {
                 tableJubilamentoPorAbandono(jubilados.porAbandono)
                 tableJubilamentoPorPrazo(jubilados.porPrazo)
