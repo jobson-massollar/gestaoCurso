@@ -30,12 +30,7 @@ fun Routing.alunoRoutes() {
         val alunos = findAlunos(params.sorting, params.filter, params.search)
 
         call.respondHTML(status = HttpStatusCode.OK) {
-            title(
-                "Alunos",
-                "/alunos/download?sort=${params.sorting}&filter=${params.filter}&search=${params.search}"
-            ) {
-                tableAlunos(alunos, params.sorting, params.filter, params.search)
-            }
+            tableAlunos(alunos, params.sorting, params.filter, params.search)
         }
     }
 
@@ -57,9 +52,7 @@ fun Routing.alunoRoutes() {
         val alunos = findAlunos()
 
         call.respondHTML(status = HttpStatusCode.OK) {
-            title("Alunos com 11 ou mais Períodos de Integralização", "/alunos/extensao/download") {
-                tableExtensao(alunos)
-            }
+            tableExtensao(alunos)
         }
     }
 

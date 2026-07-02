@@ -1,5 +1,6 @@
 package adapter.input.ui
 
+import adapter.input.rest.Jubilados
 import kotlinx.html.FlowContent
 import kotlinx.html.div
 import kotlinx.html.h2
@@ -12,6 +13,13 @@ import kotlinx.html.th
 import kotlinx.html.thead
 import kotlinx.html.tr
 import model.Aluno
+
+fun FlowContent.tableJubilamentos(jubilados: Jubilados) {
+    title("Jubilamentos", "/jubilamentos/download") {
+        tableJubilamentoPorAbandono(jubilados.porAbandono)
+        tableJubilamentoPorPrazo(jubilados.porPrazo)
+    }
+}
 
 fun FlowContent.tableJubilamentoPorAbandono(jubilados: List<Aluno>) {
     div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {

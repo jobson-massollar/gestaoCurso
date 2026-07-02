@@ -10,6 +10,7 @@ import kotlinx.html.div
 import kotlinx.html.h2
 import kotlinx.html.hr
 import kotlinx.html.label
+import kotlinx.html.onClick
 import kotlinx.html.radioInput
 import kotlinx.html.span
 import kotlinx.html.unsafe
@@ -28,12 +29,18 @@ var HTMLTag.tabIndex: Int
         attributes["tabindex"] = value.toString()
     }
 
-fun FlowContent.title(title: String, downloadURL: String = "", block: FlowContent.() -> Unit = {}) {
+fun FlowContent.title(title: String, downloadURL: String = "", backButton: Boolean = false, block: FlowContent.() -> Unit = {}) {
     div(classes = "mb-4 p-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
-        div(classes = "flex") {
+        div(classes = "flex items-center") {
+            if (backButton) {
+                button(classes = "btn btn-ghost") {
+                    onClick = "history.back()"
+                    unsafe { +BACK_SVG }
+                }
+            }
             label(classes = "text-lg font-semibold") { +title }
             if (downloadURL.isNotBlank()) {
-                label(classes = "ml-auto mr-4") {
+                label(classes = "ml-auto") {
                     downloadButton(downloadURL)
                 }
             }

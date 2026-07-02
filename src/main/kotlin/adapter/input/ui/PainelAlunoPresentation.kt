@@ -14,7 +14,7 @@ fun FlowContent.painelAluno(aluno: Aluno) {
     val obrigatoriasFaltantes = aluno.disciplinasObrigatoriasFaltantes.sortedWith(compareBy(collator) { it.nome })
     val matriculadas = aluno.itensMatriculados.sortedWith(comparator)
 
-    title("Painel do Aluno") {
+    title("Painel do Aluno", backButton = true) {
         cardDadosAluno(aluno, aprovadasObrigatorias, aprovadasOptativas, aprovadasComplementares, aprovadasEletivas)
 
         cardPeriodos(aluno)

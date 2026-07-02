@@ -18,7 +18,7 @@ import model.Periodo
 fun FlowContent.historicoAluno(aluno: Aluno) {
     val comparator: Comparator<ItemHistorico> = compareBy(collator) { it.nome }
 
-    title("Histórico - ${aluno.nome} (${aluno.matricula})") {
+    title("Histórico - ${aluno.nome} (${aluno.matricula})", backButton = true) {
         aluno.historico
             .groupBy { Periodo(it.ano, it.periodo) }
             .toSortedMap()

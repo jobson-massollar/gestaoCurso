@@ -21,9 +21,7 @@ fun Route.inscricoesRoutes() {
 
     get("/inscricoes/irregulares") {
         call.respondHTML(status = HttpStatusCode.OK) {
-            title("Inscrições Irregulares", "/inscricoes/irregulares/download") {
-                tableInscricoes(findAlunos())
-            }
+            tableInscricoes(findAlunos())
         }
     }
     get("/inscricoes/irregulares/download") {

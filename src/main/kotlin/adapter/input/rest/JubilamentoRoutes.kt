@@ -2,6 +2,7 @@ package adapter.input.rest
 
 import adapter.input.ui.tableJubilamentoPorAbandono
 import adapter.input.ui.tableJubilamentoPorPrazo
+import adapter.input.ui.tableJubilamentos
 import adapter.input.ui.title
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
@@ -18,18 +19,13 @@ import model.RepositoryFactory
 import services.application.AlunoFilter
 import kotlin.collections.joinToString
 
-private data class Jubilados(val porAbandono: List<Aluno>, val porPrazo: List<Aluno>)
+data class Jubilados(val porAbandono: List<Aluno>, val porPrazo: List<Aluno>)
 
 fun Route.jubilamentoRoutes() {
 
     get("/jubilamentos") {
-        val jubilados = findJubilados()
-
         call.respondHTML(status = HttpStatusCode.OK) {
-            title("Jubilamentos", "/jubilamentos/download") {
-                tableJubilamentoPorAbandono(jubilados.porAbandono)
-                tableJubilamentoPorPrazo(jubilados.porPrazo)
-            }
+            tableJubilamentos(findJubilados())
         }
     }
 
