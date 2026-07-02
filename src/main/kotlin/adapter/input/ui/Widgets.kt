@@ -48,7 +48,7 @@ fun FlowContent.smallButton(label: String, url: String, container: String, disab
         attributes.hx {
             get = url
             target = container
-            swap = "innerHTML"
+            swap = "innerHTML show:top showTarget:body"
             indicator = "#loading-spinner"
             pushUrl = "true"
         }
