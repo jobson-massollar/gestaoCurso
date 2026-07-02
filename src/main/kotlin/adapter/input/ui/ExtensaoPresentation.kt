@@ -39,7 +39,7 @@ fun FlowContent.tableExtensao(alunos: List<Aluno>) {
             }
             tbody {
                 alunos.forEach { aluno ->
-                    tr(classes = "hover:bg-accent hover:text-base-100") {
+                    tr(classes = "hover:bg-secondary hover:text-base-100") {
                         td(classes = "text-center") { +aluno.matricula }
                         td { +aluno.nome }
                         td(classes = "text-center") { +aluno.versao }

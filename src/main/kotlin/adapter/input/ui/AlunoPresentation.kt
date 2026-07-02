@@ -11,9 +11,10 @@ private fun FlowOrPhrasingContent.sortingButton(sorting: String, container: Stri
         attributes.hx {
             get = "/alunos"
             target = container
-            swap = HxSwap.innerHtml
+            swap = "innerHTML"
             indicator = "#loading-spinner"
             include = "closest form"
+            replaceUrl = "true"
         }
         onClick = "document.alunos.sort.value = '$sorting'"
         unsafe { +svg }
@@ -71,10 +72,11 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                 attributes.hx {
                     get = "/alunos"
                     target = "#main-container"
-                    swap = HxSwap.innerHtml
+                    swap = "innerHTML"
                     include = "closest form"
-                    trigger = "search, change, keyup delay:700ms changed"
+                    trigger = "input delay:700ms changed"
                     indicator = "#loading-spinner"
+                    replaceUrl = "true"
                 }
                 name = "search"
                 size = "15"

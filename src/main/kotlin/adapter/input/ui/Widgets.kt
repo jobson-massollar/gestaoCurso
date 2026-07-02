@@ -30,18 +30,16 @@ var HTMLTag.tabIndex: Int
 
 fun FlowContent.title(title: String, downloadURL: String = "", block: FlowContent.() -> Unit = {}) {
     div(classes = "mb-4 p-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
-        //div(classes = "m-4") {
-            div(classes = "flex") {
-                label(classes = "text-lg font-semibold") { +title }
-                if (downloadURL.isNotBlank()) {
-                    label(classes = "ml-auto mr-4") {
-                        downloadButton(downloadURL)
-                    }
+        div(classes = "flex") {
+            label(classes = "text-lg font-semibold") { +title }
+            if (downloadURL.isNotBlank()) {
+                label(classes = "ml-auto mr-4") {
+                    downloadButton(downloadURL)
                 }
             }
-            hr(classes = "mb-2 border-base-content/50") {  }
-            block()
-        //}
+        }
+        hr(classes = "mb-2 border-base-content/50") {  }
+        block()
     }
 }
 
@@ -50,7 +48,7 @@ fun FlowContent.smallButton(label: String, url: String, container: String, disab
         attributes.hx {
             get = url
             target = container
-            swap = HxSwap.innerHtml
+            swap = "innerHTML"
             indicator = "#loading-spinner"
             pushUrl = "true"
         }
@@ -64,9 +62,10 @@ fun FlowContent.radioButton(fieldName: String, url: String, container: String, c
         attributes.hx {
             get = url
             target = container
-            swap = HxSwap.innerHtml
+            swap = "innerHTML"
             indicator = "#loading-spinner"
             include = "closest form"
+            replaceUrl = "true"
         }
         name = fieldName
         value = filterValue
@@ -76,7 +75,11 @@ fun FlowContent.radioButton(fieldName: String, url: String, container: String, c
 
 fun FlowContent.downloadButton(url: String) {
     a(classes = "btn btn-ghost") {
-        href = url
+        attributes.hx {
+            get = url
+            swap = "none"
+            indicator = "#loading-spinner"
+        }
         unsafe { +DOWNLOAD_SVG }
     }
 }

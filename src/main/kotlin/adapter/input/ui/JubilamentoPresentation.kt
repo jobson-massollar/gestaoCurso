@@ -36,7 +36,7 @@ fun FlowContent.tableJubilamentoPorAbandono(jubilados: List<Aluno>) {
             }
             tbody {
                 jubilados.forEach {
-                    tr(classes = "hover:bg-accent hover:text-base-100") {
+                    tr(classes = "hover:bg-secondary hover:text-base-100") {
                         td(classes = "text-center") { +it.matricula }
                         td { +it.nome }
                         td(classes = "text-center") { +it.versao }
@@ -77,7 +77,7 @@ fun FlowContent.tableJubilamentoPorPrazo(jubilados: List<Aluno>) {
             }
             tbody {
                 jubilados.forEach {
-                    tr(classes = "hover:bg-accent hover:text-base-100") {
+                    tr(classes = "hover:bg-secondary hover:text-base-100") {
                         td(classes = "text-center") { +it.matricula }
                         td { +it.nome }
                         td(classes = "text-center") { +it.versao }
