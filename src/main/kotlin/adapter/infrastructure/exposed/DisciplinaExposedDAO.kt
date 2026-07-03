@@ -113,7 +113,8 @@ class DisciplinaExposedDAO: IDisciplinaDAO {
             row[disciplinas.periodo],
             row[disciplinas.creditos],
             row[disciplinas.horas],
-            row[disciplinas.tipo])
+            row[disciplinas.tipo],
+            0)
 
 //    override fun deleteAll() {
 //        transaction {

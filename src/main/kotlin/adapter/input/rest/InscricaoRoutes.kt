@@ -2,13 +2,9 @@ package adapter.input.rest
 
 import adapter.input.ui.observacoes
 import adapter.input.ui.tableInscricoes
-import adapter.input.ui.title
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.html.respondHtmlFragment
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
+import io.ktor.http.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.datetime.format
 import main.currentDateTime
 import main.dateTimeFormat

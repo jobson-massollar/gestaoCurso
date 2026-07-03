@@ -1,7 +1,6 @@
 package adapter.input.ui
 
 import adapter.input.rest.*
-import io.ktor.htmx.*
 import io.ktor.htmx.html.*
 import kotlinx.html.*
 import model.Aluno

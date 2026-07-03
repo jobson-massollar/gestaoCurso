@@ -150,6 +150,27 @@ insert into disciplinas_equivalentes(id, versao, codigo, nome) values('3fd977a1-
 insert into disciplinas_equivalentes(id, versao, codigo, nome) values('cbc50c52-91f2-4078-8d68-43fddb2b3d41', '2023/2', 'TIN0202', 'PROGRAMAÇÃO II');
 
 /*----------------------------------------------------------------------------------
+ Itens do diário
+ ----------------------------------------------------------------------------------*/
+
+DROP TABLE itens_diario;
+
+CREATE TABLE itens_diario (
+    id uuid NOT NULL,
+    matricula varchar(14) NOT NULL,
+    nome varchar(100) NOT NULL,
+    curso int4 NOT NULL,
+    depto varchar(5) NOT NULL,
+    versao varchar(6) NOT NULL,
+    codigo varchar(10) NOT NULL,
+    turma varchar(20) NOT NULL,
+    CONSTRAINT itens_diario_pkey PRIMARY KEY (id)
+);
+CREATE INDEX itens_diario_turma_idx ON public.itens_diario USING btree (turma);
+CREATE INDEX itens_diario_versao_codigo_idx ON public.itens_diario USING btree (versao, codigo);
+-- CREATE INDEX itens_diario_matricula_idc ON public.itens_diario USING btree (matricula);
+
+/*----------------------------------------------------------------------------------
  Inscrições em disciplinas (não é usado atualmente)
  ----------------------------------------------------------------------------------*/
 
@@ -173,26 +194,6 @@ CREATE TABLE inscricoes (
 -- CREATE INDEX inscricoes_descricao ON public.inscricoes USING btree (descricao);
 -- CREATE INDEX inscricoes_matricula ON public.inscricoes USING btree (matricula);
 -- CREATE INDEX inscricoes_situacao ON public.inscricoes USING btree (situacao);
-
-/*----------------------------------------------------------------------------------
- Itens do diário (não é usado atualmente)
- ----------------------------------------------------------------------------------*/
-
-DROP TABLE itens_diario;
-
-CREATE TABLE itens_diario (
-    id uuid NOT NULL,
-    matricula varchar(14) NOT NULL,
-    nome varchar(100) NOT NULL,
-    curso int4 NOT NULL,
-    depto varchar(5) NOT NULL,
-    codigo varchar(10) NOT NULL,
-    versao varchar(6) NOT NULL,
-    turma varchar(20) NOT NULL,
-    CONSTRAINT itens_diario_pkey PRIMARY KEY (id)
-);
--- CREATE INDEX itens_diario_codigo_idx ON public.itens_diario USING btree (codigo);
--- CREATE INDEX itens_diario_matricula_idc ON public.itens_diario USING btree (matricula);
 
 /*----------------------------------------------------------------------------------
  Disciplinas únicas com somatório de horas e créditos
@@ -266,6 +267,27 @@ left join (
            h.tipo = 'Obrigatória'
 ) T on a.matricula = T.matricula and d.versao = T.versao and d.codigo = T.codigo
 where T.codigo is null;
+
+/*----------------------------------------------------------------------------------
+ Turmas e suas disciplinas com qtd de alunos por disciplina e turma
+ Usado no eager loading de turma + disciplinas
+ ----------------------------------------------------------------------------------*/
+
+create or replace view vw_turmas_disciplinas as
+select id.turma, id.versao, id.codigo, vd.nome as nome_disciplina, vd.periodo, vd.creditos, vd.horas, vd.tipo, count(*) as inscritos, sum(count(*)) over (partition by id.turma) as inscritos_turma
+from itens_diario id
+inner join vw_disciplinas vd on vd.versao = id.versao and vd.codigo = id.codigo
+group by id.turma, id.versao, id.codigo, vd.nome, vd.periodo, vd.creditos, vd.horas, vd.tipo;
+
+/*----------------------------------------------------------------------------------
+ Itens do diário para as disciplinas do BSI (disciplinas do DIA< DMAT e DMQ)
+ Alunos do BSI e de outros cursos
+ ----------------------------------------------------------------------------------*/
+
+create or replace view vw_itens_diario as
+select id.*, vd.nome as nome_disciplina
+from itens_diario id
+inner join vw_disciplinas vd on vd.versao = id.versao and vd.codigo = id.codigo;
 
 /*----------------------------------------------------------------------------------
   Definição das horas de disciplinas complementares

@@ -22,7 +22,19 @@ const val ELETIVA = "Eletiva"
 const val ANTIGA = "Antiga"
 const val OUTRA = "Outra"
 
-class ItemHistorico(val matricula: String, val ano: Int, val periodo: Int, val descPeriodo: String, val versao: String, val codigo: String, val nome: String, val situacao: Int, val descricao: String, val nota: Float?, val creditos: Int, val horas: Int, val tipo: String): Entity() {
+class ItemHistorico private constructor(val matricula: String,
+                                        val ano: Int,
+                                        val periodo: Int,
+                                        val descPeriodo: String,
+                                        val versao: String,
+                                        val codigo: String,
+                                        val nome: String,
+                                        val situacao: Int,
+                                        val descricao: String,
+                                        val nota: Float?,
+                                        val creditos: Int,
+                                        val horas: Int,
+                                        val tipo: String): Entity() {
 
     val isAprovado = situacao == APROVADO || situacao == DISPENSA_SEM_NOTA || situacao == DISPENSA_COM_NOTA || situacao == APROVADO_SEM_NOTA || situacao == APROVEITAMENTO
     val isReprovado = situacao == REPROVADO_POR_NOTA || situacao == REPROVADO_POR_FALTA || situacao == REPROVADO_SEM_NOTA

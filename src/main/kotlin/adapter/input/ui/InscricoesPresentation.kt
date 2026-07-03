@@ -1,16 +1,6 @@
 package adapter.input.ui
 
-import kotlinx.html.FlowContent
-import kotlinx.html.div
-import kotlinx.html.li
-import kotlinx.html.p
-import kotlinx.html.table
-import kotlinx.html.tbody
-import kotlinx.html.td
-import kotlinx.html.th
-import kotlinx.html.thead
-import kotlinx.html.tr
-import kotlinx.html.ul
+import kotlinx.html.*
 import model.Aluno
 import model.Grade
 

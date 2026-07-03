@@ -31,6 +31,10 @@ sealed interface IDAO<E: Entity, T: EntityDTO<E>> {
     }
 
     interface IPreRequisitoDAO: IDAO<PreRequisito, PreRequisitoDTO>
+
+    interface ITurmaDAO: IDAO<Turma, TurmaDisciplinaDTO> {
+        fun findAll(): List<TurmaDisciplinaDTO>
+    }
 }
 
 interface IDAOFactory {
@@ -44,7 +48,8 @@ object DAOFactory: IDAOFactory {
         DISCIPLINA,
         ALUNO,
         HISTORICO,
-        PRE_REQUISITO
+        PRE_REQUISITO,
+        TURMA
 //        INSCRICAO,
 //        DIARIO
     }

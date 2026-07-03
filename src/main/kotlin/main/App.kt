@@ -9,7 +9,7 @@ import kotlinx.datetime.format.char
 import kotlinx.datetime.toLocalDateTime
 import services.domain.persistence.DAOFactory
 import java.text.Collator
-import java.util.Locale
+import java.util.*
 import kotlin.time.Clock
 
 val appLocale: Locale = Locale.of("pt", "BR")

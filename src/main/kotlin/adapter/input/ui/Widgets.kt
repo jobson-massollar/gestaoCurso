@@ -1,19 +1,7 @@
 package adapter.input.ui
 
-import io.ktor.htmx.*
 import io.ktor.htmx.html.*
-import kotlinx.html.FlowContent
-import kotlinx.html.HTMLTag
-import kotlinx.html.a
-import kotlinx.html.button
-import kotlinx.html.div
-import kotlinx.html.h2
-import kotlinx.html.hr
-import kotlinx.html.label
-import kotlinx.html.onClick
-import kotlinx.html.radioInput
-import kotlinx.html.span
-import kotlinx.html.unsafe
+import kotlinx.html.*
 
 fun Float.format(digits: Int) = "%.${digits}f".format(this)
 

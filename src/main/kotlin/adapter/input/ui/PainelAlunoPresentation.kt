@@ -3,7 +3,6 @@ package adapter.input.ui
 import kotlinx.html.*
 import main.collator
 import model.*
-import kotlin.comparisons.compareBy
 
 fun FlowContent.painelAluno(aluno: Aluno) {
     val comparator: Comparator<ItemHistorico> = compareBy(collator) { it.nome }
@@ -206,8 +205,8 @@ private fun numeracaoPeriodo(status: StatusPeriodo): String =
 private fun situacaoPeriodo(status: StatusPeriodo, aluno: Aluno): String =
     when (status) {
         is StatusPeriodo.ACursar -> "-"
-        is StatusPeriodo.Trancado -> "T"
-        is StatusPeriodo.NaoMatriculado -> "⚠"
+        is StatusPeriodo.Trancado -> "🔒" // 🔒
+        is StatusPeriodo.NaoMatriculado -> "❓" // "🔴⁉️"
         is StatusPeriodo.Matriculado -> {
             val historicoPeriodo = aluno.historico.cursadas(status.periodo)
 

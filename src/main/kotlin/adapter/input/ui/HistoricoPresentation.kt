@@ -1,15 +1,6 @@
 package adapter.input.ui
 
-import kotlinx.html.FlowContent
-import kotlinx.html.div
-import kotlinx.html.h2
-import kotlinx.html.hr
-import kotlinx.html.table
-import kotlinx.html.tbody
-import kotlinx.html.td
-import kotlinx.html.th
-import kotlinx.html.thead
-import kotlinx.html.tr
+import kotlinx.html.*
 import main.collator
 import model.Aluno
 import model.ItemHistorico

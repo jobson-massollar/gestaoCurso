@@ -71,6 +71,9 @@ class PageBodyTemplate: Template<FlowContent> {
                             mainMenuItem("/jubilamentos", "Jubilamentos")
                         }
                         li {
+                            mainMenuItem("/turmas", "Turmas")
+                        }
+                        li {
                             a {
                                 // Para fechar o menu e chamar a modal
                                 onClick = "document.activeElement.blur();about_modal.showModal()"

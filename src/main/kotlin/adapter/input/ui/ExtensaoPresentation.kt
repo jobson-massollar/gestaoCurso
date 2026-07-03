@@ -1,18 +1,8 @@
 package adapter.input.ui
 
-import kotlinx.html.FlowContent
-import kotlinx.html.br
-import kotlinx.html.div
-import kotlinx.html.p
-import kotlinx.html.table
-import kotlinx.html.tbody
-import kotlinx.html.td
-import kotlinx.html.th
-import kotlinx.html.thead
-import kotlinx.html.tr
+import kotlinx.html.*
 import model.Aluno
 import model.Periodo
-import kotlin.collections.forEach
 
 fun FlowContent.tableExtensao(alunos: List<Aluno>) {
     title("Alunos com 11 ou mais Períodos de Integralização", "/alunos/extensao/download") {

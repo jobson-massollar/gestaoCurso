@@ -1,10 +1,9 @@
 package adapter.input.rest
 
 import adapter.input.ui.historicoAluno
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.html.respondHtml
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
+import io.ktor.http.*
+import io.ktor.server.html.*
+import io.ktor.server.routing.*
 import model.AlunoRepository
 import model.RepositoryFactory
 

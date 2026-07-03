@@ -3,10 +3,9 @@ package adapter.input.rest
 import adapter.input.ui.MainPageTemplate
 import adapter.input.ui.tableAlunos
 import adapter.input.ui.tableExtensao
-import adapter.input.ui.title
 import io.ktor.http.*
 import io.ktor.server.html.*
-import io.ktor.server.response.respondText
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.datetime.format
 import main.appLocale
