@@ -3,6 +3,7 @@ package adapter.input.ui
 import adapter.input.rest.Jubilados
 import kotlinx.html.*
 import model.Aluno
+import model.Periodo
 
 fun FlowContent.tableJubilamentos(jubilados: Jubilados) {
     title("Jubilamentos", "/jubilamentos/download") {

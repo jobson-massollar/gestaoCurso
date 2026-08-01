@@ -14,7 +14,7 @@ class Periodo(private var _ano: Int, private var _semestre: Int): Comparable<Per
     companion object {
         val ATUAL by lazy {
             val dt = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-            Periodo(dt.year, if (dt.month.ordinal <= 6) 1 else 2)
+            Periodo(dt.year, if (dt.month.ordinal <= 5) 1 else 2)
         }
     }
 

@@ -1,11 +1,13 @@
 /*----------------------------------------------------------------------------------
  Exclusão das views na ordem correta
  ----------------------------------------------------------------------------------*/
-drop view vw_obrigatorias_faltantes;
-drop view vw_disciplinas_cursadas;
-drop view vw_alunos_ativos;
-drop view vw_alunos;
-drop view vw_disciplinas;
+drop view if exists vw_obrigatorias_faltantes;
+drop view if exists vw_disciplinas_cursadas;
+drop view if exists vw_alunos_ativos;
+drop view if exists vw_alunos;
+drop view if exists vw_turmas_disciplinas;
+drop view if exists vw_itens_diario;
+drop view if exists vw_disciplinas;
 
 DROP TABLE departamentos;
 
@@ -64,7 +66,7 @@ CREATE TABLE disciplinas (
     situacao varchar(20) NOT NULL,
     aula varchar(50) NOT NULL,
     CONSTRAINT disciplinas_pkey PRIMARY KEY (id),
-    CONSTRAINT disciplina_codigo_versao_aula_unique UNIQUE (versao, codigo, aula)
+    CONSTRAINT disciplina_versao_codigo_aula_unique UNIQUE (versao, codigo, aula)
 );
 
 CREATE INDEX disciplinas_versao_codigo_idx ON public.disciplinas USING btree (versao, codigo);
@@ -107,6 +109,7 @@ CREATE TABLE public.itens_historico (
     nota float4 NULL,
     creditos int4 NOT NULL,
     horas int4 NOT NULL,
+    tipo varchar(60) DEFAULT ''::character varying NOT NULL,
     CONSTRAINT itens_historico_pkey PRIMARY KEY (id)
 );
 
@@ -126,6 +129,9 @@ CREATE TABLE public.extensoes_prazo (
     CONSTRAINT extensoes_prazo_pkey PRIMARY KEY (id),
     CONSTRAINT extensoes_prazo_matricula_unique UNIQUE (matricula)
 );
+
+insert into extensoes_prazo (id, matricula, prazo) values('6a83ac01-01ee-4b72-9c6f-debfe81076a9', '20161210019', 2);
+insert into extensoes_prazo (id, matricula, prazo) values('90c75518-8892-456d-8bee-879a95c3b1f4', '20171210008', 2);
 
 /*----------------------------------------------------------------------------------
  Disciplinas que possuem equivalentes na grade do BSI (não contam na carga horária
@@ -200,8 +206,6 @@ CREATE TABLE inscricoes (
  Essa view permite somar as horas de teoria e prática das disciplinas
  ----------------------------------------------------------------------------------*/
 
-drop view vw_disciplinas;
-
 create or replace view vw_disciplinas as
 select versao, codigo, nome, periodo, sum(creditos) as creditos, sum(horas) as horas, tipo
 from disciplinas
@@ -210,8 +214,6 @@ group by versao, codigo, nome, periodo, tipo;
 /*----------------------------------------------------------------------------------
  Alunos com prazo de extensão e trancamentos
  ----------------------------------------------------------------------------------*/
-
-drop view vw_alunos;
 
 create or replace view vw_alunos as
 select a.*, coalesce(T1.trancamentos, 0) as trancamentos, coalesce(T2.prazo, 0) as prazo_extensao
@@ -228,8 +230,6 @@ left join extensoes_prazo T2 on T2.matricula = a.matricula;
  Alunos com matrícula ativa
  ----------------------------------------------------------------------------------*/
 
-drop view vw_alunos_ativos;
-
 create or replace view vw_alunos_ativos as
 select va.*
 from vw_alunos va
@@ -238,8 +238,6 @@ where va.dt_evasao is null and left(va.evasao, 3) <> 'ABA';
 /*----------------------------------------------------------------------------------
  Itens do histórico com disciplinas cursadas (aprovadas) para alunos ativos
  ----------------------------------------------------------------------------------*/
-
-drop view vw_disciplinas_cursadas;
 
 create or replace view vw_disciplinas_cursadas as
 select h.*
@@ -251,8 +249,6 @@ where (h.situacao = 1 or h.situacao = 4 or h.situacao = 7 or h.situacao = 8 or h
 /*----------------------------------------------------------------------------------
  Alunos e disciplinas obrigatórias faltantes
  ----------------------------------------------------------------------------------*/
-
-drop view vw_obrigatorias_faltantes;
 
 create or replace view vw_obrigatorias_faltantes as
 select a.matricula, d.*
@@ -280,7 +276,7 @@ inner join vw_disciplinas vd on vd.versao = id.versao and vd.codigo = id.codigo
 group by id.turma, id.versao, id.codigo, vd.nome, vd.periodo, vd.creditos, vd.horas, vd.tipo;
 
 /*----------------------------------------------------------------------------------
- Itens do diário para as disciplinas do BSI (disciplinas do DIA< DMAT e DMQ)
+ Itens do diário para as disciplinas do BSI (disciplinas do DIA, DMAT e DMQ)
  Alunos do BSI e de outros cursos
  ----------------------------------------------------------------------------------*/
 
@@ -290,26 +286,18 @@ from itens_diario id
 inner join vw_disciplinas vd on vd.versao = id.versao and vd.codigo = id.codigo;
 
 /*----------------------------------------------------------------------------------
-  Definição das horas de disciplinas complementares
-  Existem ATCs SEM horas!!!!
- ----------------------------------------------------------------------------------*/
-
-update itens_historico ih set horas = 90 where ih.codigo = 'ATC0021';
-update itens_historico ih set horas = 180 where ih.codigo = 'ATC0010';
-update itens_historico ih set horas = 45 where ih.codigo = 'ATC0031';
-update itens_historico ih set horas = 60 where ih.codigo = 'ATC0100';
-
-/*----------------------------------------------------------------------------------
   Complementa os dados vindos da importação, calculando novos campos para facilitar
   o processamento e evitar a criação de muitas views
  ----------------------------------------------------------------------------------*/
 
-DROP PROCEDURE public.complementar_dados();
+drop procedure if exists public.complementar_dados();
 
-CREATE OR REPLACE PROCEDURE public.complementar_dados()
- LANGUAGE plpgsql
-AS $procedure$
-BEGIN
+create or replace procedure complementar_dados()
+ language plpgsql
+as $procedure$
+begin
+
+-- Atualiza o tipo das disciplinas no histórico
 
 update itens_historico ih
 set tipo = T.tipo
@@ -330,45 +318,19 @@ set tipo = T.tipo
 	left join disciplinas_equivalentes de on de.versao = h.versao and de.codigo = h.codigo) T
 where ih.matricula = T.matricula and ih.ano = T.ano and ih.periodo = T.periodo and ih.codigo = T.codigo;
 
-END;
+-- Definição das horas de disciplinas complementares
+-- Existem ATCs SEM horas!!!!
+
+update itens_historico ih set horas = 90 where ih.codigo = 'ATC0021';
+update itens_historico ih set horas = 180 where ih.codigo = 'ATC0010';
+update itens_historico ih set horas = 45 where ih.codigo = 'ATC0031';
+update itens_historico ih set horas = 60 where ih.codigo = 'ATC0100';
+
+end;
 $procedure$
 ;
 
-COMMENT ON PROCEDURE public.complementar_dados() IS 'Complementa os dados vindos da importação, calculando novos campos para facilitar o processamento e evitar a criação de muitas views.';
+comment on procedure complementar_dados() is 'Complementa os dados vindos da importação, calculando novos campos para facilitar o processamento e evitar a criação de muitas views.';
 
-CALL public.complementar_dados();
+-- call public.complementar_dados();
 
-/*=============================================================================*/
-
-/*----------------------------------------------------------------------------------
- Total de alunos inscritos nas disciplinas do DIA (alunos do BSI e de outros)
-  Usar na consulta do total de alunos ns turmas
- ----------------------------------------------------------------------------------*/
-
-select i.versao, i.codigo, i.turma, d.nome, count(*) as qtd
-from itens_diario i
-         inner join vw_disciplinas d on i.versao = d.versao and i.codigo = d.codigo
-where i.depto='DIA'
-group by i.versao, i.codigo, i.turma, d.nome
-order by i.turma asc, i.versao desc;
-
-select i.versao, i.codigo, i.turma, d.nome, A.qtd + coalesce(B.qtd, 0) as total, A.qtd as bsi, coalesce(B.qtd, 0) as outros
-from itens_diario i
-         inner join vw_disciplinas d on i.versao = d.versao and i.codigo = d.codigo
-         inner join (
-    select i.versao, i.codigo, i.turma, count(*) as qtd
-    from itens_diario i
-             inner join vw_disciplinas d on i.versao = d.versao and i.codigo = d.codigo
-    where i.depto='DIA' and substring(i.matricula, 6, 3) = '210'
-    group by i.versao, i.codigo, i.turma
-) A on i.versao = A.versao and i.codigo = A.codigo and i.turma = A.turma
-         left join (
-    select i.versao, i.codigo, i.turma, count(*) as qtd
-    from itens_diario i
-             inner join vw_disciplinas d on i.versao = d.versao and i.codigo = d.codigo
-    where i.depto='DIA' and substring(i.matricula, 6, 3) <> '210'
-    group by i.versao, i.codigo, i.turma
-) B on i.versao = B.versao and i.codigo = B.codigo and i.turma = B.turma
-where i.depto='DIA'
-group by i.versao, i.codigo, i.turma, d.nome, A.qtd, B.qtd
-order by i.turma asc, i.versao desc;
