@@ -86,6 +86,18 @@ class DisciplinaExposedDAO: IDisciplinaDAO {
                 }.first()
         }
 
+    override fun findByCode(versao: String, codigo: String): DisciplinaDTO =
+        transaction {
+            Disciplinas
+                .selectAll()
+                .where {
+                    (Disciplinas.versao eq versao) and
+                            (Disciplinas.codigo eq codigo)
+                }
+                .map { createDTO(it, Disciplinas) }
+                .first()
+        }
+
     override fun findPreRequisitos(disciplina: Disciplina) =
         transaction {
             Disciplinas

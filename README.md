@@ -34,3 +34,12 @@ If the server starts successfully, you'll see the following output:
 2024-12-04 14:32:45.584 [main] INFO  Application - Application started in 0.303 seconds.
 2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
 ```
+
+## Funcionalidades (TODO)
+
+* Diário: lista de alunos inscritos em uma disciplina (DiarioRoutes e DiarioPresentation)
+* Download de turmas
+* Geração das inscrições
+* Importação das inscrições
+* Inscrições: alunos e suas inscrições com status
+* Alunos inscritos em turmas erradas

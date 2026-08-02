@@ -13,6 +13,10 @@ class Disciplina private constructor(val versao: String,
         RepositoryFactory.get(DisciplinaRepository::class).findPreRequisitos(this)
     }
 
+    val itensDiario by lazy {
+        RepositoryFactory.get(ItemDiarioRepository::class).findAll(this)
+    }
+
     companion object {
         fun of(versao: String, codigo: String, nome: String, periodo: Int, creditos: Int, horas: Int, tipo: String, inscritos: Int) =
             Disciplina(versao, codigo, nome, periodo, creditos, horas, tipo, inscritos)

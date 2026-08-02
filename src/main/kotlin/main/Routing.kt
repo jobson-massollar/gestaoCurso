@@ -16,5 +16,6 @@ fun Application.configureRouting() {
         historicoRoutes()
         jubilamentoRoutes()
         turmaRoutes()
+        diarioRoutes()
     }
 }

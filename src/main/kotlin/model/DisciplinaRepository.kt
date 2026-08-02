@@ -14,4 +14,6 @@ class DisciplinaRepository: Repository<Disciplina, IDisciplinaDAO, DisciplinaDTO
     fun findByItemHistorico(itemHistorico: ItemHistorico) = createEntity(dao.findByItemHistorico(itemHistorico))
 
     fun findPreRequisitos(disciplina: Disciplina) = createEntityList(dao.findPreRequisitos(disciplina))
+
+    fun findByCode(versao: String, codigo: String) = createEntity(dao.findByCode(versao, codigo))
 }

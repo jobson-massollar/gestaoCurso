@@ -95,7 +95,7 @@ CREATE INDEX pre_requisitos_versao_codigo_pre_req_idx ON public.pre_requisitos U
 
 DROP TABLE itens_historico;
 
-CREATE TABLE public.itens_historico (
+CREATE TABLE itens_historico (
     id uuid NOT NULL,
     matricula varchar(14) NOT NULL,
     ano int4 NOT NULL,
@@ -122,7 +122,7 @@ CREATE INDEX itens_historico_matricula_idx ON public.itens_historico USING btree
 
 DROP TABLE extensoes_prazo;
 
-CREATE TABLE public.extensoes_prazo (
+CREATE TABLE extensoes_prazo (
     id uuid NOT NULL,
     matricula varchar(14) NOT NULL,
     prazo int4 NOT NULL,
@@ -140,7 +140,7 @@ insert into extensoes_prazo (id, matricula, prazo) values('90c75518-8892-456d-8b
 
 DROP TABLE disciplinas_equivalentes;
 
-CREATE TABLE public.disciplinas_equivalentes (
+CREATE TABLE disciplinas_equivalentes (
     id uuid NOT NULL,
     versao varchar(6) NOT NULL,
     codigo varchar(10) NOT NULL,

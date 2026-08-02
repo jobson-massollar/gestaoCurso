@@ -20,6 +20,7 @@ fun Route.inscricoesRoutes() {
             tableInscricoes(findAlunos())
         }
     }
+
     get("/inscricoes/irregulares/download") {
 
         call.response.headers.apply {

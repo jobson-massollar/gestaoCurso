@@ -21,7 +21,7 @@ fun FlowContent.tableInscricoes(alunos: List<Aluno>) {
                         th(classes = "text-center") { +"Currículo" }
                         th { +"E-mail" }
                         th(classes = "text-center") { +"Inscrições" }
-                        th { +"Observações" }
+                        th { +"Pode Cursar" }
                         th { +" " }
                     }
                 }

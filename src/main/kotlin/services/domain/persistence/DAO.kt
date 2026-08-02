@@ -28,12 +28,17 @@ sealed interface IDAO<E: Entity, T: EntityDTO<E>> {
         fun findObrigatoriasFaltantes(aluno: Aluno): List<DisciplinaDTO>
         fun findPreRequisitos(disciplina: Disciplina): List<DisciplinaDTO>
         fun findByItemHistorico(itemHistorico: ItemHistorico): DisciplinaDTO
+        fun findByCode(versao: String, codigo: String): DisciplinaDTO
     }
 
     interface IPreRequisitoDAO: IDAO<PreRequisito, PreRequisitoDTO>
 
     interface ITurmaDAO: IDAO<Turma, TurmaDisciplinaDTO> {
         fun findAll(): List<TurmaDisciplinaDTO>
+    }
+
+    interface IItemDiarioDAO: IDAO<ItemDiario, ItemDiarioDTO> {
+        fun findAll(disciplina: Disciplina): List<ItemDiarioDTO>
     }
 }
 
@@ -49,9 +54,9 @@ object DAOFactory: IDAOFactory {
         ALUNO,
         HISTORICO,
         PRE_REQUISITO,
-        TURMA
-//        INSCRICAO,
-//        DIARIO
+        TURMA,
+        DIARIO
+//        INSCRICAO
     }
 
     private var factory: IDAOFactory? = null
