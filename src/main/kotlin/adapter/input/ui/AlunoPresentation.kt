@@ -5,33 +5,15 @@ import io.ktor.htmx.html.*
 import kotlinx.html.*
 import model.Aluno
 
-private fun FlowOrPhrasingContent.sortingButton(sorting: String, container: String, svg: String) {
-    button(classes = "btn btn-ghost btn-xs ml-2 pl-px pr-px base-content") {
-        attributes.hx {
-            get = "/alunos"
-            target = container
-            swap = "innerHTML"
-            indicator = "#loading-spinner"
-            include = "closest form"
-            replaceUrl = "true"
-        }
-        onClick = "document.alunos.sort.value = '$sorting'"
-        unsafe { +svg }
-    }
-}
-
-private fun FlowOrPhrasingContent.sortingButtons(fieldAsc: String, fieldDesc: String) {
-    sortingButton(fieldAsc, "#main-container", AZ_SORT_SVG)
-    sortingButton(fieldDesc, "#main-container",ZA_SORT_SVG)
-}
+const val ALUNOS_FORM = "alunos"
 
 fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, currentFilter: String, search: String) {
     title(
         "Alunos",
-        "/alunos/download?sort=${currentSorting}&filter=${currentFilter}&search=${search}"
+        "$DOWNLOAD_ALUNOS_ROUTE?sort=${currentSorting}&filter=${currentFilter}&search=${search}"
     ) {
         form {
-            name = "alunos"
+            name = ALUNOS_FORM
             hiddenInput {
                 name = "sort"
                 value = currentSorting
@@ -40,7 +22,7 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                 label(classes = "ml-4 mt-2 mb-2") { +"Alunos:" }
                 radioButton(
                     "filter",
-                    "/alunos",
+                    ALUNOS_ROUTE,
                     "#main-container",
                     currentFilter,
                     ALUNO_FILTER_ALL
@@ -48,7 +30,7 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                 label(classes = "ml-2") { +"Todos" }
                 radioButton(
                     "filter",
-                    "/alunos",
+                    ALUNOS_ROUTE,
                     "#main-container",
                     currentFilter,
                     ALUNO_FILTER_ACTIVE
@@ -56,7 +38,7 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                 label(classes = "ml-2") { +"Ativos" }
                 radioButton(
                     "filter",
-                    "/alunos",
+                    ALUNOS_ROUTE,
                     "#main-container",
                     currentFilter,
                     ALUNO_FILTER_GRADUATING
@@ -64,7 +46,7 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                 label(classes = "ml-2") { +"Formandos" }
                 radioButton(
                     "filter",
-                    "/alunos",
+                    ALUNOS_ROUTE,
                     "#main-container",
                     currentFilter,
                     ALUNO_FILTER_GRADUATED
@@ -73,7 +55,7 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                 label(classes = "ml-10") { +"Filtro" }
                 searchInput(classes = "ml-2") {
                     attributes.hx {
-                        get = "/alunos"
+                        get = ALUNOS_ROUTE
                         target = "#main-container"
                         swap = "innerHTML"
                         include = "closest form"
@@ -103,11 +85,11 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                         tr(classes = "bg-base-300") {
                             th(classes = "gap-4") {
                                 +"Matrícula"
-                                sortingButtons(ALUNO_SORTING_MATRICULA_ASC, ALUNO_SORTING_MATRICULA_DESC)
+                                sortingButtons(ALUNOS_ROUTE, ALUNOS_FORM, ALUNO_SORTING_MATRICULA_ASC, ALUNO_SORTING_MATRICULA_DESC)
                             }
                             th(classes = "gap-4") {
                                 +"Nome"
-                                sortingButtons(ALUNO_SORTING_NOME_ASC, ALUNO_SORTING_NOME_DESC)
+                                sortingButtons(ALUNOS_ROUTE, ALUNOS_FORM,ALUNO_SORTING_NOME_ASC, ALUNO_SORTING_NOME_DESC)
                             }
                             th { +"Currículo" }
                             th { +"E-mail" }

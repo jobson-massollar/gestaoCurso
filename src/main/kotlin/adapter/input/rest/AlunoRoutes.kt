@@ -16,6 +16,11 @@ import model.AlunoRepository
 import model.RepositoryFactory
 import services.application.AlunoFilter
 
+const val ALUNOS_ROUTE = "/alunos"
+const val DOWNLOAD_ALUNOS_ROUTE = "/alunos/download"
+const val ALUNOS_EXTENSAO_ROUTE = "/alunos/extensao"
+const val DOWNLOAD_ALUNOS_EXTENSAO_ROUTE = "/alunos/extensao/download"
+
 private data class Parameters(val sorting: String, val filter: String, val search: String)
 
 fun Routing.alunoRoutes() {
@@ -24,7 +29,7 @@ fun Routing.alunoRoutes() {
         }
     }
 
-    get("/alunos") {
+    get(ALUNOS_ROUTE) {
         val params = getParameters(call)
         val alunos = findAlunos(params.sorting, params.filter, params.search)
 
@@ -33,7 +38,7 @@ fun Routing.alunoRoutes() {
         }
     }
 
-    get("/alunos/download") {
+    get(DOWNLOAD_ALUNOS_ROUTE) {
         val params = getParameters(call)
         val alunos = findAlunos(params.sorting, params.filter, params.search)
 
@@ -47,16 +52,16 @@ fun Routing.alunoRoutes() {
         }
     }
 
-    get("/alunos/extensao") {
-        val alunos = findAlunos()
+    get(ALUNOS_EXTENSAO_ROUTE) {
+        val alunos = findAlunosExtensao()
 
         call.respondHTML(status = HttpStatusCode.OK) {
             tableExtensao(alunos)
         }
     }
 
-    get("/alunos/extensao/download") {
-        val alunos = findAlunos()
+    get(DOWNLOAD_ALUNOS_EXTENSAO_ROUTE) {
+        val alunos = findAlunosExtensao()
 
         call.response.headers.apply {
             append("Content-Disposition", "attachment; filename=\"alunos para extensao ${currentDateTime().format(dateTimeFormat)}.csv\"")
@@ -81,7 +86,7 @@ private fun findAlunos(sorting: String, filter: String, search: String): List<Al
         .findByFilter(getAlunoFilterByValue(filter), search)
         .sortedWith(getAlunoSortingByValue(sorting).comparator)
 
-private fun findAlunos(): List<Aluno> =
+private fun findAlunosExtensao(): List<Aluno> =
     RepositoryFactory.get(AlunoRepository::class)
         .findByFilter(AlunoFilter.ACTIVE)
         .filter { it.ultimoPeriodoCursado.numero >= 11 }

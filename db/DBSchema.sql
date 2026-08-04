@@ -297,7 +297,7 @@ select codigo, nome,
 count(case when situacao=2 then 1 end) as aceitos,
 count(case when situacao=4 then 1 end) as falta_pr,
 count(case when situacao=9 then 1 end) as falta_vagas,
-count(case when situacao=99 then 1 end)  as cancelado
+count(case when situacao=99 then 1 end)  as cancelados
 from inscricoes
 group by codigo, nome;
 

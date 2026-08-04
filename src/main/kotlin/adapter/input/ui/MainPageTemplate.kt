@@ -1,5 +1,9 @@
 package adapter.input.ui
 
+import adapter.input.rest.ALUNOS_EXTENSAO_ROUTE
+import adapter.input.rest.ALUNOS_ROUTE
+import adapter.input.rest.INSCRICOES_IRREGULARES_ROUTE
+import adapter.input.rest.INSCRICOES_ROUTE
 import io.ktor.htmx.html.*
 import io.ktor.server.html.*
 import kotlinx.html.*
@@ -59,16 +63,19 @@ class PageBodyTemplate: Template<FlowContent> {
                         tabIndex = -1
 
                         li {
-                            mainMenuItem("/alunos", "Alunos")
+                            mainMenuItem(ALUNOS_ROUTE, "Alunos")
                         }
                         li {
-                            mainMenuItem("/alunos/extensao", "Alunos com 11 ou mais períodos")
+                            mainMenuItem(ALUNOS_EXTENSAO_ROUTE, "Alunos com 11 ou mais Períodos")
                         }
                         li {
-                            mainMenuItem("/inscricoes/irregulares", "Inscrições irregulares")
+                            mainMenuItem(INSCRICOES_IRREGULARES_ROUTE, "Alunos com Inscrições Irregulares")
                         }
                         li {
-                            mainMenuItem("/jubilamentos", "Jubilamentos")
+                            mainMenuItem("/jubilamentos", "Alunos em Jubilamento")
+                        }
+                        li {
+                            mainMenuItem(INSCRICOES_ROUTE, "Inscrições")
                         }
                         li {
                             mainMenuItem("/turmas", "Turmas")

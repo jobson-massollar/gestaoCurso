@@ -30,5 +30,4 @@ class Disciplina private constructor(val versao: String,
 
     override fun hashCode() = (versao + codigo).hashCode()
 
-    //override fun toString(): String = "[id=$id versao=$versao codigo=$codigo nome=$nome periodo=$periodo creditos=$creditos horas=$horas tipo=$tipo"
 }

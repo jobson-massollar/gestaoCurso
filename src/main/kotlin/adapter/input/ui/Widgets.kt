@@ -68,6 +68,26 @@ fun FlowContent.radioButton(fieldName: String, url: String, container: String, c
     }
 }
 
+fun FlowOrPhrasingContent.sortingButton(url: String, formName: String, sorting: String, container: String, svg: String) {
+    button(classes = "btn btn-ghost btn-xs ml-2 pl-px pr-px base-content") {
+        attributes.hx {
+            get = url
+            target = container
+            swap = "innerHTML"
+            indicator = "#loading-spinner"
+            include = "closest form"
+            replaceUrl = "true"
+        }
+        onClick = "document.$formName.sort.value = '$sorting'"
+        unsafe { +svg }
+    }
+}
+
+fun FlowOrPhrasingContent.sortingButtons(url: String, formName: String, fieldAsc: String, fieldDesc: String) {
+    sortingButton(url, formName, fieldAsc, "#main-container", AZ_SORT_SVG)
+    sortingButton(url, formName, fieldDesc, "#main-container",ZA_SORT_SVG)
+}
+
 fun FlowContent.downloadButton(url: String) {
     a(classes = "btn btn-ghost") {
         attributes.hx {

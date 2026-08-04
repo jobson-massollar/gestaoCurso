@@ -17,6 +17,7 @@ class ItemDiario private constructor(val matricula: String,
     override fun hashCode(): Int = (matricula + versao + codigo).hashCode()
 
     companion object {
-        fun of(matricula: String, nome: String, curso: Int, depto: String, versao: String, codigo: String, turma: String) = ItemDiario(matricula, nome, curso, depto, versao, codigo, turma)
+        fun of(matricula: String, nome: String, curso: Int, depto: String, versao: String, codigo: String, turma: String) =
+            ItemDiario(matricula, nome, curso, depto, versao, codigo, turma)
     }
 }

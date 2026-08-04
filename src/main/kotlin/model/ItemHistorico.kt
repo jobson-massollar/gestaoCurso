@@ -60,10 +60,6 @@ class ItemHistorico private constructor(val matricula: String,
             false
 
     override fun hashCode(): Int = (matricula + ano.toString() + periodo.toString() + codigo).hashCode()
-
-    override fun toString(): String {
-        return "[id=$id matricula=$matricula, ano=$ano, periodo=$periodo, periodo=$descPeriodo, versao=$versao, codigo=$codigo, nome=$nome, situacao=$situacao, descricao=$descricao, nota=$nota, creditos=$creditos, horas=$horas, tipo=$tipo]"
-    }
 }
 
 val List<ItemHistorico>.obrigatorias: List<ItemHistorico>

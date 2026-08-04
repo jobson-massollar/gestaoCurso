@@ -1,11 +1,87 @@
 package adapter.input.ui
 
+import adapter.input.rest.DOWNLOAD_INSCRICOES_IRREGULARES_ROUTE
+import adapter.input.rest.DOWNLOAD_INSCRICOES_ROUTE
+import adapter.input.rest.INSCRICAO_SORTING_ACEITOS_ASC
+import adapter.input.rest.INSCRICAO_SORTING_ACEITOS_DESC
+import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_ASC
+import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_DESC
+import adapter.input.rest.INSCRICAO_SORTING_VAGAS_ASC
+import adapter.input.rest.INSCRICAO_SORTING_VAGAS_DESC
+import adapter.input.rest.INSCRICOES_ROUTE
 import kotlinx.html.*
 import model.Aluno
 import model.Grade
+import model.TotalizacaoInscricao
 
-fun FlowContent.tableInscricoes(alunos: List<Aluno>) {
-    title("Inscrições Irregulares", "/inscricoes/irregulares/download") {
+const val INSCRICOES_FORM = "inscricoes"
+
+fun FlowContent.tableInscricoes(totalizacoes: List<TotalizacaoInscricao>, currentSorting: String) {
+    title("Inscrições", DOWNLOAD_INSCRICOES_ROUTE) {
+
+        if (totalizacoes.isEmpty()) {
+            p(classes = "text-base") { +"Nenhuma inscrição foi encontrada!" }
+            return@title
+        }
+
+        form {
+            name = INSCRICOES_FORM
+            hiddenInput {
+                name = "sort"
+                value = currentSorting
+            }
+
+            div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
+                table(classes = "table table-zebra table-sm") {
+                    thead {
+                        tr(classes = "bg-base-300") {
+                            th(classes = "text-center") { +"Turma" }
+                            th(classes = "text-center") { +"Código" }
+                            th {
+                                +"Nome"
+                                sortingButtons(INSCRICOES_ROUTE, INSCRICOES_FORM, INSCRICAO_SORTING_DISCIPLINA_ASC,
+                                    INSCRICAO_SORTING_DISCIPLINA_DESC
+                                )
+                            }
+                            th(classes = "text-right") {
+                                +"Aceitas"
+                                sortingButtons(INSCRICOES_ROUTE, INSCRICOES_FORM, INSCRICAO_SORTING_ACEITOS_ASC,
+                                    INSCRICAO_SORTING_ACEITOS_DESC
+                                )
+                            }
+                            th(classes = "text-right") {
+                                +"Falta de Vagas"
+                                sortingButtons(INSCRICOES_ROUTE, INSCRICOES_FORM, INSCRICAO_SORTING_VAGAS_ASC,
+                                    INSCRICAO_SORTING_VAGAS_DESC
+                                )
+                            }
+                            th(classes = "text-right") { +"Falta de Pré-req" }
+                            th(classes = "text-right") { +"Canceladas" }
+                            th { +" " }
+                        }
+                    }
+                    tbody {
+                        totalizacoes.forEach {
+                            tr {
+                                td(classes = "text-center") { +it.turma }
+                                td(classes = "text-center") { +it.codigo }
+                                td { +it.nome }
+                                td(classes = "text-right") { +it.aceitos.toString() }
+                                td(classes = "text-right") { +it.faltaVagas.toString() }
+                                td(classes = "text-right") { +it.faltaPreRequisito.toString() }
+                                td(classes = "text-right") { +it.cancelados.toString() }
+                                td { +" " }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun FlowContent.tableInscricoesIrregulares(alunos: List<Aluno>) {
+    title("Inscrições Irregulares", DOWNLOAD_INSCRICOES_IRREGULARES_ROUTE) {
 
         if (alunos.isEmpty()) {
             p(classes = "text-base") { +"Nenhuma inscrição irregular foi encontrada!" }
