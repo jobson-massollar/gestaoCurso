@@ -91,8 +91,7 @@ class DisciplinaExposedDAO: IDisciplinaDAO {
             Disciplinas
                 .selectAll()
                 .where {
-                    (Disciplinas.versao eq versao) and
-                            (Disciplinas.codigo eq codigo)
+                    (Disciplinas.versao eq versao) and (Disciplinas.codigo eq codigo)
                 }
                 .map { createDTO(it, Disciplinas) }
                 .first()

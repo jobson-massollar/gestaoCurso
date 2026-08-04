@@ -8,6 +8,7 @@ drop view if exists vw_alunos;
 drop view if exists vw_turmas_disciplinas;
 drop view if exists vw_itens_diario;
 drop view if exists vw_disciplinas;
+drop view if exists vw_total_inscricoes;
 
 DROP TABLE departamentos;
 
@@ -185,7 +186,9 @@ DROP TABLE inscricoes;
 CREATE TABLE inscricoes (
     id uuid NOT NULL,
     matricula varchar(14) NOT NULL,
+	nome_aluno varchar(100) NOT NULL,
     codigo varchar(10) NOT NULL,
+	nome varchar(100) NOT NULL,
     turma varchar(10) NOT NULL,
     situacao int4 NOT NULL,
     descricao varchar(50) NOT NULL,
@@ -196,10 +199,9 @@ CREATE TABLE inscricoes (
     dt_processamento date NULL,
     CONSTRAINT inscricoes_pkey PRIMARY KEY (id)
 );
--- CREATE INDEX inscricoes_codigo ON public.inscricoes USING btree (codigo);
--- CREATE INDEX inscricoes_descricao ON public.inscricoes USING btree (descricao);
--- CREATE INDEX inscricoes_matricula ON public.inscricoes USING btree (matricula);
--- CREATE INDEX inscricoes_situacao ON public.inscricoes USING btree (situacao);
+CREATE INDEX inscricoes_codigo ON public.inscricoes USING btree (codigo);
+CREATE INDEX inscricoes_matricula ON public.inscricoes USING btree (matricula);
+CREATE INDEX inscricoes_situacao ON public.inscricoes USING btree (situacao);
 
 /*----------------------------------------------------------------------------------
  Disciplinas únicas com somatório de horas e créditos
@@ -284,6 +286,20 @@ create or replace view vw_itens_diario as
 select id.*, vd.nome as nome_disciplina
 from itens_diario id
 inner join vw_disciplinas vd on vd.versao = id.versao and vd.codigo = id.codigo;
+
+/*----------------------------------------------------------------------------------
+ Inscrições por disciplina com total de inscritos, falta de vagas, 
+ falta de pré-requisitos e cancelamentos
+ ----------------------------------------------------------------------------------*/
+
+create or replace view vw_total_inscricoes as
+select codigo, nome, 
+count(case when situacao=2 then 1 end) as aceitos,
+count(case when situacao=4 then 1 end) as falta_pr,
+count(case when situacao=9 then 1 end) as falta_vagas,
+count(case when situacao=99 then 1 end)  as cancelado
+from inscricoes
+group by codigo, nome;
 
 /*----------------------------------------------------------------------------------
   Complementa os dados vindos da importação, calculando novos campos para facilitar

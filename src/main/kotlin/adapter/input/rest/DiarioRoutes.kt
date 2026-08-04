@@ -12,8 +12,8 @@ import model.RepositoryFactory
 fun Route.diarioRoutes() {
 
     get("/diario/{versao}/{codigo}") {
-        val versao = call.parameters["versao"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) {}
-        val codigo = call.parameters["versao"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) {}
+        val versao = call.parameters["versao"]?.replace('-', '/') ?: return@get call.respondHtml(HttpStatusCode.BadRequest) {}
+        val codigo = call.parameters["codigo"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) {}
 
         val disciplina = RepositoryFactory.get(DisciplinaRepository::class).findByCode(versao, codigo)
         val itensDiario = disciplina.itensDiario

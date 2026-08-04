@@ -50,7 +50,7 @@ fun FlowContent.tableTurmas(turmas: List<Turma>) {
                                 td {
                                     smallButton(
                                         "Alunos",
-                                        $"/diario/${disciplina.versao}/${disciplina.codigo}",
+                                        $"/diario/${disciplina.versao.replace('/', '-')}/${disciplina.codigo}",
                                         "#main-container"
                                     )
                                 }
