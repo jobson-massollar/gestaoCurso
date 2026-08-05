@@ -9,9 +9,13 @@ import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_DESC
 import adapter.input.rest.INSCRICAO_SORTING_VAGAS_ASC
 import adapter.input.rest.INSCRICAO_SORTING_VAGAS_DESC
 import adapter.input.rest.INSCRICOES_ROUTE
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.format.char
 import kotlinx.html.*
 import model.Aluno
 import model.Grade
+import model.Inscricao
 import model.TotalizacaoInscricao
 
 const val INSCRICOES_FORM = "inscricoes"
@@ -61,17 +65,75 @@ fun FlowContent.tableInscricoes(totalizacoes: List<TotalizacaoInscricao>, curren
                         }
                     }
                     tbody {
-                        totalizacoes.forEach {
+                        totalizacoes.forEach {disciplina ->
                             tr {
-                                td(classes = "text-center") { +it.turma }
-                                td(classes = "text-center") { +it.codigo }
-                                td { +it.nome }
-                                td(classes = "text-right") { +it.aceitos.toString() }
-                                td(classes = "text-right") { +it.faltaVagas.toString() }
-                                td(classes = "text-right") { +it.faltaPreRequisito.toString() }
-                                td(classes = "text-right") { +it.cancelados.toString() }
-                                td { +" " }
+                                td(classes = "text-center") { +disciplina.turma }
+                                td(classes = "text-center") { +disciplina.codigo }
+                                td { +disciplina.nome }
+                                td(classes = "text-right") { +disciplina.aceitos.toString() }
+                                td(classes = "text-right") { +disciplina.faltaVagas.toString() }
+                                td(classes = "text-right") { +disciplina.faltaPreRequisito.toString() }
+                                td(classes = "text-right") { +disciplina.cancelados.toString() }
+                                td {
+                                    smallButton("Alunos",
+                                        "$INSCRICOES_ROUTE/${disciplina.codigo}/${disciplina.turma}",
+                                        "#main-container")
+                                }
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun FlowContent.tableInscricoesAlunos(inscricoes: List<Inscricao>, codigo: String, turma: String) {
+    title("Inscrições - $codigo - $turma", backButton = true) {
+
+        if (inscricoes.isEmpty()) {
+            p(classes = "text-base") { +"Nenhuma inscrição foi encontrada!" }
+            return@title
+        }
+
+        div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
+            table(classes = "table table-zebra table-sm") {
+                thead {
+                    tr(classes = "bg-base-300") {
+                        th(classes = "text-center") { +"Matrícula" }
+                        th { +"Nome" }
+                        th(classes = "text-center") { +"Currículo" }
+                        th { +"E-mail" }
+                        th { +"Situação" }
+                        th { +"Solicitação" }
+                        th { +"Processamento" }
+                    }
+                }
+                tbody {
+                    val df = LocalDate.Format {
+                        day()
+                        char('/')
+                        monthNumber()
+                        char('/')
+                        year()
+                    }
+                    val tf = LocalTime.Format {
+                        hour()
+                        char(':')
+                        minute()
+                        char(':')
+                        second()
+                    }
+
+                    inscricoes.forEach { inscricao ->
+                        tr {
+                            td(classes = "text-center") { +inscricao.matricula }
+                            td { +inscricao.nomeAluno }
+                            td(classes = "text-center") { +"TODO" }
+                            td { +"TODO" }
+                            td { +inscricao.descricao }
+                            td { +"${df.format(inscricao.dataSolicitacao)} ${tf.format(inscricao.horaSolicitacao)}" }
+                            td { +(inscricao.dataProcessamento?.let { df.format(it) } ?: "") }
                         }
                     }
                 }

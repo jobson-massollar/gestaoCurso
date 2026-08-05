@@ -10,13 +10,13 @@ class InscricaoDTO(id: Uuid?,
                    val codigo: String,
                    val nome: String,
                    val turma: String,
-                   val situacao: String,
+                   val situacao: Int,
                    val descricao: String,
                    val ano: Int,
                    val periodo: Int,
                    val dataSolicitacao: LocalDate,
                    val horaSolicitacao: LocalTime,
-                   val dataProcessaento: LocalDate): EntityDTO<Inscricao>(id) {
+                   val dataProcessaento: LocalDate?): EntityDTO<Inscricao>(id) {
 
     override fun toEntity() = Inscricao.of(matricula,
         nomeAluno,

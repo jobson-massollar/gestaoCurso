@@ -17,7 +17,7 @@ object Inscricoes: Table("Inscricoes") {
     val periodo = integer("periodo")
     val dataSolicitacao = date("dt_solicitacao")
     val horaSolicitacao = time("hora_solicitacao")
-    val dataProcessamento = date("data_processamento")
+    val dataProcessamento = date("dt_processamento").nullable()
     override val primaryKey = PrimaryKey(Inscricoes.id)
 }
 

@@ -1,5 +1,6 @@
 package adapter.input.ui
 
+import adapter.input.rest.ALUNOS_COLACAO_ROUTE
 import adapter.input.rest.ALUNOS_EXTENSAO_ROUTE
 import adapter.input.rest.ALUNOS_ROUTE
 import adapter.input.rest.INSCRICOES_IRREGULARES_ROUTE
@@ -59,11 +60,14 @@ class PageBodyTemplate: Template<FlowContent> {
                         tabIndex = 10
                         unsafe { +MENU_SVG }
                     }
-                    ul(classes = "menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow") {
+                    ul(classes = "menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-80 p-2 shadow") {
                         tabIndex = -1
 
                         li {
                             mainMenuItem(ALUNOS_ROUTE, "Alunos")
+                        }
+                        li {
+                            mainMenuItem(ALUNOS_COLACAO_ROUTE, "Alunos aptos para Colação de Grau")
                         }
                         li {
                             mainMenuItem(ALUNOS_EXTENSAO_ROUTE, "Alunos com 11 ou mais Períodos")

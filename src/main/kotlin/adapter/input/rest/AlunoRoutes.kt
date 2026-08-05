@@ -2,6 +2,7 @@ package adapter.input.rest
 
 import adapter.input.ui.MainPageTemplate
 import adapter.input.ui.tableAlunos
+import adapter.input.ui.tableColacao
 import adapter.input.ui.tableExtensao
 import io.ktor.http.*
 import io.ktor.server.html.*
@@ -20,6 +21,7 @@ const val ALUNOS_ROUTE = "/alunos"
 const val DOWNLOAD_ALUNOS_ROUTE = "/alunos/download"
 const val ALUNOS_EXTENSAO_ROUTE = "/alunos/extensao"
 const val DOWNLOAD_ALUNOS_EXTENSAO_ROUTE = "/alunos/extensao/download"
+const val ALUNOS_COLACAO_ROUTE = "/alunos/colacao"
 
 private data class Parameters(val sorting: String, val filter: String, val search: String)
 
@@ -72,6 +74,14 @@ fun Routing.alunoRoutes() {
                     alunos.joinToString(separator = "\n") { it.toDownloadExtensaoCsv() }
         }
     }
+
+    get (ALUNOS_COLACAO_ROUTE) {
+        val alunos = findAlunosColacao()
+
+        call.respondHTML(status = HttpStatusCode.OK) {
+            tableColacao(alunos)
+        }
+    }
 }
 
 private fun getParameters(call: RoutingCall) =
@@ -91,6 +101,12 @@ private fun findAlunosExtensao(): List<Aluno> =
         .findByFilter(AlunoFilter.ACTIVE)
         .filter { it.ultimoPeriodoCursado.numero >= 11 }
         .sortedByDescending { it.ultimoPeriodoCursado.numero }
+
+private fun findAlunosColacao() : List<Aluno> =
+    RepositoryFactory.get(AlunoRepository::class)
+        .findByFilter(AlunoFilter.ACTIVE)
+        .filter { it.estaFormado }
+        .sortedBy { it.nome }
 
 private fun Aluno.toDownloadAlunoCsv() = "${matricula};${nome};${versao};${email};${sexo};${dataNascimento};${trancamentos};${prazoExtensao};${ingresso};${evasao};${dataEvasao?:""};${logradouro};${numero};${complemento};${bairro};${cidade};${cep};${telefone1};${telefone2}"
 

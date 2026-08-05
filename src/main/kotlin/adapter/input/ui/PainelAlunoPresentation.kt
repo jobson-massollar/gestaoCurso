@@ -127,13 +127,13 @@ private fun FlowContent.tableObrigatoriasFaltantes(title: String, disciplinas: L
             }
             tbody {
                 disciplinas
-                    .forEach {
+                    .forEach { disciplina ->
                         tr {
-                            td(classes = "text-center") { +it.codigo  }
-                            td { +it.nome }
-                            td(classes = "text-center") { +if (matriculadas.any { m -> m.codigo == it.codigo }) "✅" else "-" }
-                            td(classes = "text-center") { +"${it.periodo}" }
-                            td(classes = "text-center") { +"${it.horas}" }
+                            td(classes = "text-center") { +disciplina.codigo  }
+                            td { +disciplina.nome }
+                            td(classes = "text-center") { +if (matriculadas.any { m -> m.codigo == disciplina.codigo }) "✅" else "-" }
+                            td(classes = "text-center") { +"${disciplina.periodo}" }
+                            td(classes = "text-center") { +"${disciplina.horas}" }
                         }
                     }
             }
@@ -159,25 +159,25 @@ private fun FlowContent.tableDisciplinas(title: String, historico: List<ItemHist
             }
             tbody {
                 historico
-                    .forEach {
+                    .forEach { item ->
                         tr {
                             td(classes = "text-center") {
-                                +"${it.ano}.${it.periodo}"
+                                +"${item.ano}.${item.periodo}"
                             }
                             td(classes = "text-center") {
-                                +it.codigo
+                                +item.codigo
                             }
                             td {
-                                +it.nome
+                                +item.nome
                             }
                             td(classes = "text-center") {
-                                +it.descricao.take(3)
+                                +item.descricao.take(3)
                             }
                             td(classes = "text-right") {
-                                +(it.nota?.format(2) ?: "")
+                                +(item.nota?.format(2) ?: "")
                             }
                             td(classes = "text-center") {
-                                +"${it.horas}"
+                                +"${item.horas}"
                             }
                         }
                     }

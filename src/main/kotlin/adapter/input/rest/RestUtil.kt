@@ -53,6 +53,4 @@ fun getInscricaoSortingByValue(value: String) =
 //        AlunoSorting.NOME_DESCENDING -> "-nome"
 //    }
 
-
-
 //fun getValueByAlunoFilter(filter: AlunoFilter) = filter.name.lowercase()

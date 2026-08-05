@@ -83,7 +83,7 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                 table(classes = "table table-zebra table-sm") {
                     thead {
                         tr(classes = "bg-base-300") {
-                            th(classes = "gap-4") {
+                            th(classes = "gap-4 text-center") {
                                 +"Matrícula"
                                 sortingButtons(ALUNOS_ROUTE, ALUNOS_FORM, ALUNO_SORTING_MATRICULA_ASC, ALUNO_SORTING_MATRICULA_DESC)
                             }
@@ -91,7 +91,7 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                                 +"Nome"
                                 sortingButtons(ALUNOS_ROUTE, ALUNOS_FORM,ALUNO_SORTING_NOME_ASC, ALUNO_SORTING_NOME_DESC)
                             }
-                            th { +"Currículo" }
+                            th(classes = "text-center") { +"Currículo" }
                             th { +"E-mail" }
                             if (currentFilter == ALUNO_FILTER_ALL) {
                                 th { +"Evasão" }
@@ -99,27 +99,75 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                             th { +" " }
                         }
                     }
-                    alunos.forEach {
+                    alunos.forEach { aluno ->
                         tr(classes = "hover:bg-secondary hover:text-base-100") {
-                            td { +it.matricula }
-                            td { +it.nome }
-                            td { +it.versao }
-                            td { +it.email }
+                            td(classes = "text-center") { +aluno.matricula }
+                            td { +aluno.nome }
+                            td(classes = "text-center") { +aluno.versao }
+                            td { +aluno.email }
                             if (currentFilter == ALUNO_FILTER_ALL) {
-                                td { +it.evasao.take(40) }
+                                td { +aluno.evasao.take(40) }
                             }
                             td(classes = "gap-4") {
                                 smallButton(
                                     "Painel",
-                                    $"/alunos/painel/${it.matricula}",
+                                    "$PAINEL_ALUNO_ROUTE/${aluno.matricula}",
                                     "#main-container",
-                                    !it.estaAtivo
+                                    !aluno.estaAtivo
                                 )
                                 smallButton(
                                     "Histórico",
-                                    $"/historico/${it.matricula}",
+                                    $"/historico/${aluno.matricula}",
                                     "#main-container",
-                                    !it.estaAtivo
+                                    !aluno.estaAtivo
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun FlowContent.tableColacao(alunos: List<Aluno>) {
+    title("Alunos aptos para Colação de Grau") {
+
+        if (alunos.isEmpty()) {
+            p(classes = "text-base") { +"Nenhum aluno apto para colação de grau" }
+            return@title
+        }
+
+        div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
+            table(classes = "table table-zebra table-sm") {
+                thead {
+                    tr(classes = "bg-base-300") {
+                        th(classes = "text-center") { +"Matrícula" }
+                        th { +"Nome" }
+                        th(classes = "text-center") { +"Currículo" }
+                        th { +"E-mail" }
+                        th { +" " }
+                    }
+                }
+                tbody {
+                    alunos.forEach { aluno ->
+                        tr {
+                            td(classes = "text-center") { +aluno.matricula }
+                            td { +aluno.nome }
+                            td(classes = "text-center") { +aluno.versao }
+                            td { +aluno.email }
+                            td(classes = "gap-4") {
+                                smallButton(
+                                    "Painel",
+                                    "$PAINEL_ALUNO_ROUTE/${aluno.matricula}",
+                                    "#main-container",
+                                    !aluno.estaAtivo
+                                )
+                                smallButton(
+                                    "Histórico",
+                                    $"/historico/${aluno.matricula}",
+                                    "#main-container",
+                                    !aluno.estaAtivo
                                 )
                             }
                         }

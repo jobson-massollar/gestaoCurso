@@ -42,7 +42,7 @@ sealed interface IDAO<E: Entity, T: EntityDTO<E>> {
     }
 
     interface IInscricaoDAO: IDAO<Inscricao, InscricaoDTO> {
-        //fun findTotalizacoes(): List<TotalizacaoInscricoesDTO>
+        fun findByDisciplina(codigo: String, turma: String): List<InscricaoDTO>
     }
 
     interface ITotalizacaoInscricaoDAO: IDAO<TotalizacaoInscricao, TotalizacaoInscricaoDTO> {

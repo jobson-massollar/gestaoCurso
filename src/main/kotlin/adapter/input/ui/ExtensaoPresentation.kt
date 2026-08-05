@@ -1,11 +1,13 @@
 package adapter.input.ui
 
+import adapter.input.rest.DOWNLOAD_ALUNOS_EXTENSAO_ROUTE
+import adapter.input.rest.PAINEL_ALUNO_ROUTE
 import kotlinx.html.*
 import model.Aluno
 import model.Periodo
 
 fun FlowContent.tableExtensao(alunos: List<Aluno>) {
-    title("Alunos com 11 ou mais Períodos de Integralização", "/alunos/extensao/download") {
+    title("Alunos com 11 ou mais Períodos de Integralização", DOWNLOAD_ALUNOS_EXTENSAO_ROUTE) {
 
         if (alunos.isEmpty()) {
             p(classes = "text-base") { +"Nenhum aluno em período de extensão" }
@@ -43,7 +45,7 @@ fun FlowContent.tableExtensao(alunos: List<Aluno>) {
                             td(classes = "gap-4") {
                                 smallButton(
                                     "Painel",
-                                    $"/alunos/painel/${aluno.matricula}",
+                                    "$PAINEL_ALUNO_ROUTE/${aluno.matricula}",
                                     "#main-container",
                                     !aluno.estaAtivo
                                 )

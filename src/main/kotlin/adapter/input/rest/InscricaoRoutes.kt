@@ -2,8 +2,10 @@ package adapter.input.rest
 
 import adapter.input.ui.observacoes
 import adapter.input.ui.tableInscricoes
+import adapter.input.ui.tableInscricoesAlunos
 import adapter.input.ui.tableInscricoesIrregulares
 import io.ktor.http.*
+import io.ktor.server.html.respondHtml
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.datetime.format
@@ -11,6 +13,7 @@ import main.currentDateTime
 import main.dateTimeFormat
 import model.Aluno
 import model.AlunoRepository
+import model.InscricaoRepository
 import model.RepositoryFactory
 import model.TotalizacaoInscricaoRepository
 import services.application.AlunoFilter
@@ -35,6 +38,16 @@ fun Route.inscricoesRoutes() {
 
     get(DOWNLOAD_INSCRICOES_ROUTE) {
 
+    }
+
+    get("$INSCRICOES_ROUTE/{codigo}/{turma}") {
+        val codigo = call.parameters["codigo"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) { }
+        val turma = call.parameters["turma"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) { }
+        val inscricoes = RepositoryFactory.get(InscricaoRepository::class).findByDisciplina(codigo, turma).sortedBy { it.nomeAluno }
+
+        call.respondHTML(status = HttpStatusCode.OK) {
+            tableInscricoesAlunos(inscricoes, codigo, turma)
+        }
     }
 
     get(INSCRICOES_IRREGULARES_ROUTE) {

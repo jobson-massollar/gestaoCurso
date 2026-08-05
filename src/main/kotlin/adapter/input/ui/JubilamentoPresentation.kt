@@ -1,6 +1,7 @@
 package adapter.input.ui
 
 import adapter.input.rest.Jubilados
+import adapter.input.rest.PAINEL_ALUNO_ROUTE
 import kotlinx.html.*
 import model.Aluno
 import model.Periodo
@@ -34,16 +35,16 @@ fun FlowContent.tableJubilamentoPorAbandono(jubilados: List<Aluno>) {
                 }
             }
             tbody {
-                jubilados.forEach {
+                jubilados.forEach { aluno ->
                     tr(classes = "hover:bg-secondary hover:text-base-100") {
-                        td(classes = "text-center") { +it.matricula }
-                        td { +it.nome }
-                        td(classes = "text-center") { +it.versao }
-                        td { +it.email }
-                        td(classes = "text-center") { +it.trancamentos.toString() }
+                        td(classes = "text-center") { +aluno.matricula }
+                        td { +aluno.nome }
+                        td(classes = "text-center") { +aluno.versao }
+                        td { +aluno.email }
+                        td(classes = "text-center") { +aluno.trancamentos.toString() }
                         td(classes = "gap-4") {
-                            smallButton("Painel", $"/alunos/painel/${it.matricula}", "#main-container", !it.estaAtivo)
-                            smallButton("Histórico", $"/historico/${it.matricula}", "#main-container", !it.estaAtivo)
+                            smallButton("Painel", "$PAINEL_ALUNO_ROUTE/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
+                            smallButton("Histórico", "/historico/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
                         }
                     }
                 }
@@ -75,16 +76,16 @@ fun FlowContent.tableJubilamentoPorPrazo(jubilados: List<Aluno>) {
                 }
             }
             tbody {
-                jubilados.forEach {
+                jubilados.forEach { aluno ->
                     tr(classes = "hover:bg-secondary hover:text-base-100") {
-                        td(classes = "text-center") { +it.matricula }
-                        td { +it.nome }
-                        td(classes = "text-center") { +it.versao }
-                        td { +it.email }
-                        td(classes = "text-center") { +it.periodoLimite.toString() }
+                        td(classes = "text-center") { +aluno.matricula }
+                        td { +aluno.nome }
+                        td(classes = "text-center") { +aluno.versao }
+                        td { +aluno.email }
+                        td(classes = "text-center") { +aluno.periodoLimite.toString() }
                         td(classes = "gap-4") {
-                            smallButton("Painel", $"/alunos/painel/${it.matricula}", "#main-container", !it.estaAtivo)
-                            smallButton("Histórico", $"/historico/${it.matricula}", "#main-container", !it.estaAtivo)
+                            smallButton("Painel", "$PAINEL_ALUNO_ROUTE/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
+                            smallButton("Histórico", "/historico/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
                         }
                     }
                 }

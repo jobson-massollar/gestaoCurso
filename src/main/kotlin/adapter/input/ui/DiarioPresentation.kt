@@ -25,16 +25,20 @@ fun FlowContent.tableDiario(disciplina: Disciplina, itensDiario: List<ItemDiario
                 thead {
                     tr(classes = "bg-base-300") {
                         th { +"#" }
-                        th { +"Matricula" }
+                        th(classes = "text-center") { +"Matricula" }
                         th { +"Nome" }
+                        th(classes = "text-center") { +"Currículo" }
+                        th { +"E-mail" }
                     }
                 }
                 tbody {
                     itensDiario.forEachIndexed { i, item ->
                         tr {
                             td { +(i+1).toString() }
-                            td { +item.matricula }
+                            td(classes = "text-center") { +item.matricula }
                             td { +item.nome }
+                            td(classes = "text-center") { +"TODO" }
+                            td { +"TODO" }
                         }
                     }
                 }

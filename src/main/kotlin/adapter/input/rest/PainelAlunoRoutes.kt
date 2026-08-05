@@ -7,8 +7,10 @@ import io.ktor.server.routing.*
 import model.AlunoRepository
 import model.RepositoryFactory
 
+const val PAINEL_ALUNO_ROUTE = "/painel"
+
 fun Routing.painelAlunoRoutes() {
-    get("/alunos/painel/{matricula}") {
+    get("$PAINEL_ALUNO_ROUTE/{matricula}") {
         val matricula = call.parameters["matricula"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) {}
 
         val aluno = RepositoryFactory.get(AlunoRepository::class).findByMatricula(matricula)

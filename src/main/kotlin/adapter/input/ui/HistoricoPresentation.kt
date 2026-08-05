@@ -36,13 +36,13 @@ private fun FlowContent.tableDisciplinas(title: String, historico: List<ItemHist
             }
             tbody {
                 historico
-                    .forEach {
+                    .forEach { item ->
                         tr {
-                            td(classes = "text-center") { +it.codigo }
-                            td { +it.nome }
-                            td(classes = "text-center") { +"${it.horas}" }
-                            td(classes = "text-center") { +it.descricao.take(3) }
-                            td(classes = "text-right") { +(it.nota?.format(2) ?: "") }
+                            td(classes = "text-center") { +item.codigo }
+                            td { +item.nome }
+                            td(classes = "text-center") { +"${item.horas}" }
+                            td(classes = "text-center") { +item.descricao.take(3) }
+                            td(classes = "text-right") { +(item.nota?.format(2) ?: "") }
                         }
                     }
             }
