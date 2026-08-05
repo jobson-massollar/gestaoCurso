@@ -5,6 +5,8 @@ import adapter.input.rest.ALUNOS_EXTENSAO_ROUTE
 import adapter.input.rest.ALUNOS_ROUTE
 import adapter.input.rest.INSCRICOES_IRREGULARES_ROUTE
 import adapter.input.rest.INSCRICOES_ROUTE
+import adapter.input.rest.JUBILAMENTOS_ROUTE
+import adapter.input.rest.TURMAS_ROUTE
 import io.ktor.htmx.html.*
 import io.ktor.server.html.*
 import kotlinx.html.*
@@ -24,8 +26,8 @@ class MainPageTemplate: Template<HTML> {
             link(href="https://cdn.jsdelivr.net/npm/daisyui@5.6", rel="stylesheet", type = "text/css")
             link(href="https://cdn.jsdelivr.net/npm/daisyui@5.6/themes.css", rel="stylesheet", type = "text/css")
             script(src = "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4") {}
-            script(src = "https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-beta5", crossorigin = ScriptCrossorigin.anonymous) {}
-            script(src = "https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-beta5/dist/ext/hx-download.js") {}
+            script(src = "https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-beta6", crossorigin = ScriptCrossorigin.anonymous) {}
+            script(src = "https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-beta6/dist/ext/hx-download.js") {}
             //script(src = "https://unpkg.com/htmx.org@2.0.7", crossorigin = ScriptCrossorigin.anonymous) {}
             script(src = "https://cdn.jsdelivr.net/npm/sweetalert2@11") {}
             //script(src = "/static/script/util.js") {}
@@ -76,13 +78,13 @@ class PageBodyTemplate: Template<FlowContent> {
                             mainMenuItem(INSCRICOES_IRREGULARES_ROUTE, "Alunos com Inscrições Irregulares")
                         }
                         li {
-                            mainMenuItem("/jubilamentos", "Alunos em Jubilamento")
+                            mainMenuItem(JUBILAMENTOS_ROUTE, "Alunos em Jubilamento")
                         }
                         li {
                             mainMenuItem(INSCRICOES_ROUTE, "Inscrições")
                         }
                         li {
-                            mainMenuItem("/turmas", "Turmas")
+                            mainMenuItem(TURMAS_ROUTE, "Turmas")
                         }
                         li {
                             a {
@@ -141,6 +143,7 @@ private fun LI.mainMenuItem(url: String, label: String) {
             swap = "innerHTML"
             indicator = "#loading-spinner"
             pushUrl = "true"
+
         }
         // Para fechar o menu
         onClick = "document.activeElement.blur()"

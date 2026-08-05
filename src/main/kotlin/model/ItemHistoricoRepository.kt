@@ -7,6 +7,6 @@ class ItemHistoricoRepository: Repository<ItemHistorico, IDAO.IItemHistoricoDAO,
 
     override val dao: IDAO.IItemHistoricoDAO = DAOFactory.getDAO(DAOFactory.Type.HISTORICO)
 
-    fun findByMatricula(aluno: Aluno): List<ItemHistorico> =
+    fun findByAluno(aluno: Aluno): List<ItemHistorico> =
         createEntityList(dao.findByAluno(aluno))
 }

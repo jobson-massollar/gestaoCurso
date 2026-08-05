@@ -15,14 +15,17 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.format.char
 import kotlinx.html.*
+import main.dateFormat
+import main.timeFormat
 import model.Aluno
 import model.Grade
 import model.Inscricao
 import model.TotalizacaoInscricao
+import model.ehAlunoBSI
 
 const val INSCRICOES_FORM = "inscricoes"
 
-fun FlowContent.tableInscricoes(totalizacoes: List<TotalizacaoInscricao>, currentSorting: String) {
+fun FlowContent.tableTotalizacaoInscricoes(totalizacoes: List<TotalizacaoInscricao>, currentSorting: String) {
     title("Inscrições", DOWNLOAD_INSCRICOES_ROUTE) {
 
         if (totalizacoes.isEmpty()) {
@@ -90,7 +93,7 @@ fun FlowContent.tableInscricoes(totalizacoes: List<TotalizacaoInscricao>, curren
     }
 }
 
-fun FlowContent.tableInscricoesAlunos(inscricoes: List<Inscricao>, codigo: String, turma: String) {
+fun FlowContent.tableInscricoesDisciplina(inscricoes: List<Inscricao>, codigo: String, turma: String) {
     title("Inscrições - $codigo - $turma", backButton = true) {
 
         if (inscricoes.isEmpty()) {
@@ -107,26 +110,12 @@ fun FlowContent.tableInscricoesAlunos(inscricoes: List<Inscricao>, codigo: Strin
                         th(classes = "text-center") { +"Currículo" }
                         th { +"E-mail" }
                         th { +"Situação" }
-                        th { +"Solicitação" }
-                        th { +"Processamento" }
+                        th(classes = "text-center") { +"Solicitação" }
+                        th(classes = "text-center") { +"Processamento" }
+                        th { +" " }
                     }
                 }
                 tbody {
-                    val df = LocalDate.Format {
-                        day()
-                        char('/')
-                        monthNumber()
-                        char('/')
-                        year()
-                    }
-                    val tf = LocalTime.Format {
-                        hour()
-                        char(':')
-                        minute()
-                        char(':')
-                        second()
-                    }
-
                     inscricoes.forEach { inscricao ->
                         tr {
                             td(classes = "text-center") { +inscricao.matricula }
@@ -134,8 +123,59 @@ fun FlowContent.tableInscricoesAlunos(inscricoes: List<Inscricao>, codigo: Strin
                             td(classes = "text-center") { +"TODO" }
                             td { +"TODO" }
                             td { +inscricao.descricao }
-                            td { +"${df.format(inscricao.dataSolicitacao)} ${tf.format(inscricao.horaSolicitacao)}" }
-                            td { +(inscricao.dataProcessamento?.let { df.format(it) } ?: "") }
+                            td(classes = "text-center") { +"${dateFormat.format(inscricao.dataSolicitacao)} ${timeFormat.format(inscricao.horaSolicitacao)}" }
+                            td(classes = "text-center") { +(inscricao.dataProcessamento?.let { dateFormat.format(it) } ?: "") }
+                            td(classes = "gap-4") {
+                                smallButton(
+                                    "Painel",
+                                    "$PAINEL_ALUNO_ROUTE/${inscricao.matricula}",
+                                    "#main-container",
+                                    ! inscricao.matricula.ehAlunoBSI
+                                )
+                                smallButton(
+                                    "Histórico",
+                                    "$HISTORICO_ROUTE/${inscricao.matricula}",
+                                    "#main-container",
+                                    ! inscricao.matricula.ehAlunoBSI
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun FlowContent.tableInscricoesAluno(aluno: Aluno) {
+    title("Inscrições - ${aluno.matricula} - ${aluno.nome} (${aluno.versao})", backButton = true) {
+
+        if (aluno.inscricoes.isEmpty()) {
+            p(classes = "text-base") { +"Nenhuma inscrição foi encontrada!" }
+            return@title
+        }
+
+        div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
+            table(classes = "table table-zebra table-sm") {
+                thead {
+                    tr(classes = "bg-base-300") {
+                        th(classes = "text-center") { +"Turma" }
+                        th(classes = "text-center") { +"Código" }
+                        th { +"Disciplina" }
+                        th { +"Situação" }
+                        th(classes = "text-center") { +"Solicitação" }
+                        th(classes = "text-center") { +"Processamento" }
+                    }
+                }
+                tbody {
+                    aluno.inscricoes.forEach { inscricao ->
+                        tr {
+                            td(classes = "text-center") { +inscricao.turma }
+                            td(classes = "text-center") { +inscricao.codigo }
+                            td { +inscricao.nome }
+                            td { +inscricao.descricao }
+                            td(classes = "text-center") { +"${dateFormat.format(inscricao.dataSolicitacao)} ${timeFormat.format(inscricao.horaSolicitacao)}" }
+                            td(classes = "text-center") { +(inscricao.dataProcessamento?.let { dateFormat.format(it) } ?: "") }
                         }
                     }
                 }
@@ -160,7 +200,8 @@ fun FlowContent.tableInscricoesIrregulares(alunos: List<Aluno>) {
                         th { +"Nome" }
                         th(classes = "text-center") { +"Currículo" }
                         th { +"E-mail" }
-                        th(classes = "text-center") { +"Inscrições" }
+                        th(classes = "text-center") { +"Matriculado" }
+                        th(classes = "text-center") { +"Trancamentos" }
                         th { +"Pode Cursar" }
                         th { +" " }
                     }
@@ -173,6 +214,7 @@ fun FlowContent.tableInscricoesIrregulares(alunos: List<Aluno>) {
                             td(classes = "text-center") { +aluno.versao }
                             td { +aluno.email }
                             td(classes = "text-center") { +aluno.itensMatriculados.size.toString() }
+                            td(classes = "text-center") { +aluno.trancamentos.toString() }
                             td {
                                 ul {
                                     aluno.observacoes.forEach { obs ->
@@ -190,6 +232,12 @@ fun FlowContent.tableInscricoesIrregulares(alunos: List<Aluno>) {
                                 smallButton(
                                     "Histórico",
                                     "$HISTORICO_ROUTE/${aluno.matricula}",
+                                    "#main-container",
+                                    !aluno.estaAtivo
+                                )
+                                smallButton(
+                                    "Inscrições",
+                                    "$INSCRICOES_ROUTE/${aluno.matricula}",
                                     "#main-container",
                                     !aluno.estaAtivo
                                 )

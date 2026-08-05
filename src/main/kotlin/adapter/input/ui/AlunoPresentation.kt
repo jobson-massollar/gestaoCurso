@@ -121,6 +121,12 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                                     "#main-container",
                                     !aluno.estaAtivo
                                 )
+                                smallButton(
+                                    "Inscrições",
+                                    "$INSCRICOES_ROUTE/${aluno.matricula}",
+                                    "#main-container",
+                                    !aluno.estaAtivo
+                                )
                             }
                         }
                     }

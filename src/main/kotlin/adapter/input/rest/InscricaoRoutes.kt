@@ -1,8 +1,9 @@
 package adapter.input.rest
 
 import adapter.input.ui.observacoes
-import adapter.input.ui.tableInscricoes
-import adapter.input.ui.tableInscricoesAlunos
+import adapter.input.ui.tableInscricoesAluno
+import adapter.input.ui.tableTotalizacaoInscricoes
+import adapter.input.ui.tableInscricoesDisciplina
 import adapter.input.ui.tableInscricoesIrregulares
 import io.ktor.http.*
 import io.ktor.server.html.respondHtml
@@ -31,12 +32,26 @@ fun Route.inscricoesRoutes() {
         val totalizacoes = RepositoryFactory.get(TotalizacaoInscricaoRepository::class).findTotalizacoes()
 
         call.respondHTML(status = HttpStatusCode.OK) {
-            tableInscricoes(totalizacoes.sortedWith(comparator), sorting)
+            tableTotalizacaoInscricoes(totalizacoes.sortedWith(comparator), sorting)
         }
     }
 
     get(DOWNLOAD_INSCRICOES_ROUTE) {
 
+    }
+
+    get("$INSCRICOES_ROUTE/{matricula}") {
+        val matricula = call.parameters["matricula"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) { }
+
+        val aluno = RepositoryFactory.get(AlunoRepository::class).findByMatricula(matricula)
+
+        if (aluno != null) {
+            call.respondHTML(status = HttpStatusCode.OK) {
+                tableInscricoesAluno(aluno)
+            }
+        }
+        else
+            call.respondHtml(HttpStatusCode.NotFound) {}
     }
 
     get("$INSCRICOES_ROUTE/{codigo}/{turma}") {
@@ -45,7 +60,7 @@ fun Route.inscricoesRoutes() {
         val inscricoes = RepositoryFactory.get(InscricaoRepository::class).findByDisciplina(codigo, turma).sortedBy { it.nomeAluno }
 
         call.respondHTML(status = HttpStatusCode.OK) {
-            tableInscricoesAlunos(inscricoes, codigo, turma)
+            tableInscricoesDisciplina(inscricoes, codigo, turma)
         }
     }
 
@@ -62,7 +77,7 @@ fun Route.inscricoesRoutes() {
         }
 
         call.respondText(ContentType.Text.CSV, HttpStatusCode.OK) {
-            "Matricula;Nome;Versao;E-mail;Inscricoes;Observacoes\n" +
+            "Matricula;Nome;Versao;E-mail;Matriculado;Trancamentos;Observacoes\n" +
             findAlunosIrregulares().joinToString(separator = "\n") { it.toCsv() + it.observacoes.joinToString(" / ") }
         }
     }
@@ -70,8 +85,8 @@ fun Route.inscricoesRoutes() {
 
 private fun findAlunosIrregulares() =
     RepositoryFactory.get(AlunoRepository::class)
-        .findByFilter(AlunoFilter.ACTIVE)
+        .findInscricoesIrregulares()
         .filter { it.estaIrregular }
         .sortedBy { it.itensMatriculados.size }
 
-private fun Aluno.toCsv() = "${this.matricula};${this.nome};${this.versao};${this.email};${itensMatriculados.size};"
+private fun Aluno.toCsv() = "${this.matricula};${this.nome};${this.versao};${this.email};${this.itensMatriculados.size};${this.trancamentos};"

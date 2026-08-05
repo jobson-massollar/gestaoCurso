@@ -4,6 +4,9 @@ import kotlinx.datetime.LocalDate
 import kotlin.math.max
 import kotlin.math.min
 
+val String.ehAlunoBSI: Boolean
+    get() = this.length == 11 && this.substring(5, 8) == "210"
+
 sealed class StatusPeriodo(val periodo: Periodo, val isAcimaLimite: Boolean, val isPandemia: Boolean = false, val numero: Int = 0) {
     class Matriculado(periodo: Periodo, isAcimaLimite: Boolean, isPandemia: Boolean, numero: Int): StatusPeriodo(periodo, isAcimaLimite, isPandemia, numero)
     class ACursar(periodo: Periodo, isAcimaLimite: Boolean, numero: Int): StatusPeriodo(periodo, isAcimaLimite, numero = numero)
@@ -79,7 +82,11 @@ class Aluno private constructor(val matricula: String,
         }
 
     val historico: List<ItemHistorico> by lazy {
-        RepositoryFactory.get(ItemHistoricoRepository::class).findByMatricula(this)
+        RepositoryFactory.get(ItemHistoricoRepository::class).findByAluno(this)
+    }
+
+    val inscricoes: List<Inscricao> by lazy {
+        RepositoryFactory.get(InscricaoRepository::class).findByAluno(this)
     }
 
     val itensAprovados: List<ItemHistorico> by lazy {

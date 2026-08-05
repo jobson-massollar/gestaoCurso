@@ -1,5 +1,7 @@
 package adapter.input.ui
 
+import adapter.input.rest.HISTORICO_ROUTE
+import adapter.input.rest.PAINEL_ALUNO_ROUTE
 import kotlinx.html.FlowContent
 import kotlinx.html.div
 import kotlinx.html.p
@@ -11,6 +13,7 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 import model.Disciplina
 import model.ItemDiario
+import model.ehAlunoBSI
 
 fun FlowContent.tableDiario(disciplina: Disciplina, itensDiario: List<ItemDiario>) {
     title("${disciplina.nome} (${disciplina.codigo}) - ${itensDiario.size} aluno(s)", backButton = true) {
@@ -29,6 +32,7 @@ fun FlowContent.tableDiario(disciplina: Disciplina, itensDiario: List<ItemDiario
                         th { +"Nome" }
                         th(classes = "text-center") { +"Currículo" }
                         th { +"E-mail" }
+                        th { +" "}
                     }
                 }
                 tbody {
@@ -39,6 +43,20 @@ fun FlowContent.tableDiario(disciplina: Disciplina, itensDiario: List<ItemDiario
                             td { +item.nome }
                             td(classes = "text-center") { +"TODO" }
                             td { +"TODO" }
+                            td(classes = "gap-4") {
+                                smallButton(
+                                    "Painel",
+                                    "$PAINEL_ALUNO_ROUTE/${item.matricula}",
+                                    "#main-container",
+                                    ! item.matricula.ehAlunoBSI
+                                )
+                                smallButton(
+                                    "Histórico",
+                                    "$HISTORICO_ROUTE/${item.matricula}",
+                                    "#main-container",
+                                    ! item.matricula.ehAlunoBSI
+                                )
+                            }
                         }
                     }
                 }

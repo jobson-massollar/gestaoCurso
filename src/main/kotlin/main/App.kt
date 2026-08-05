@@ -2,7 +2,9 @@ package main
 
 import adapter.infrastructure.exposed.ExposedDAOFactory
 import io.ktor.server.application.*
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.format.char
@@ -33,6 +35,21 @@ val fileTimestampFormat: DateTimeFormat<LocalDateTime>
         minute()
         second()
     }
+
+val dateFormat = LocalDate.Format {
+    day()
+    char('/')
+    monthNumber()
+    char('/')
+    year()
+}
+val timeFormat = LocalTime.Format {
+    hour()
+    char(':')
+    minute()
+    char(':')
+    second()
+}
 
 fun currentDateTime() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 

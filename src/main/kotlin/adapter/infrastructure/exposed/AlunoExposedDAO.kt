@@ -1,10 +1,18 @@
 package adapter.infrastructure.exposed
 
 import model.AlunoDTO
+import org.jetbrains.exposed.v1.core.JoinType
 import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.alias
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.count
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.greater
+import org.jetbrains.exposed.v1.core.isNull
 import org.jetbrains.exposed.v1.core.like
 import org.jetbrains.exposed.v1.core.lowerCase
+import org.jetbrains.exposed.v1.core.not
+import org.jetbrains.exposed.v1.jdbc.select
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import services.domain.persistence.IDAO.IAlunoDAO
@@ -78,6 +86,39 @@ class AlunoExposedDAO: IAlunoDAO {
                     createDTO(Alunos, it)
                 }.firstOrNull()
         }
+
+    override fun findInscricoesIrregulares(): List<AlunoDTO> {
+        // Recupera as matrículas que tem 3 ou mais inscrições aceitas
+        // Esses alunos estão REGULARES!
+        val qtdInscricoes = Inscricoes.matricula.count()
+        val inscricoesValidas =
+            Inscricoes
+                .select(Inscricoes.matricula)
+                .where { Inscricoes.situacao eq 2 }
+                .groupBy(Inscricoes.matricula)
+                .having { qtdInscricoes greater 2 }
+                .alias("inscricoesValidas")
+
+        // Recupera todos os alunos ativos que não estão REGULARES,
+        // excluindo os ingressantes. Esses são candidatos a sere
+        // IRREGULARES
+        val inscricoesIrregulares =
+            AlunosAtivos
+                .join(
+                inscricoesValidas,
+                JoinType.LEFT) {
+                    AlunosAtivos.matricula eq inscricoesValidas[Inscricoes.matricula]
+                }
+                .selectAll()
+                .where { (inscricoesValidas[Inscricoes.matricula]).isNull() and (not (AlunosAtivos.matricula like "20262210%")) }
+
+        return transaction {
+            inscricoesIrregulares
+                .map {
+                    createDTO(AlunosAtivos, it)
+                }.toList()
+        }
+    }
 
     private fun findWithSearch(table: AlunosBase, search: String): List<AlunoDTO> {
         val query = table.selectAll()
