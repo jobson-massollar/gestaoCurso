@@ -1,5 +1,6 @@
 package adapter.input.ui
 
+import adapter.input.rest.HISTORICO_ROUTE
 import adapter.input.rest.Jubilados
 import adapter.input.rest.PAINEL_ALUNO_ROUTE
 import kotlinx.html.*
@@ -44,7 +45,7 @@ fun FlowContent.tableJubilamentoPorAbandono(jubilados: List<Aluno>) {
                         td(classes = "text-center") { +aluno.trancamentos.toString() }
                         td(classes = "gap-4") {
                             smallButton("Painel", "$PAINEL_ALUNO_ROUTE/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
-                            smallButton("Histórico", "/historico/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
+                            smallButton("Histórico", "$HISTORICO_ROUTE/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
                         }
                     }
                 }
@@ -85,7 +86,7 @@ fun FlowContent.tableJubilamentoPorPrazo(jubilados: List<Aluno>) {
                         td(classes = "text-center") { +aluno.periodoLimite.toString() }
                         td(classes = "gap-4") {
                             smallButton("Painel", "$PAINEL_ALUNO_ROUTE/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
-                            smallButton("Histórico", "/historico/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
+                            smallButton("Histórico", "$HISTORICO_ROUTE/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
                         }
                     }
                 }

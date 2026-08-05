@@ -21,7 +21,7 @@ val collator: Collator = Collator.getInstance(appLocale).apply {
     strength = Collator.PRIMARY
 }
 
-val dateTimeFormat: DateTimeFormat<LocalDateTime>
+val fileTimestampFormat: DateTimeFormat<LocalDateTime>
     get() = LocalDateTime.Format {
         year()
         char('-')

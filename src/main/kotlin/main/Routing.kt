@@ -10,6 +10,7 @@ fun Application.configureRouting() {
 
         staticResources("/static", "static")
 
+        mainRoutes()
         alunoRoutes()
         painelAlunoRoutes()
         inscricoesRoutes()

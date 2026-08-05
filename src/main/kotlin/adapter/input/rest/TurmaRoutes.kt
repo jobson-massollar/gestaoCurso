@@ -7,9 +7,11 @@ import main.collator
 import model.RepositoryFactory
 import model.TurmaRepository
 
+const val TURMAS_ROUTE = "/turmas"
+
 fun Routing.turmaRoutes() {
 
-    get("/turmas") {
+    get(TURMAS_ROUTE) {
         val turmas = RepositoryFactory.get(TurmaRepository::class).findAll()
 
         turmas.forEach { turma ->

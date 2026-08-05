@@ -1,6 +1,7 @@
 package adapter.input.ui
 
 import adapter.input.rest.DOWNLOAD_ALUNOS_EXTENSAO_ROUTE
+import adapter.input.rest.HISTORICO_ROUTE
 import adapter.input.rest.PAINEL_ALUNO_ROUTE
 import kotlinx.html.*
 import model.Aluno
@@ -51,7 +52,7 @@ fun FlowContent.tableExtensao(alunos: List<Aluno>) {
                                 )
                                 smallButton(
                                     "Histórico",
-                                    $"/historico/${aluno.matricula}",
+                                    "$HISTORICO_ROUTE/${aluno.matricula}",
                                     "#main-container",
                                     !aluno.estaAtivo
                                 )

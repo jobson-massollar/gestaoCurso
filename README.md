@@ -37,9 +37,9 @@ If the server starts successfully, you'll see the following output:
 
 ## Funcionalidades (TODO)
 
-* Diário: lista de alunos inscritos em uma disciplina (DiarioRoutes e DiarioPresentation)
+* Diário: lista de alunos inscritos em uma disciplina (DONE)
 * Download de turmas
-* Geração das inscrições
-* Importação das inscrições
+* Geração das inscrições (DONE)
+* Importação das inscrições (DONE)
 * Inscrições: alunos e suas inscrições com status
 * Alunos inscritos em turmas erradas

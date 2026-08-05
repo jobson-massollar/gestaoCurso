@@ -6,27 +6,30 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.datetime.format
 import main.currentDateTime
-import main.dateTimeFormat
+import main.fileTimestampFormat
 import model.Aluno
 import model.AlunoRepository
 import model.RepositoryFactory
 import services.application.AlunoFilter
 
+const val JUBILAMENTOS_ROUTE = "/jubilamentos"
+const val DOWNLOAD_JUBILAMENTOS_ROUTE = "/jubilamentos/download"
+
 data class Jubilados(val porAbandono: List<Aluno>, val porPrazo: List<Aluno>)
 
 fun Route.jubilamentoRoutes() {
 
-    get("/jubilamentos") {
+    get(JUBILAMENTOS_ROUTE) {
         call.respondHTML(status = HttpStatusCode.OK) {
             tableJubilamentos(findJubilados())
         }
     }
 
-    get("/jubilamentos/download") {
+    get(DOWNLOAD_JUBILAMENTOS_ROUTE) {
         val jubilados = findJubilados()
 
         call.response.headers.apply {
-            append("Content-Disposition", "attachment; filename=\"jubilamentos ${currentDateTime().format(dateTimeFormat)}.csv\"")
+            append("Content-Disposition", "attachment; filename=\"jubilamentos ${currentDateTime().format(fileTimestampFormat)}.csv\"")
         }
 
         call.respondText(ContentType.Text.CSV, HttpStatusCode.OK) {

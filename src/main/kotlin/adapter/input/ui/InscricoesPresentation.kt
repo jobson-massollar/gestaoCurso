@@ -2,6 +2,7 @@ package adapter.input.ui
 
 import adapter.input.rest.DOWNLOAD_INSCRICOES_IRREGULARES_ROUTE
 import adapter.input.rest.DOWNLOAD_INSCRICOES_ROUTE
+import adapter.input.rest.HISTORICO_ROUTE
 import adapter.input.rest.INSCRICAO_SORTING_ACEITOS_ASC
 import adapter.input.rest.INSCRICAO_SORTING_ACEITOS_DESC
 import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_ASC
@@ -9,6 +10,7 @@ import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_DESC
 import adapter.input.rest.INSCRICAO_SORTING_VAGAS_ASC
 import adapter.input.rest.INSCRICAO_SORTING_VAGAS_DESC
 import adapter.input.rest.INSCRICOES_ROUTE
+import adapter.input.rest.PAINEL_ALUNO_ROUTE
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.format.char
@@ -181,13 +183,13 @@ fun FlowContent.tableInscricoesIrregulares(alunos: List<Aluno>) {
                             td(classes = "gap-4") {
                                 smallButton(
                                     "Painel",
-                                    $"/alunos/painel/${aluno.matricula}",
+                                    "$PAINEL_ALUNO_ROUTE/${aluno.matricula}",
                                     "#main-container",
                                     !aluno.estaAtivo
                                 )
                                 smallButton(
                                     "Histórico",
-                                    $"/historico/${aluno.matricula}",
+                                    "$HISTORICO_ROUTE/${aluno.matricula}",
                                     "#main-container",
                                     !aluno.estaAtivo
                                 )

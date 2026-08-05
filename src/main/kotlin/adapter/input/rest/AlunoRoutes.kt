@@ -1,17 +1,15 @@
 package adapter.input.rest
 
-import adapter.input.ui.MainPageTemplate
 import adapter.input.ui.tableAlunos
 import adapter.input.ui.tableColacao
 import adapter.input.ui.tableExtensao
 import io.ktor.http.*
-import io.ktor.server.html.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.datetime.format
 import main.appLocale
 import main.currentDateTime
-import main.dateTimeFormat
+import main.fileTimestampFormat
 import model.Aluno
 import model.AlunoRepository
 import model.RepositoryFactory
@@ -26,10 +24,6 @@ const val ALUNOS_COLACAO_ROUTE = "/alunos/colacao"
 private data class Parameters(val sorting: String, val filter: String, val search: String)
 
 fun Routing.alunoRoutes() {
-    get("/") {
-        call.respondHtmlTemplate(MainPageTemplate(), status = HttpStatusCode.OK) {
-        }
-    }
 
     get(ALUNOS_ROUTE) {
         val params = getParameters(call)
@@ -45,7 +39,7 @@ fun Routing.alunoRoutes() {
         val alunos = findAlunos(params.sorting, params.filter, params.search)
 
         call.response.headers.apply {
-            append("Content-Disposition", "attachment; filename=\"alunos ${currentDateTime().format(dateTimeFormat)}.csv\"")
+            append("Content-Disposition", "attachment; filename=\"alunos ${currentDateTime().format(fileTimestampFormat)}.csv\"")
         }
 
         call.respondText(ContentType.Text.CSV, HttpStatusCode.OK) {
@@ -66,7 +60,7 @@ fun Routing.alunoRoutes() {
         val alunos = findAlunosExtensao()
 
         call.response.headers.apply {
-            append("Content-Disposition", "attachment; filename=\"alunos para extensao ${currentDateTime().format(dateTimeFormat)}.csv\"")
+            append("Content-Disposition", "attachment; filename=\"alunos para extensao ${currentDateTime().format(fileTimestampFormat)}.csv\"")
         }
 
         call.respondText(ContentType.Text.CSV, HttpStatusCode.OK) {

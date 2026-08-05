@@ -117,7 +117,7 @@ fun FlowContent.tableAlunos(alunos: List<Aluno>, currentSorting: String, current
                                 )
                                 smallButton(
                                     "Histórico",
-                                    $"/historico/${aluno.matricula}",
+                                    "$HISTORICO_ROUTE/${aluno.matricula}",
                                     "#main-container",
                                     !aluno.estaAtivo
                                 )
@@ -165,7 +165,7 @@ fun FlowContent.tableColacao(alunos: List<Aluno>) {
                                 )
                                 smallButton(
                                     "Histórico",
-                                    $"/historico/${aluno.matricula}",
+                                    "$HISTORICO_ROUTE/${aluno.matricula}",
                                     "#main-container",
                                     !aluno.estaAtivo
                                 )

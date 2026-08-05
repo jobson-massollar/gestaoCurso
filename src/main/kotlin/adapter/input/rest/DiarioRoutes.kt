@@ -9,9 +9,11 @@ import main.collator
 import model.DisciplinaRepository
 import model.RepositoryFactory
 
+const val DIARIO_ROUTE = "/diario"
+
 fun Route.diarioRoutes() {
 
-    get("/diario/{versao}/{codigo}") {
+    get("$DIARIO_ROUTE/{versao}/{codigo}") {
         val versao = call.parameters["versao"]?.replace('-', '/') ?: return@get call.respondHtml(HttpStatusCode.BadRequest) {}
         val codigo = call.parameters["codigo"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) {}
 
