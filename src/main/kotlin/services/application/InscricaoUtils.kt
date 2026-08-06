@@ -6,6 +6,8 @@ import model.TotalizacaoInscricao
 enum class InscricaoSorting(val comparator: Comparator<TotalizacaoInscricao>) {
     DISCIPLINA_ASCENDING(compareBy(collator) { it.nome }),
     DISCIPLINA_DESCENDING(compareByDescending(collator) { it.nome }),
+    SOLICITADOS_ASCENDING(compareBy { it.solicitados }),
+    SOLICITADOS_DESCENDING(compareByDescending { it.solicitados }),
     ACEITOS_ASCENDING(compareBy { it.aceitos }),
     ACEITOS_DESCENDING(compareByDescending { it.aceitos }),
     VAGAS_ASCENDING(compareBy { it.faltaVagas }),

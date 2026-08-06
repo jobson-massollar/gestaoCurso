@@ -293,13 +293,14 @@ inner join vw_disciplinas vd on vd.versao = id.versao and vd.codigo = id.codigo;
  ----------------------------------------------------------------------------------*/
 
 create or replace view vw_total_inscricoes as
-select codigo, nome, 
+select codigo, nome, turma,
+count(case when situacao=1 then 1 end) as solicitados,
 count(case when situacao=2 then 1 end) as aceitos,
 count(case when situacao=4 then 1 end) as falta_pr,
 count(case when situacao=9 then 1 end) as falta_vagas,
 count(case when situacao=99 then 1 end)  as cancelados
 from inscricoes
-group by codigo, nome;
+group by codigo, nome, turma;
 
 /*----------------------------------------------------------------------------------
   Complementa os dados vindos da importação, calculando novos campos para facilitar

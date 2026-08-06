@@ -25,6 +25,7 @@ object TotalizacaoInscricoes: Table("vw_total_inscricoes") {
     val codigo = varchar("codigo", 10)
     val nome = varchar("nome", 100)
     val turma = varchar("turma", 10)
+    val solicitados = integer("solicitados")
     val aceitos = integer("aceitos")
     val faltaPreRequisitos = integer("falta_pr")
     val faltaVagas = integer("falta_vagas")

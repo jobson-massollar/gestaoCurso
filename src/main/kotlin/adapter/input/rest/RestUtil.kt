@@ -29,6 +29,8 @@ fun getAlunoFilterByValue(value: String) =
 
 const val INSCRICAO_SORTING_DISCIPLINA_ASC = "disciplina"
 const val INSCRICAO_SORTING_DISCIPLINA_DESC = "-disciplina"
+const val INSCRICAO_SORTING_SOLICITADOS_ASC = "solicitados"
+const val INSCRICAO_SORTING_SOLICITADOS_DESC = "-solicitados"
 const val INSCRICAO_SORTING_ACEITOS_ASC = "aceitos"
 const val INSCRICAO_SORTING_ACEITOS_DESC = "-aceitos"
 const val INSCRICAO_SORTING_VAGAS_ASC = "vagas"
@@ -38,6 +40,8 @@ fun getInscricaoSortingByValue(value: String) =
     when (value) {
         INSCRICAO_SORTING_DISCIPLINA_ASC -> InscricaoSorting.DISCIPLINA_ASCENDING
         INSCRICAO_SORTING_DISCIPLINA_DESC -> InscricaoSorting.DISCIPLINA_DESCENDING
+        INSCRICAO_SORTING_SOLICITADOS_ASC -> InscricaoSorting.SOLICITADOS_ASCENDING
+        INSCRICAO_SORTING_SOLICITADOS_DESC -> InscricaoSorting.SOLICITADOS_DESCENDING
         INSCRICAO_SORTING_ACEITOS_ASC -> InscricaoSorting.ACEITOS_ASCENDING
         INSCRICAO_SORTING_ACEITOS_DESC -> InscricaoSorting.ACEITOS_DESCENDING
         INSCRICAO_SORTING_VAGAS_ASC -> InscricaoSorting.VAGAS_ASCENDING

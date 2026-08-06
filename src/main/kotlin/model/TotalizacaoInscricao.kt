@@ -3,6 +3,7 @@ package model
 class TotalizacaoInscricao(val codigo: String,
                            val nome: String,
                            val turma: String,
+                           val solicitados: Int,
                            val aceitos: Int,
                            val faltaPreRequisito: Int,
                            val faltaVagas: Int,
@@ -17,7 +18,7 @@ class TotalizacaoInscricao(val codigo: String,
     override fun hashCode() = codigo.hashCode()
 
     companion object {
-        fun of(codigo: String, nome: String, turma: String, aceitos: Int, faltaPreRequisito: Int, faltaVagas: Int, cancelados: Int) =
-            TotalizacaoInscricao(codigo, nome, turma, aceitos, faltaPreRequisito, faltaVagas, cancelados)
+        fun of(codigo: String, nome: String, turma: String, solicitados: Int, aceitos: Int, faltaPreRequisito: Int, faltaVagas: Int, cancelados: Int) =
+            TotalizacaoInscricao(codigo, nome, turma, solicitados, aceitos, faltaPreRequisito, faltaVagas, cancelados)
     }
 }

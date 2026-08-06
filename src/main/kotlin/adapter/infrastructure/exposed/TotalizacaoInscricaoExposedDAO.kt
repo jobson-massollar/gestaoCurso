@@ -17,6 +17,7 @@ class TotalizacaoInscricaoExposedDAO: ITotalizacaoInscricaoDAO {
                         it[TotalizacaoInscricoes.codigo],
                         it[TotalizacaoInscricoes.nome],
                         it[TotalizacaoInscricoes.turma],
+                        it[TotalizacaoInscricoes.solicitados],
                         it[TotalizacaoInscricoes.aceitos],
                         it[TotalizacaoInscricoes.faltaPreRequisitos],
                         it[TotalizacaoInscricoes.faltaVagas],

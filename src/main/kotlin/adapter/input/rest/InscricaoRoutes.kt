@@ -15,8 +15,10 @@ import main.currentDateTime
 import main.fileTimestampFormat
 import model.Aluno
 import model.AlunoRepository
+import model.Inscricao
 import model.InscricaoRepository
 import model.RepositoryFactory
+import model.TotalizacaoInscricao
 import model.TotalizacaoInscricaoRepository
 import services.application.AlunoFilter
 
@@ -29,16 +31,23 @@ fun Route.inscricoesRoutes() {
 
     get(INSCRICOES_ROUTE) {
         val sorting = call.request.queryParameters["sort"]?: ""
-        val comparator = getInscricaoSortingByValue(sorting).comparator
-        val totalizacoes = RepositoryFactory.get(TotalizacaoInscricaoRepository::class).findTotalizacoes()
 
         call.respondHTML(status = HttpStatusCode.OK) {
-            tableTotalizacaoInscricoes(totalizacoes.sortedWith(comparator), sorting)
+            tableTotalizacaoInscricoes(findTotalizacaoInscricoes(sorting), sorting)
         }
     }
 
     get(DOWNLOAD_INSCRICOES_ROUTE) {
+        val sorting = call.request.queryParameters["sort"]?: ""
 
+        call.response.headers.apply {
+            append("Content-Disposition", "attachment; filename=\"totalizacao-inscricoes ${currentDateTime().format(fileTimestampFormat)}.csv\"")
+        }
+
+        call.respondText(ContentType.Text.CSV, HttpStatusCode.OK) {
+            "Turma;Código;Nome;Solicitadas;Aceitas;Falta de vagas;Falta de pré-req;Canceladas\n" +
+                    findTotalizacaoInscricoes(sorting).joinToString(separator = "\n") { it.toCsv() }
+        }
     }
 
     get("$INSCRICOES_ROUTE/{matricula}") {
@@ -84,6 +93,12 @@ fun Route.inscricoesRoutes() {
     }
 }
 
+private fun findTotalizacaoInscricoes(sorting: String) : List<TotalizacaoInscricao> {
+    val comparator = getInscricaoSortingByValue(sorting).comparator
+
+    return RepositoryFactory.get(TotalizacaoInscricaoRepository::class).findTotalizacoes().sortedWith(comparator)
+}
+
 private fun findAlunosIrregulares() =
     RepositoryFactory.get(AlunoRepository::class)
         .findInscricoesIrregulares()
@@ -94,5 +109,7 @@ private fun findAlunosIrregulares() =
             else
                 a1.itensMatriculados.size - a2.itensMatriculados.size
         }
+
+private fun TotalizacaoInscricao.toCsv() = "${this.turma};${this.codigo};${this.nome};${this.solicitados};${this.aceitos};${this.faltaVagas};${this.faltaPreRequisito};${this.cancelados}"
 
 private fun Aluno.toCsv() = "${this.matricula};${this.nome};${this.versao};${this.email};${this.itensMatriculados.size};${this.trancamentos};"

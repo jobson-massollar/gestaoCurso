@@ -7,6 +7,8 @@ import adapter.input.rest.INSCRICAO_SORTING_ACEITOS_ASC
 import adapter.input.rest.INSCRICAO_SORTING_ACEITOS_DESC
 import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_ASC
 import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_DESC
+import adapter.input.rest.INSCRICAO_SORTING_SOLICITADOS_ASC
+import adapter.input.rest.INSCRICAO_SORTING_SOLICITADOS_DESC
 import adapter.input.rest.INSCRICAO_SORTING_VAGAS_ASC
 import adapter.input.rest.INSCRICAO_SORTING_VAGAS_DESC
 import adapter.input.rest.INSCRICOES_ROUTE
@@ -48,19 +50,37 @@ fun FlowContent.tableTotalizacaoInscricoes(totalizacoes: List<TotalizacaoInscric
                             th(classes = "text-center") { +"Código" }
                             th {
                                 +"Nome"
-                                sortingButtons(INSCRICOES_ROUTE, INSCRICOES_FORM, INSCRICAO_SORTING_DISCIPLINA_ASC,
+                                sortingButtons(
+                                    INSCRICOES_ROUTE,
+                                    INSCRICOES_FORM,
+                                    INSCRICAO_SORTING_DISCIPLINA_ASC,
                                     INSCRICAO_SORTING_DISCIPLINA_DESC
                                 )
                             }
                             th(classes = "text-right") {
+                                +"Solicitadas"
+                                sortingButtons(
+                                    INSCRICOES_ROUTE,
+                                    INSCRICOES_FORM,
+                                    INSCRICAO_SORTING_SOLICITADOS_ASC,
+                                    INSCRICAO_SORTING_SOLICITADOS_DESC
+                                )
+                            }
+                            th(classes = "text-right") {
                                 +"Aceitas"
-                                sortingButtons(INSCRICOES_ROUTE, INSCRICOES_FORM, INSCRICAO_SORTING_ACEITOS_ASC,
+                                sortingButtons(
+                                    INSCRICOES_ROUTE,
+                                    INSCRICOES_FORM,
+                                    INSCRICAO_SORTING_ACEITOS_ASC,
                                     INSCRICAO_SORTING_ACEITOS_DESC
                                 )
                             }
                             th(classes = "text-right") {
                                 +"Falta de Vagas"
-                                sortingButtons(INSCRICOES_ROUTE, INSCRICOES_FORM, INSCRICAO_SORTING_VAGAS_ASC,
+                                sortingButtons(
+                                    INSCRICOES_ROUTE,
+                                    INSCRICOES_FORM,
+                                    INSCRICAO_SORTING_VAGAS_ASC,
                                     INSCRICAO_SORTING_VAGAS_DESC
                                 )
                             }
@@ -75,6 +95,7 @@ fun FlowContent.tableTotalizacaoInscricoes(totalizacoes: List<TotalizacaoInscric
                                 td(classes = "text-center") { +disciplina.turma }
                                 td(classes = "text-center") { +disciplina.codigo }
                                 td { +disciplina.nome }
+                                td(classes = "text-right") { +disciplina.solicitados.toString() }
                                 td(classes = "text-right") { +disciplina.aceitos.toString() }
                                 td(classes = "text-right") { +disciplina.faltaVagas.toString() }
                                 td(classes = "text-right") { +disciplina.faltaPreRequisito.toString() }
