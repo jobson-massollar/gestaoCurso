@@ -1,11 +1,12 @@
 package adapter.input.ui
 
 import adapter.input.rest.DIARIO_ROUTE
+import adapter.input.rest.DOWNLOAD_TURMAS_ROUTE
 import kotlinx.html.*
 import model.Turma
 
 fun FlowContent.tableTurmas(turmas: List<Turma>) {
-    title("Turmas") {
+    title("Turmas", DOWNLOAD_TURMAS_ROUTE) {
 
         if (turmas.isEmpty()) {
             p(classes = "text-base") { +"Nenhuma turma encontrada!" }
@@ -51,7 +52,7 @@ fun FlowContent.tableTurmas(turmas: List<Turma>) {
                                 td {
                                     smallButton(
                                         "Alunos",
-                                        "$DIARIO_ROUTE/${disciplina.versao.replace('/', '-')}/${disciplina.codigo}",
+                                        "$DIARIO_ROUTE/${turma.codigo}/${disciplina.versao.replace('/', '-')}/${disciplina.codigo}",
                                         "#main-container"
                                     )
                                 }

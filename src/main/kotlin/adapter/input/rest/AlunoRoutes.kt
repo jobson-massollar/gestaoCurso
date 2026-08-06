@@ -44,7 +44,7 @@ fun Routing.alunoRoutes() {
 
         call.respondText(ContentType.Text.CSV, HttpStatusCode.OK) {
             "Matricula;Nome;Versao;E-mail;Sexo;Data de nascimento;Trancamento;Prazo de Extensão;Ingresso;Evasão;Data de evasão;Logradouro;Numero;Complemento;Bairro;Cidade;CEP;Telefone1;Telefone2\n" +
-            alunos.joinToString(separator = "\n") { it.toDownloadAlunoCsv() }
+            alunos.joinToString(separator = "\n") { it.toAlunoCsv() }
         }
     }
 
@@ -65,7 +65,7 @@ fun Routing.alunoRoutes() {
 
         call.respondText(ContentType.Text.CSV, HttpStatusCode.OK) {
             "Matricula;Nome;Versao;E-mail;Período Limite;Períodos;Extensão (períodos)\n" +
-                    alunos.joinToString(separator = "\n") { it.toDownloadExtensaoCsv() }
+                    alunos.joinToString(separator = "\n") { it.toExtensaoCsv() }
         }
     }
 
@@ -102,6 +102,6 @@ private fun findAlunosColacao() : List<Aluno> =
         .filter { it.estaFormado }
         .sortedBy { it.nome }
 
-private fun Aluno.toDownloadAlunoCsv() = "${matricula};${nome};${versao};${email};${sexo};${dataNascimento};${trancamentos};${prazoExtensao};${ingresso};${evasao};${dataEvasao?:""};${logradouro};${numero};${complemento};${bairro};${cidade};${cep};${telefone1};${telefone2}"
+private fun Aluno.toAlunoCsv() = "${matricula};${nome};${versao};${email};${sexo};${dataNascimento};${trancamentos};${prazoExtensao};${ingresso};${evasao};${dataEvasao?:""};${logradouro};${numero};${complemento};${bairro};${cidade};${cep};${telefone1};${telefone2}"
 
-private fun Aluno.toDownloadExtensaoCsv() = "${matricula};${nome};${versao};${email};${periodoLimite};${ultimoPeriodoCursado.numero};${prazoExtensao}"
+private fun Aluno.toExtensaoCsv() = "${matricula};${nome};${versao};${email};${periodoLimite};${ultimoPeriodoCursado.numero};${prazoExtensao}"

@@ -9,12 +9,15 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import services.domain.persistence.IDAO.IItemDiarioDAO
 
 class ItemDiarioExposedDAO: IItemDiarioDAO {
-    override fun findAll(disciplina: Disciplina): List<ItemDiarioDTO> =
+
+    override fun findAll(turma: String, disciplina: Disciplina): List<ItemDiarioDTO> =
         transaction {
             ItensDiario
                 .selectAll()
                 .where {
-                    (ItensDiario.versao eq disciplina.versao) and (ItensDiario.codigo eq disciplina.codigo)
+                    (ItensDiario.turma eq turma) and
+                    (ItensDiario.versao eq disciplina.versao) and
+                    (ItensDiario.codigo eq disciplina.codigo)
                 }
                 .map {
                     ItemDiarioDTO(

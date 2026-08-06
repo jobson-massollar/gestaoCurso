@@ -19,7 +19,7 @@ class TurmaExposedDAO: ITurmaDAO {
 private fun createDTO(row: ResultRow) =
     TurmaDisciplinaDTO(
         null,
-        row[Turmas.codigoTurma],
+        row[Turmas.codigoTurma].uppercase(),
         row[Turmas.inscritosTurma],
         DisciplinaDTO(null,
             row[Turmas.versao],

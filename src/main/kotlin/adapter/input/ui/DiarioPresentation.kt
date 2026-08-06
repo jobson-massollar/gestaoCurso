@@ -15,8 +15,8 @@ import model.Disciplina
 import model.ItemDiario
 import model.ehAlunoBSI
 
-fun FlowContent.tableDiario(disciplina: Disciplina, itensDiario: List<ItemDiario>) {
-    title("${disciplina.nome} (${disciplina.codigo}) - ${itensDiario.size} aluno(s)", backButton = true) {
+fun FlowContent.tableDiario(turma: String, disciplina: Disciplina, itensDiario: List<ItemDiario>) {
+    title("${disciplina.nome} (${disciplina.codigo} - $turma) - ${itensDiario.size} aluno(s)", backButton = true) {
 
         if (itensDiario.isEmpty()) {
             p(classes = "text-base") { +"Nenhum aluno encontrado!" }

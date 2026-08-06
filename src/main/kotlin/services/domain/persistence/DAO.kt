@@ -39,7 +39,7 @@ sealed interface IDAO<E: Entity, T: EntityDTO<E>> {
     }
 
     interface IItemDiarioDAO: IDAO<ItemDiario, ItemDiarioDTO> {
-        fun findAll(disciplina: Disciplina): List<ItemDiarioDTO>
+        fun findAll(turma: String, disciplina: Disciplina): List<ItemDiarioDTO>
     }
 
     interface IInscricaoDAO: IDAO<Inscricao, InscricaoDTO> {

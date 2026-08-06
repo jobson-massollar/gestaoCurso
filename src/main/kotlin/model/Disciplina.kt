@@ -9,13 +9,16 @@ class Disciplina private constructor(val versao: String,
                                      val tipo: String,
                                      val inscritos: Int): Entity() {
 
+    private val cacheItensDiario = mutableMapOf<String, List<ItemDiario>>()
+
     val preRequisitos by lazy {
         RepositoryFactory.get(DisciplinaRepository::class).findPreRequisitos(this)
     }
 
-    val itensDiario by lazy {
-        RepositoryFactory.get(ItemDiarioRepository::class).findAll(this)
-    }
+    fun itensDiario(turma: String): List<ItemDiario> =
+        cacheItensDiario.getOrPut(turma) {
+            RepositoryFactory.get(ItemDiarioRepository::class).findAll(turma, this)
+        }
 
     companion object {
         fun of(versao: String, codigo: String, nome: String, periodo: Int, creditos: Int, horas: Int, tipo: String, inscritos: Int) =
