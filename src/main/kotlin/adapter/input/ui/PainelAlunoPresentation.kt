@@ -1,5 +1,8 @@
 package adapter.input.ui
 
+import adapter.input.rest.HISTORICO_ROUTE
+import adapter.input.rest.INSCRICOES_ROUTE
+import adapter.input.rest.PAINEL_ALUNO_ROUTE
 import kotlinx.html.*
 import main.collator
 import model.*
@@ -53,22 +56,57 @@ private fun FlowContent.cardDadosAluno(
         div(classes = "card-body") {
             h2(classes = "card-title") { +"${aluno.matricula} - ${aluno.nome} (${aluno.versao})" }
             p { +"✉: ${aluno.email}" }
-            hr(classes = "border-base-content/50") {  }
-            p { +"Obrigatórias: ${aprovadasObrigatorias.size} / ${aprovadasObrigatorias.sumOf { it.horas }}h" }
-            p { +"Optativas: ${aprovadasOptativas.size} / ${aprovadasOptativas.sumOf { it.horas }}h" }
-            p { +"Complementares: ${aprovadasComplementares.size} / ${aprovadasComplementares.sumOf { it.horas }}h" }
-            p { +"Eletivas: ${aprovadasEletivas.size} / ${aprovadasEletivas.sumOf { it.horas }}h" }
-            hr(classes = "border-base-content/50") {  }
-            p { +"Trancamentos: ${aluno.trancamentos}"}
-            p { +"Prazo de extensão: ${aluno.prazoExtensao} período(s)"}
-            p { +"Período limite: ${aluno.periodoLimite.ano}.${aluno.periodoLimite.semestre}"}
             if (aluno.ehFormando || aluno.estaFormado) {
-                hr(classes = "border-base-content/50") { }
+                //hr(classes = "border-base-content/50") { }
                 div(classes="alert bg-accent") {
                     role = "alert"
                     p(classes="text-base font-bold") { +if (aluno.estaFormado) "\uD83D\uDE00 Formado!" else "\uD83D\uDE42 Formando!"}
                 }
             }
+            hr(classes = "border-base-content/50") {  }
+//            p { +"Obrigatórias: ${aprovadasObrigatorias.size} / ${aprovadasObrigatorias.sumOf { it.horas }}h" }
+//            p { +"Optativas: ${aprovadasOptativas.size} / ${aprovadasOptativas.sumOf { it.horas }}h" }
+//            p { +"Complementares: ${aprovadasComplementares.size} / ${aprovadasComplementares.sumOf { it.horas }}h" }
+//            p { +"Eletivas: ${aprovadasEletivas.size} / ${aprovadasEletivas.sumOf { it.horas }}h" }
+//            hr(classes = "border-base-content/50") {  }
+            div(classes="flex") {
+                div(classes="my-1 leading-7") {
+                    p { +"Obrigatórias: ${aprovadasObrigatorias.size} / ${aprovadasObrigatorias.sumOf { it.horas }}h" }
+                    p { +"Optativas: ${aprovadasOptativas.size} / ${aprovadasOptativas.sumOf { it.horas }}h" }
+                    p { +"Complementares: ${aprovadasComplementares.size} / ${aprovadasComplementares.sumOf { it.horas }}h" }
+                    p { +"Eletivas: ${aprovadasEletivas.size} / ${aprovadasEletivas.sumOf { it.horas }}h" }
+                }
+                div(classes="mx-30 my-1 leading-7") {
+                    p { +"Trancamentos: ${aluno.trancamentos}"}
+                    p { +"Prazo de extensão: ${aluno.prazoExtensao} período(s)"}
+                    p { +"Período limite: ${aluno.periodoLimite.ano}.${aluno.periodoLimite.semestre}"}
+                }
+            }
+            hr(classes = "border-base-content/50") {  }
+            span(classes = "gap-4") {
+                smallButton(
+                    "Histórico",
+                    "$HISTORICO_ROUTE/${aluno.matricula}",
+                    "#main-container",
+                    !aluno.estaAtivo
+                )
+                smallButton(
+                    "Inscrições",
+                    "$INSCRICOES_ROUTE/${aluno.matricula}",
+                    "#main-container",
+                    !aluno.estaAtivo
+                )
+            }
+//            p { +"Trancamentos: ${aluno.trancamentos}"}
+//            p { +"Prazo de extensão: ${aluno.prazoExtensao} período(s)"}
+//            p { +"Período limite: ${aluno.periodoLimite.ano}.${aluno.periodoLimite.semestre}"}
+//            if (aluno.ehFormando || aluno.estaFormado) {
+//                hr(classes = "border-base-content/50") { }
+//                div(classes="alert bg-accent") {
+//                    role = "alert"
+//                    p(classes="text-base font-bold") { +if (aluno.estaFormado) "\uD83D\uDE00 Formado!" else "\uD83D\uDE42 Formando!"}
+//                }
+//            }
         }
     }
 }
@@ -189,8 +227,8 @@ private fun FlowContent.tableDisciplinas(title: String, historico: List<ItemHist
 private fun estiloPeriodo(status: StatusPeriodo): String =
     when {
         status.isPandemia -> "bg-warning"
-        status.isAcimaLimite -> if (status is StatusPeriodo.ACursar) "" else "bg-red-400"
-        status is StatusPeriodo.Trancado -> "bg-error"
+        status.isAcimaLimite -> if (status is StatusPeriodo.ACursar) "" else "bg-red-300"
+        status is StatusPeriodo.Trancado -> "bg-secondary"
         status is StatusPeriodo.ACursar -> "bg-info"
         else -> "bg-success"
     }

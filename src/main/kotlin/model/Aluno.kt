@@ -179,9 +179,17 @@ class Aluno private constructor(val matricula: String,
         if (itensMatriculados.size >= 3 || estaTrancado || estaFormado)
             return@lazy false
 
+//        if (matricula == "20221210001") {
+//           println(itensAprovados.obrigatorias.size)
+//            println(itensMatriculados.obrigatorias.size)
+//            println(grade.qtdObrigatorias)
+//            println(disciplinasObrigatoriasACursar.size)
+//        }
+
         // Se não está matriculado em todas as obrigatórias possíveis, então está irregular
-        if (itensAprovados.obrigatorias.size + itensMatriculados.obrigatorias.size < grade.qtdObrigatorias) {
-            disciplinasObrigatoriasACursar.isNotEmpty()
+        if (itensAprovados.obrigatorias.size + itensMatriculados.obrigatorias.size < grade.qtdObrigatorias &&
+            disciplinasObrigatoriasACursar.isNotEmpty()) {
+            return@lazy true
         }
 
         // Se não está fazendo todas as horas de optativas/eletivas que anda restam, então está irregular
@@ -196,11 +204,11 @@ class Aluno private constructor(val matricula: String,
     }
 
     val jubiladoPorAbandono: Boolean by lazy {
-        itensMatriculados.cursadas(Periodo.ATUAL).isEmpty() && ! estaTrancado
+        ! estaTrancado && ! estaFormado && itensMatriculados.cursadas(Periodo.ATUAL).isEmpty()
     }
 
     val jubiladoPorPrazo: Boolean by lazy {
-        Periodo.ATUAL > periodoLimite && ! estaFormado
+        ! estaTrancado && ! estaFormado && Periodo.ATUAL > periodoLimite
     }
 
     override fun equals(other: Any?): Boolean =

@@ -10,6 +10,7 @@ import io.ktor.server.html.respondHtml
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.datetime.format
+import main.collator
 import main.currentDateTime
 import main.fileTimestampFormat
 import model.Aluno
@@ -87,6 +88,11 @@ private fun findAlunosIrregulares() =
     RepositoryFactory.get(AlunoRepository::class)
         .findInscricoesIrregulares()
         .filter { it.estaIrregular }
-        .sortedBy { it.itensMatriculados.size }
+        .sortedWith { a1, a2 ->
+            if (a1.itensMatriculados.size == a2.itensMatriculados.size)
+                collator.compare(a1.nome, a2.nome)
+            else
+                a1.itensMatriculados.size - a2.itensMatriculados.size
+        }
 
 private fun Aluno.toCsv() = "${this.matricula};${this.nome};${this.versao};${this.email};${this.itensMatriculados.size};${this.trancamentos};"

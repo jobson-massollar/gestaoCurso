@@ -93,7 +93,7 @@ private fun findAlunos(sorting: String, filter: String, search: String): List<Al
 private fun findAlunosExtensao(): List<Aluno> =
     RepositoryFactory.get(AlunoRepository::class)
         .findByFilter(AlunoFilter.ACTIVE)
-        .filter { it.ultimoPeriodoCursado.numero >= 11 }
+        .filter { ! it.estaFormado && it.ultimoPeriodoCursado.numero >= 11 }
         .sortedByDescending { it.ultimoPeriodoCursado.numero }
 
 private fun findAlunosColacao() : List<Aluno> =

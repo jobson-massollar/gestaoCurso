@@ -23,8 +23,8 @@ class MainPageTemplate: Template<HTML> {
             title { +"Gestão do BSI" }
             meta(name = "viewport", content = "width=device-width, initial-scale=1.0")
             meta(name="charset", content = "utf-8")
-            link(href="https://cdn.jsdelivr.net/npm/daisyui@5.6", rel="stylesheet", type = "text/css")
-            link(href="https://cdn.jsdelivr.net/npm/daisyui@5.6/themes.css", rel="stylesheet", type = "text/css")
+            link(href="https://cdn.jsdelivr.net/npm/daisyui@5.7.16", rel="stylesheet", type = "text/css")
+            link(href="https://cdn.jsdelivr.net/npm/daisyui@5.7.16/themes.css", rel="stylesheet", type = "text/css")
             script(src = "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4") {}
             script(src = "https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-beta6", crossorigin = ScriptCrossorigin.anonymous) {}
             script(src = "https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-beta6/dist/ext/hx-download.js") {}
