@@ -62,7 +62,7 @@ class PageBodyTemplate: Template<FlowContent> {
                         tabIndex = 10
                         unsafe { +MENU_SVG }
                     }
-                    ul(classes = "menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-80 p-2 shadow") {
+                    ul(classes = "menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-100 p-2 shadow") {
                         tabIndex = -1
 
                         li {
@@ -75,10 +75,10 @@ class PageBodyTemplate: Template<FlowContent> {
                             mainMenuItem(ALUNOS_EXTENSAO_ROUTE, "Alunos com 11 ou mais Períodos")
                         }
                         li {
-                            mainMenuItem(INSCRICOES_IRREGULARES_ROUTE, "Alunos com Inscrições Irregulares")
+                            mainMenuItem(INSCRICOES_IRREGULARES_ROUTE, "Alunos com menos de 3 Inscrições no Período")
                         }
                         li {
-                            mainMenuItem(SITUACAO_IRREGULAR_ROUTE, "Alunos em Situação Irregular")
+                            mainMenuItem(SITUACAO_IRREGULAR_ROUTE, "Alunos em Situação Irregular de Matricula (Abandono e Prazo)")
                         }
                         li {
                             mainMenuItem(INSCRICOES_ROUTE, "Inscrições")

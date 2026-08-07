@@ -7,7 +7,7 @@ import kotlinx.html.*
 import model.Aluno
 
 fun FlowContent.tableSituacaoIrregular(situacaoIrregular: SituacaoIrregular) {
-    title("Alunos em Situação Irregular de Matrícula", "/jubilamentos/download") {
+    title("Alunos em Situação Irregular de Matrícula (Abandono e Prazo)", "/jubilamentos/download") {
         tableIrregularPorAbandono(situacaoIrregular.porAbandono)
         tableIrregularPorPrazo(situacaoIrregular.porPrazo)
     }
@@ -15,7 +15,7 @@ fun FlowContent.tableSituacaoIrregular(situacaoIrregular: SituacaoIrregular) {
 
 fun FlowContent.tableIrregularPorAbandono(irregulares: List<Aluno>) {
     div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
-        h2(classes = "m-2 text-base-content/50 font-bold") { +"Jubilamento por Abandono" }
+        h2(classes = "m-2 text-base-content/50 font-bold") { +"Situação Irregular por Abandono" }
         hr(classes = "border-base-content/50") { }
 
         if (irregulares.isEmpty()) {
@@ -55,7 +55,7 @@ fun FlowContent.tableIrregularPorAbandono(irregulares: List<Aluno>) {
 
 fun FlowContent.tableIrregularPorPrazo(irregulares: List<Aluno>) {
     div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
-        h2(classes = "m-2 text-base-content/50 font-bold") { +"Jubilamento por Prazo" }
+        h2(classes = "m-2 text-base-content/50 font-bold") { +"Situação Irregular por Prazo" }
         hr(classes = "border-base-content/50") { }
 
         if (irregulares.isEmpty()) {

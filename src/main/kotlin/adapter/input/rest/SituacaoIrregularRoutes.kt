@@ -5,6 +5,7 @@ import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.datetime.format
+import main.collator
 import main.currentDateTime
 import main.fileTimestampFormat
 import model.Aluno
@@ -44,8 +45,8 @@ private fun findAlunosSituacaoIrregular(): SituacaoIrregular {
     val alunos = RepositoryFactory.get(AlunoRepository::class).findByFilter(AlunoFilter.ACTIVE)
 
     return SituacaoIrregular (
-        alunos.filter { it.irregularPorAbandono },
-        alunos.filter { it.irregularPorPrazo }
+        alunos.filter { it.irregularPorAbandono }.sortedWith { a1, a2 -> collator.compare(a1.nome, a2.nome) },
+        alunos.filter { it.irregularPorPrazo }.sortedWith { a1, a2 -> collator.compare(a1.nome, a2.nome) }
     )
 }
 

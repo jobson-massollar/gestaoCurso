@@ -206,7 +206,7 @@ fun FlowContent.tableInscricoesAluno(aluno: Aluno) {
 }
 
 fun FlowContent.tableInscricoesIrregulares(alunos: List<Aluno>) {
-    title("Inscrições Irregulares", DOWNLOAD_INSCRICOES_IRREGULARES_ROUTE) {
+    title("Alunos com menos de 3 Inscrições", DOWNLOAD_INSCRICOES_IRREGULARES_ROUTE) {
 
         if (alunos.isEmpty()) {
             p(classes = "text-base") { +"Nenhuma inscrição irregular foi encontrada!" }

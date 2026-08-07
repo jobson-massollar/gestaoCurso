@@ -204,6 +204,14 @@ class Aluno private constructor(val matricula: String,
     }
 
     val irregularPorAbandono: Boolean by lazy {
+//        if (matricula == "20192210019") {
+//            println(estaTrancado)
+//            println(estaFormado)
+//            println(Periodo.ATUAL)
+//            println(itensMatriculados.size)
+//            println(itensMatriculados.first())
+//            println(itensMatriculados.cursadas(Periodo.ATUAL).size)
+//        }
         ! estaTrancado && ! estaFormado && itensMatriculados.cursadas(Periodo.ATUAL).isEmpty()
     }
 
