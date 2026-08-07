@@ -15,7 +15,7 @@ fun Application.configureRouting() {
         painelAlunoRoutes()
         inscricoesRoutes()
         historicoRoutes()
-        jubilamentoRoutes()
+        situacaoIrregularRoutes()
         turmaRoutes()
         diarioRoutes()
     }

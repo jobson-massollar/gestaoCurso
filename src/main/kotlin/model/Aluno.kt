@@ -203,11 +203,11 @@ class Aluno private constructor(val matricula: String,
             horasOptativas + horasOptativasMatr + eletivas.eletivasAproveitadas.horasEletivasAproveitadas < grade.horasOptativas
     }
 
-    val jubiladoPorAbandono: Boolean by lazy {
+    val irregularPorAbandono: Boolean by lazy {
         ! estaTrancado && ! estaFormado && itensMatriculados.cursadas(Periodo.ATUAL).isEmpty()
     }
 
-    val jubiladoPorPrazo: Boolean by lazy {
+    val irregularPorPrazo: Boolean by lazy {
         ! estaTrancado && ! estaFormado && Periodo.ATUAL > periodoLimite
     }
 

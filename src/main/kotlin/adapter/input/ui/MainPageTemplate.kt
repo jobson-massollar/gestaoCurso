@@ -5,7 +5,7 @@ import adapter.input.rest.ALUNOS_EXTENSAO_ROUTE
 import adapter.input.rest.ALUNOS_ROUTE
 import adapter.input.rest.INSCRICOES_IRREGULARES_ROUTE
 import adapter.input.rest.INSCRICOES_ROUTE
-import adapter.input.rest.JUBILAMENTOS_ROUTE
+import adapter.input.rest.SITUACAO_IRREGULAR_ROUTE
 import adapter.input.rest.TURMAS_ROUTE
 import io.ktor.htmx.html.*
 import io.ktor.server.html.*
@@ -78,7 +78,7 @@ class PageBodyTemplate: Template<FlowContent> {
                             mainMenuItem(INSCRICOES_IRREGULARES_ROUTE, "Alunos com Inscrições Irregulares")
                         }
                         li {
-                            mainMenuItem(JUBILAMENTOS_ROUTE, "Alunos em Jubilamento")
+                            mainMenuItem(SITUACAO_IRREGULAR_ROUTE, "Alunos em Situação Irregular")
                         }
                         li {
                             mainMenuItem(INSCRICOES_ROUTE, "Inscrições")

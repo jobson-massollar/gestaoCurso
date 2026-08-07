@@ -1,25 +1,24 @@
 package adapter.input.ui
 
 import adapter.input.rest.HISTORICO_ROUTE
-import adapter.input.rest.Jubilados
+import adapter.input.rest.SituacaoIrregular
 import adapter.input.rest.PAINEL_ALUNO_ROUTE
 import kotlinx.html.*
 import model.Aluno
-import model.Periodo
 
-fun FlowContent.tableJubilamentos(jubilados: Jubilados) {
-    title("Jubilamentos", "/jubilamentos/download") {
-        tableJubilamentoPorAbandono(jubilados.porAbandono)
-        tableJubilamentoPorPrazo(jubilados.porPrazo)
+fun FlowContent.tableSituacaoIrregular(situacaoIrregular: SituacaoIrregular) {
+    title("Alunos em Situação Irregular de Matrícula", "/jubilamentos/download") {
+        tableIrregularPorAbandono(situacaoIrregular.porAbandono)
+        tableIrregularPorPrazo(situacaoIrregular.porPrazo)
     }
 }
 
-fun FlowContent.tableJubilamentoPorAbandono(jubilados: List<Aluno>) {
+fun FlowContent.tableIrregularPorAbandono(irregulares: List<Aluno>) {
     div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
         h2(classes = "m-2 text-base-content/50 font-bold") { +"Jubilamento por Abandono" }
         hr(classes = "border-base-content/50") { }
 
-        if (jubilados.isEmpty()) {
+        if (irregulares.isEmpty()) {
             p(classes = "mt-4 mb-4 text-base") { +"Nenhum aluno a ser jubilado por abandono!"}
             return@div
         }
@@ -36,7 +35,7 @@ fun FlowContent.tableJubilamentoPorAbandono(jubilados: List<Aluno>) {
                 }
             }
             tbody {
-                jubilados.forEach { aluno ->
+                irregulares.forEach { aluno ->
                     tr(classes = "hover:bg-secondary hover:text-base-100") {
                         td(classes = "text-center") { +aluno.matricula }
                         td { +aluno.nome }
@@ -50,17 +49,16 @@ fun FlowContent.tableJubilamentoPorAbandono(jubilados: List<Aluno>) {
                     }
                 }
             }
-
         }
     }
 }
 
-fun FlowContent.tableJubilamentoPorPrazo(jubilados: List<Aluno>) {
+fun FlowContent.tableIrregularPorPrazo(irregulares: List<Aluno>) {
     div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
         h2(classes = "m-2 text-base-content/50 font-bold") { +"Jubilamento por Prazo" }
         hr(classes = "border-base-content/50") { }
 
-        if (jubilados.isEmpty()) {
+        if (irregulares.isEmpty()) {
             p(classes = "mt-4 mb-4 text-base") { +"Nenhum aluno a ser jubilado por prazo!" }
             return@div
         }
@@ -77,7 +75,7 @@ fun FlowContent.tableJubilamentoPorPrazo(jubilados: List<Aluno>) {
                 }
             }
             tbody {
-                jubilados.forEach { aluno ->
+                irregulares.forEach { aluno ->
                     tr(classes = "hover:bg-secondary hover:text-base-100") {
                         td(classes = "text-center") { +aluno.matricula }
                         td { +aluno.nome }
@@ -91,7 +89,6 @@ fun FlowContent.tableJubilamentoPorPrazo(jubilados: List<Aluno>) {
                     }
                 }
             }
-
         }
     }
 }
