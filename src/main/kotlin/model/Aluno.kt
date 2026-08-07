@@ -179,13 +179,6 @@ class Aluno private constructor(val matricula: String,
         if (itensMatriculados.cursadas(Periodo.ATUAL).size >= 3 || estaTrancado || estaFormado)
             return@lazy false
 
-//        if (matricula == "20221210001") {
-//           println(itensAprovados.obrigatorias.size)
-//            println(itensMatriculados.obrigatorias.size)
-//            println(grade.qtdObrigatorias)
-//            println(disciplinasObrigatoriasACursar.size)
-//        }
-
         // Se não está matriculado em todas as obrigatórias possíveis, então está irregular
         if (itensAprovados.obrigatorias.size + itensMatriculados.obrigatorias.size < grade.qtdObrigatorias &&
             disciplinasObrigatoriasACursar.isNotEmpty()) {
@@ -204,14 +197,6 @@ class Aluno private constructor(val matricula: String,
     }
 
     val irregularPorAbandono: Boolean by lazy {
-//        if (matricula == "20192210019") {
-//            println(estaTrancado)
-//            println(estaFormado)
-//            println(Periodo.ATUAL)
-//            println(itensMatriculados.size)
-//            println(itensMatriculados.first())
-//            println(itensMatriculados.cursadas(Periodo.ATUAL).size)
-//        }
         ! estaTrancado && ! estaFormado && itensMatriculados.cursadas(Periodo.ATUAL).isEmpty()
     }
 
