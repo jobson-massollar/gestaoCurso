@@ -94,7 +94,7 @@ class Aluno private constructor(val matricula: String,
     }
 
     val itensMatriculados: List<ItemHistorico> by lazy {
-        historico.filter { it.isMatriculado }
+        historico.filter { it.isMatriculado && it.periodo == Periodo.ATUAL.semestre && it.ano == Periodo.ATUAL.ano }
     }
 
     val itensReprovados: List<ItemHistorico> by lazy {
@@ -176,7 +176,7 @@ class Aluno private constructor(val matricula: String,
     }
 
     val estaIrregular: Boolean by lazy {
-        if (itensMatriculados.size >= 3 || estaTrancado || estaFormado)
+        if (itensMatriculados.cursadas(Periodo.ATUAL).size >= 3 || estaTrancado || estaFormado)
             return@lazy false
 
 //        if (matricula == "20221210001") {
