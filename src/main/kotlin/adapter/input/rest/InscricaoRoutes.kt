@@ -20,6 +20,7 @@ import model.InscricaoRepository
 import model.RepositoryFactory
 import model.TotalizacaoInscricao
 import model.TotalizacaoInscricaoRepository
+import model.trancados
 import services.application.AlunoFilter
 
 const val INSCRICOES_ROUTE = "/inscricoes"
@@ -88,7 +89,9 @@ fun Route.inscricoesRoutes() {
 
         call.respondText(ContentType.Text.CSV, HttpStatusCode.OK) {
             "Matricula;Nome;Versao;E-mail;Matriculado;Trancamentos;Observacoes\n" +
-            findAlunosIrregulares().joinToString(separator = "\n") { it.toCsv() + it.observacoes.joinToString(" / ") }
+            findAlunosIrregulares().joinToString(separator = "\n") { aluno ->
+                "${aluno.toCsv()};${aluno.historico.trancados.joinToString(" / ")};${aluno.observacoes.joinToString(" / ")}"
+            }
         }
     }
 }
@@ -112,4 +115,4 @@ private fun findAlunosIrregulares() =
 
 private fun TotalizacaoInscricao.toCsv() = "${this.turma};${this.codigo};${this.nome};${this.solicitados};${this.aceitos};${this.faltaVagas};${this.faltaPreRequisito};${this.cancelados}"
 
-private fun Aluno.toCsv() = "${this.matricula};${this.nome};${this.versao};${this.email};${this.itensMatriculados.size};${this.trancamentos};"
+private fun Aluno.toCsv() = "${this.matricula};${this.nome};${this.versao};${this.email};${this.itensMatriculados.size}"

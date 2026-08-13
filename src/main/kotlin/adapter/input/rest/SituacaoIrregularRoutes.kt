@@ -11,6 +11,7 @@ import main.fileTimestampFormat
 import model.Aluno
 import model.AlunoRepository
 import model.RepositoryFactory
+import model.trancados
 import services.application.AlunoFilter
 
 const val SITUACAO_IRREGULAR_ROUTE = "/jubilamentos"
@@ -34,7 +35,7 @@ fun Route.situacaoIrregularRoutes() {
         }
 
         call.respondText(ContentType.Text.CSV, HttpStatusCode.OK) {
-            "Tipo;Matricula;Nome;Versao;E-mail;Trancamentos;Limite\n" +
+            "Tipo;Matricula;Nome;Versao;E-mail;Trancamentos;Trancados;Limite\n" +
             alunosSituacaoIrregular.porAbandono.joinToString(separator = "\n") { it.toCsvAbandono() } + "\n" +
             alunosSituacaoIrregular.porPrazo.joinToString(separator = "\n") { it.toCsvPrazo() }
         }
@@ -52,6 +53,6 @@ private fun findAlunosSituacaoIrregular(): SituacaoIrregular {
 
 private fun Aluno.toCsv(tipoAbandono: String) = "$tipoAbandono;${this.matricula};${this.nome};${this.versao};${this.email}"
 
-private fun Aluno.toCsvAbandono() = "${this.toCsv("Abandono")};${this.trancamentos};-"
+private fun Aluno.toCsvAbandono() = "${this.toCsv("Abandono")};${this.trancamentos};${this.historico.trancados.joinToString(" / ")};-"
 
-private fun Aluno.toCsvPrazo() = "${this.toCsv("Prazo")};-;${this.periodoLimite}"
+private fun Aluno.toCsvPrazo() = "${this.toCsv("Prazo")};-;-;${this.periodoLimite}"

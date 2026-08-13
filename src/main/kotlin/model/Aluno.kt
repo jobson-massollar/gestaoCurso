@@ -150,6 +150,24 @@ class Aluno private constructor(val matricula: String,
             horasOptativas + horasOptativasMatr + eletivas.eletivasAproveitadas.horasEletivasAproveitadas >= grade.horasOptativas
     }
 
+    val horasIntegralizadas: Int by lazy {
+        val horasObrigatorias = itensAprovados.obrigatorias.sumOf { it.horas }
+        val horasOptativas = itensAprovados.optativas.sumOf { it.horas }
+
+        if (grade is Grade.Grade2008) {
+            horasObrigatorias +
+            minOf(horasOptativas, grade.horasOptativas) +
+            minOf(itensAprovados.eletivas.sumOf { it.horas }, grade.horasEletivas)
+        } else {
+            horasObrigatorias +
+            minOf(
+                horasOptativas + itensAprovados.eletivas.eletivasAproveitadas.horasEletivasAproveitadas,
+                grade.horasOptativas
+            ) +
+            minOf(itensAprovados.complementares.sumOf { it.horas }, grade.horasComplementares)
+        }
+    }
+
     val horasOptativasFaltantes: Int by lazy {
         val horasOptativas = itensAprovados.optativas.sumOf { it.horas }
         val horasOptativasMatr = itensMatriculados.optativas.sumOf { it.horas }

@@ -24,6 +24,7 @@ import model.Grade
 import model.Inscricao
 import model.TotalizacaoInscricao
 import model.ehAlunoBSI
+import model.trancados
 
 const val INSCRICOES_FORM = "inscricoes"
 
@@ -235,7 +236,13 @@ fun FlowContent.tableInscricoesIrregulares(alunos: List<Aluno>) {
                             td(classes = "text-center") { +aluno.versao }
                             td { +aluno.email }
                             td(classes = "text-center") { +aluno.itensMatriculados.size.toString() }
-                            td(classes = "text-center") { +aluno.trancamentos.toString() }
+                            td(classes = "text-center") {
+                                ul {
+                                    aluno.historico.trancados.forEach { periodo ->
+                                        li { +periodo.toString() }
+                                    }
+                                }
+                            }
                             td {
                                 ul {
                                     aluno.observacoes.forEach { obs ->

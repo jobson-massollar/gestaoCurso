@@ -91,3 +91,8 @@ val List<ItemHistorico>.reprovadas: List<ItemHistorico>
 
 val List<ItemHistorico>.matriculadas: List<ItemHistorico>
     get() = this.filter { it.isMatriculado }
+
+val List<ItemHistorico>.trancados: List<Periodo>
+    get() = this.filter { it.isTrancamento }.map {
+        Periodo(it.ano, it.periodo)
+    }.filter { it !in INICIO_PANDEMIA..FIM_PANDEMIA }

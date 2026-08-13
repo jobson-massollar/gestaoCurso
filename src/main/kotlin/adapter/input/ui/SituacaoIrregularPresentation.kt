@@ -5,6 +5,7 @@ import adapter.input.rest.SituacaoIrregular
 import adapter.input.rest.PAINEL_ALUNO_ROUTE
 import kotlinx.html.*
 import model.Aluno
+import model.trancados
 
 fun FlowContent.tableSituacaoIrregular(situacaoIrregular: SituacaoIrregular) {
     title("Alunos em Situação Irregular de Matrícula (Abandono e Prazo)", "/jubilamentos/download") {
@@ -26,12 +27,13 @@ fun FlowContent.tableIrregularPorAbandono(irregulares: List<Aluno>) {
         table(classes = "table table-zebra table-sm") {
             thead {
                 tr(classes = "bg-base-300") {
-                    th(classes = "text-center w-1/11") { +"Matrícula" }
-                    th(classes = "w-3/11") { +"Nome" }
-                    th(classes = "text-center w-1/11") { +"Currículo" }
-                    th(classes = "w-3/11") { +"E-mail" }
-                    th(classes = "text-center w-1/11") { +"Trancamentos" }
-                    th(classes = "w-2/11") { +" " }
+                    th(classes = "text-center w-1/12") { +"Matrícula" }
+                    th(classes = "w-3/12") { +"Nome" }
+                    th(classes = "text-center w-1/12") { +"Currículo" }
+                    th(classes = "w-3/12") { +"E-mail" }
+                    th(classes = "text-center w-1/12") { +"Trancamentos" }
+                    th(classes = "text-center w-1/12") { +"Trancados" }
+                    th(classes = "w-2/12") { +" " }
                 }
             }
             tbody {
@@ -42,6 +44,13 @@ fun FlowContent.tableIrregularPorAbandono(irregulares: List<Aluno>) {
                         td(classes = "text-center") { +aluno.versao }
                         td { +aluno.email }
                         td(classes = "text-center") { +aluno.trancamentos.toString() }
+                        td(classes = "text-center") {
+                            ul {
+                                aluno.historico.trancados.forEach { periodo ->
+                                    li { +periodo.toString() }
+                                }
+                            }
+                        }
                         td(classes = "gap-4") {
                             smallButton("Painel", "$PAINEL_ALUNO_ROUTE/${aluno.matricula}", "#main-container", !aluno.estaAtivo)
                             smallButton("Histórico", "$HISTORICO_ROUTE/${aluno.matricula}", "#main-container", !aluno.estaAtivo)

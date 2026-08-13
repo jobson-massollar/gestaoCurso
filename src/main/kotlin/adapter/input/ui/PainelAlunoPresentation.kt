@@ -64,17 +64,13 @@ private fun FlowContent.cardDadosAluno(
                 }
             }
             hr(classes = "border-base-content/50") {  }
-//            p { +"Obrigatórias: ${aprovadasObrigatorias.size} / ${aprovadasObrigatorias.sumOf { it.horas }}h" }
-//            p { +"Optativas: ${aprovadasOptativas.size} / ${aprovadasOptativas.sumOf { it.horas }}h" }
-//            p { +"Complementares: ${aprovadasComplementares.size} / ${aprovadasComplementares.sumOf { it.horas }}h" }
-//            p { +"Eletivas: ${aprovadasEletivas.size} / ${aprovadasEletivas.sumOf { it.horas }}h" }
-//            hr(classes = "border-base-content/50") {  }
             div(classes="flex") {
                 div(classes="my-1 leading-7") {
                     p { +"Obrigatórias: ${aprovadasObrigatorias.size} / ${aprovadasObrigatorias.sumOf { it.horas }}h" }
                     p { +"Optativas: ${aprovadasOptativas.size} / ${aprovadasOptativas.sumOf { it.horas }}h" }
                     p { +"Complementares: ${aprovadasComplementares.size} / ${aprovadasComplementares.sumOf { it.horas }}h" }
                     p { +"Eletivas: ${aprovadasEletivas.size} / ${aprovadasEletivas.sumOf { it.horas }}h" }
+                    p { +"Horas integralizadas: ${aluno.horasIntegralizadas }h" }
                 }
                 div(classes="mx-30 my-1 leading-7") {
                     p { +"Trancamentos: ${aluno.trancamentos}"}
@@ -97,16 +93,6 @@ private fun FlowContent.cardDadosAluno(
                     !aluno.estaAtivo
                 )
             }
-//            p { +"Trancamentos: ${aluno.trancamentos}"}
-//            p { +"Prazo de extensão: ${aluno.prazoExtensao} período(s)"}
-//            p { +"Período limite: ${aluno.periodoLimite.ano}.${aluno.periodoLimite.semestre}"}
-//            if (aluno.ehFormando || aluno.estaFormado) {
-//                hr(classes = "border-base-content/50") { }
-//                div(classes="alert bg-accent") {
-//                    role = "alert"
-//                    p(classes="text-base font-bold") { +if (aluno.estaFormado) "\uD83D\uDE00 Formado!" else "\uD83D\uDE42 Formando!"}
-//                }
-//            }
         }
     }
 }
