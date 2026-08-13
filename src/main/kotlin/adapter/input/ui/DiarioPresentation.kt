@@ -1,5 +1,6 @@
 package adapter.input.ui
 
+import adapter.input.rest.DOWNLOAD_DIARIO_ROUTE
 import adapter.input.rest.HISTORICO_ROUTE
 import adapter.input.rest.PAINEL_ALUNO_ROUTE
 import kotlinx.html.FlowContent
@@ -13,10 +14,16 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 import model.Disciplina
 import model.ItemDiario
+import model.Turma
 import model.ehAlunoBSI
 
-fun FlowContent.tableDiario(turma: String, disciplina: Disciplina, itensDiario: List<ItemDiario>) {
-    title("${disciplina.nome} (${disciplina.codigo} - $turma) - ${itensDiario.size} aluno(s)", backButton = true) {
+fun FlowContent.tableDiario(turma: Turma, disciplina: Disciplina, itensDiario: List<ItemDiario>) {
+    title("${disciplina.codigo} - ${disciplina.nome} (${turma.codigo}) - ${itensDiario.size} aluno(s)", backButton = true, downloadURL = "$DOWNLOAD_DIARIO_ROUTE/${turma.codigo}/${
+        disciplina.versao.replace(
+            '/',
+            '-'
+        )
+    }/${disciplina.codigo}") {
 
         if (itensDiario.isEmpty()) {
             p(classes = "text-base") { +"Nenhum aluno encontrado!" }
@@ -41,8 +48,8 @@ fun FlowContent.tableDiario(turma: String, disciplina: Disciplina, itensDiario: 
                             td { +(i+1).toString() }
                             td(classes = "text-center") { +item.matricula }
                             td { +item.nome }
-                            td(classes = "text-center") { +"TODO" }
-                            td { +"TODO" }
+                            td(classes = "text-center") { +(item.aluno?.let { "${it.versao}" } ?: "-") }
+                            td { +(item.aluno?.let { "${it.email}" } ?: "-") }
                             td(classes = "gap-4") {
                                 smallButton(
                                     "Painel",

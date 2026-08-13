@@ -7,5 +7,7 @@ class ItemDiarioRepository: Repository<ItemDiario, IDAO.IItemDiarioDAO, ItemDiar
 
     override val dao: IDAO.IItemDiarioDAO = DAOFactory.getDAO(DAOFactory.Type.DIARIO)
 
-    fun findAll(turma: String, disciplina: Disciplina): List<ItemDiario> = createEntityList(dao.findAll(turma, disciplina))
+    //fun findByTurmaDisciplina(turma: String, disciplina: Disciplina): List<ItemDiario> = createEntityList(dao.findAll(turma, disciplina))
+
+    fun findByTurmaDisciplina(turma: Turma, disciplina: Disciplina): List<ItemDiario> = createEntityList(dao.findAll(turma, disciplina))
 }

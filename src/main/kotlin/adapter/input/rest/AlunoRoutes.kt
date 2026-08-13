@@ -21,12 +21,12 @@ const val ALUNOS_EXTENSAO_ROUTE = "/alunos/extensao"
 const val DOWNLOAD_ALUNOS_EXTENSAO_ROUTE = "/alunos/extensao/download"
 const val ALUNOS_COLACAO_ROUTE = "/alunos/colacao"
 
-private data class Parameters(val sorting: String, val filter: String, val search: String)
+private data class AlunoParameters(val sorting: String, val filter: String, val search: String)
 
 fun Routing.alunoRoutes() {
 
     get(ALUNOS_ROUTE) {
-        val params = getParameters(call)
+        val params = call.getAlunoParameters()
         val alunos = findAlunos(params.sorting, params.filter, params.search)
 
         call.respondHTML(status = HttpStatusCode.OK) {
@@ -35,7 +35,7 @@ fun Routing.alunoRoutes() {
     }
 
     get(DOWNLOAD_ALUNOS_ROUTE) {
-        val params = getParameters(call)
+        val params = call.getAlunoParameters()
         val alunos = findAlunos(params.sorting, params.filter, params.search)
 
         call.response.headers.apply {
@@ -78,11 +78,11 @@ fun Routing.alunoRoutes() {
     }
 }
 
-private fun getParameters(call: RoutingCall) =
-    Parameters(
-        call.request.queryParameters["sort"] ?: ALUNO_SORTING_NOME_ASC,
-        call.request.queryParameters["filter"] ?: ALUNO_FILTER_ACTIVE,
-        (call.request.queryParameters["search"] ?: "").trim().lowercase(appLocale)
+private fun RoutingCall.getAlunoParameters(): AlunoParameters =
+    AlunoParameters(
+        this.request.queryParameters["sort"] ?: ALUNO_SORTING_NOME_ASC,
+        this.request.queryParameters["filter"] ?: ALUNO_FILTER_ACTIVE,
+        (this.request.queryParameters["search"] ?: "").trim().lowercase(appLocale)
     )
 
 private fun findAlunos(sorting: String, filter: String, search: String): List<Aluno> =

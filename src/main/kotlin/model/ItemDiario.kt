@@ -8,6 +8,10 @@ class ItemDiario private constructor(val matricula: String,
                                      val codigo: String,
                                      val turma: String): Entity() {
 
+    val aluno: Aluno? by lazy {
+        RepositoryFactory.get(AlunoRepository::class).findByDiario(this)
+    }
+
     override fun equals(other: Any?): Boolean =
         if (other is ItemDiario)
             matricula == other.matricula && versao == other.versao && codigo == other.codigo

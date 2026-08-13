@@ -13,6 +13,12 @@ class Turma private constructor(val codigo: String, val inscritos: Int): Entity(
 
     fun addDisciplina(disciplina: Disciplina) = disciplinas.add(disciplina)
 
+    fun getDisciplina(versao: String, codigoDisciplina: String): Disciplina? =
+        disciplinas.firstOrNull { it.versao == versao && it.codigo == codigoDisciplina }
+
+    fun itensDiario(disciplina: Disciplina) =
+        RepositoryFactory.get(ItemDiarioRepository::class).findByTurmaDisciplina(this, disciplina)
+
     override fun equals(other: Any?): Boolean =
         if (other is Turma)
             return this.codigo == other.codigo

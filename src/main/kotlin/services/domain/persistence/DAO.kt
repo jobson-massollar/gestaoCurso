@@ -15,6 +15,7 @@ sealed interface IDAO<E: Entity, T: EntityDTO<E>> {
         fun findAtivos(search: String = ""): List<AlunoDTO>
         fun findByMatricula(matricula: String): AlunoDTO?
         fun findInscricoesIrregulares(): List<AlunoDTO>
+        fun findByDiario(diario: ItemDiario): AlunoDTO?
     }
 
     interface IItemHistoricoDAO: IDAO<ItemHistorico, ItemHistoricoDTO> {
@@ -36,10 +37,11 @@ sealed interface IDAO<E: Entity, T: EntityDTO<E>> {
 
     interface ITurmaDAO: IDAO<Turma, TurmaDisciplinaDTO> {
         fun findAll(): List<TurmaDisciplinaDTO>
+        fun findByCode(codigoTurma: String): List<TurmaDisciplinaDTO>
     }
 
     interface IItemDiarioDAO: IDAO<ItemDiario, ItemDiarioDTO> {
-        fun findAll(turma: String, disciplina: Disciplina): List<ItemDiarioDTO>
+        fun findAll(turma: Turma, disciplina: Disciplina): List<ItemDiarioDTO>
     }
 
     interface IInscricaoDAO: IDAO<Inscricao, InscricaoDTO> {

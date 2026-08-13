@@ -19,4 +19,6 @@ class AlunoRepository: Repository<Aluno, IDAO.IAlunoDAO, AlunoDTO>() {
     fun findByMatricula(matricula: String): Aluno? = createEntity(dao.findByMatricula(matricula) ?: return null)
 
     fun findInscricoesIrregulares() = createEntityList(dao.findInscricoesIrregulares())
+
+    fun findByDiario(diario: ItemDiario): Aluno? = createEntity(dao.findByDiario(diario) ?: return null)
 }

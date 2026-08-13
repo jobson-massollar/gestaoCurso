@@ -1,6 +1,7 @@
 package adapter.infrastructure.exposed
 
 import model.AlunoDTO
+import model.ItemDiario
 import org.jetbrains.exposed.v1.core.JoinType
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.alias
@@ -120,9 +121,19 @@ class AlunoExposedDAO: IAlunoDAO {
         }
     }
 
+    override fun findByDiario(diario: ItemDiario): AlunoDTO? =
+        transaction {
+            AlunosAtivos
+                .selectAll()
+                .where { AlunosAtivos.matricula eq diario.matricula }
+                .map {
+                    createDTO(AlunosAtivos, it)
+                }.firstOrNull()
+        }
+
     private fun findWithSearch(table: AlunosBase, search: String): List<AlunoDTO> {
         val query = table.selectAll()
-        if (!search.isBlank()) {
+        if (search.isNotBlank()) {
             if (search[0].isDigit())
                 query.where { table.matricula like "${search}%" }
             else
