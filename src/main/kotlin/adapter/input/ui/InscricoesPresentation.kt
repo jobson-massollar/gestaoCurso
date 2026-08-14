@@ -20,9 +20,11 @@ import kotlinx.html.*
 import main.dateFormat
 import main.timeFormat
 import model.Aluno
+import model.Disciplina
 import model.Grade
 import model.Inscricao
 import model.TotalizacaoInscricao
+import model.Turma
 import model.ehAlunoBSI
 import model.trancados
 
@@ -115,8 +117,8 @@ fun FlowContent.tableTotalizacaoInscricoes(totalizacoes: List<TotalizacaoInscric
     }
 }
 
-fun FlowContent.tableInscricoesDisciplina(inscricoes: List<Inscricao>, codigo: String, turma: String) {
-    title("Inscrições - $codigo - $turma", backButton = true) {
+fun FlowContent.tableInscricoesDisciplina(inscricoes: List<Inscricao>, turma: Turma, disciplina: Disciplina) {
+    title("Inscrições - ${disciplina.codigo} - ${disciplina.nome} (${turma.codigo})", backButton = true) {
 
         if (inscricoes.isEmpty()) {
             p(classes = "text-base") { +"Nenhuma inscrição foi encontrada!" }
@@ -127,6 +129,7 @@ fun FlowContent.tableInscricoesDisciplina(inscricoes: List<Inscricao>, codigo: S
             table(classes = "table table-zebra table-sm") {
                 thead {
                     tr(classes = "bg-base-300") {
+                        th(classes = "text-center") { +"#" }
                         th(classes = "text-center") { +"Matrícula" }
                         th { +"Nome" }
                         th(classes = "text-center") { +"Currículo" }
@@ -138,12 +141,13 @@ fun FlowContent.tableInscricoesDisciplina(inscricoes: List<Inscricao>, codigo: S
                     }
                 }
                 tbody {
-                    inscricoes.forEach { inscricao ->
+                    inscricoes.forEachIndexed { i, inscricao ->
                         tr {
+                            td(classes = "text-center") { +(i+1).toString() }
                             td(classes = "text-center") { +inscricao.matricula }
                             td { +inscricao.nomeAluno }
-                            td(classes = "text-center") { +"TODO" }
-                            td { +"TODO" }
+                            td(classes = "text-center") { +(inscricao.aluno?.let { "${it.versao}" } ?: "-") }
+                            td { +(inscricao.aluno?.let { "${it.email}" } ?: "-") }
                             td { +inscricao.descricao }
                             td(classes = "text-center") { +"${dateFormat.format(inscricao.dataSolicitacao)} ${timeFormat.format(inscricao.horaSolicitacao)}" }
                             td(classes = "text-center") { +(inscricao.dataProcessamento?.let { dateFormat.format(it) } ?: "") }

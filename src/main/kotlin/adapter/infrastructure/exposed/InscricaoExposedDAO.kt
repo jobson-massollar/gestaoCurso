@@ -1,7 +1,9 @@
 package adapter.infrastructure.exposed
 
 import model.Aluno
+import model.Disciplina
 import model.InscricaoDTO
+import model.Turma
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
@@ -11,19 +13,30 @@ import services.domain.persistence.IDAO
 
 class InscricaoExposedDAO: IDAO.IInscricaoDAO {
 
-    override fun findByDisciplina(codigo: String, turma: String): List<InscricaoDTO> =
-        transaction {
-            Inscricoes
-                .selectAll()
-                .where { (Inscricoes.codigo eq codigo) and (Inscricoes.turma eq turma) }
-                .map { createDTO(it) }
-        }
+//    override fun findByDisciplina(codigo: String, turma: String): List<InscricaoDTO> =
+//        transaction {
+//            Inscricoes
+//                .selectAll()
+//                .where { (Inscricoes.codigo eq codigo) and (Inscricoes.turma eq turma) }
+//                .map { createDTO(it) }
+//        }
 
     override fun findByAluno(aluno: Aluno): List<InscricaoDTO> =
         transaction {
             Inscricoes
                 .selectAll()
                 .where { Inscricoes.matricula eq aluno.matricula }
+                .map { createDTO(it) }
+        }
+
+    override fun findByTurmaDisciplina(
+        turma: Turma,
+        disciplina: Disciplina
+    ): List<InscricaoDTO> =
+        transaction {
+            Inscricoes
+                .selectAll()
+                .where { (Inscricoes.turma eq turma.codigo) and (Inscricoes.codigo eq disciplina.codigo) }
                 .map { createDTO(it) }
         }
 

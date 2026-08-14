@@ -18,7 +18,7 @@ import model.Turma
 import model.ehAlunoBSI
 
 fun FlowContent.tableDiario(turma: Turma, disciplina: Disciplina, itensDiario: List<ItemDiario>) {
-    title("${disciplina.codigo} - ${disciplina.nome} (${turma.codigo}) - ${itensDiario.size} aluno(s)", backButton = true, downloadURL = "$DOWNLOAD_DIARIO_ROUTE/${turma.codigo}/${
+    title("Diário - ${disciplina.codigo} - ${disciplina.nome} (${turma.codigo}) - ${itensDiario.size} aluno(s)", backButton = true, downloadURL = "$DOWNLOAD_DIARIO_ROUTE/${turma.codigo}/${
         disciplina.versao.replace(
             '/',
             '-'

@@ -1,6 +1,7 @@
 package adapter.infrastructure.exposed
 
 import model.AlunoDTO
+import model.Inscricao
 import model.ItemDiario
 import org.jetbrains.exposed.v1.core.JoinType
 import org.jetbrains.exposed.v1.core.ResultRow
@@ -126,6 +127,16 @@ class AlunoExposedDAO: IAlunoDAO {
             AlunosAtivos
                 .selectAll()
                 .where { AlunosAtivos.matricula eq diario.matricula }
+                .map {
+                    createDTO(AlunosAtivos, it)
+                }.firstOrNull()
+        }
+
+    override fun findByInscricao(inscricao: Inscricao): AlunoDTO? =
+        transaction {
+            AlunosAtivos
+                .selectAll()
+                .where { AlunosAtivos.matricula eq inscricao.matricula }
                 .map {
                     createDTO(AlunosAtivos, it)
                 }.firstOrNull()

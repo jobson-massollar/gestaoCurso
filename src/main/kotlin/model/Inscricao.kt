@@ -16,6 +16,10 @@ class Inscricao private constructor(val matricula: String,
                                     val horaSolicitacao: LocalTime,
                                     val dataProcessamento: LocalDate?): Entity() {
 
+    val aluno: Aluno? by lazy {
+        RepositoryFactory.get(AlunoRepository::class).findByInscricao(this)
+    }
+
     override fun equals(other: Any?): Boolean =
         if (other is Inscricao)
             matricula == other.matricula && codigo == other.codigo

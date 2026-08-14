@@ -21,4 +21,6 @@ class AlunoRepository: Repository<Aluno, IDAO.IAlunoDAO, AlunoDTO>() {
     fun findInscricoesIrregulares() = createEntityList(dao.findInscricoesIrregulares())
 
     fun findByDiario(diario: ItemDiario): Aluno? = createEntity(dao.findByDiario(diario) ?: return null)
+
+    fun findByInscricao(inscricao: Inscricao): Aluno? = createEntity(dao.findByInscricao(inscricao) ?: return null)
 }

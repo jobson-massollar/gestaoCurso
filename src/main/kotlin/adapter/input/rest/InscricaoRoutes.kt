@@ -15,13 +15,12 @@ import main.currentDateTime
 import main.fileTimestampFormat
 import model.Aluno
 import model.AlunoRepository
-import model.Inscricao
 import model.InscricaoRepository
 import model.RepositoryFactory
 import model.TotalizacaoInscricao
 import model.TotalizacaoInscricaoRepository
+import model.TurmaRepository
 import model.trancados
-import services.application.AlunoFilter
 
 const val INSCRICOES_ROUTE = "/inscricoes"
 const val DOWNLOAD_INSCRICOES_ROUTE = "/inscricoes/download"
@@ -66,12 +65,26 @@ fun Route.inscricoesRoutes() {
     }
 
     get("$INSCRICOES_ROUTE/{codigo}/{turma}") {
-        val codigo = call.parameters["codigo"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) { }
-        val turma = call.parameters["turma"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) { }
-        val inscricoes = RepositoryFactory.get(InscricaoRepository::class).findByDisciplina(codigo, turma).sortedBy { it.nomeAluno }
+        val codigoDisciplina = call.parameters["codigo"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) { }
+        val codigoTurma = call.parameters["turma"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) { }
+
+        if (codigoTurma.isNullOrBlank() || codigoDisciplina.isNullOrBlank()) {
+            return@get call.respondHtml(HttpStatusCode.BadRequest) {}
+        }
+
+        val turma =
+            RepositoryFactory.get(TurmaRepository::class).findByCode(codigoTurma) ?: return@get call.respondHtml(
+                HttpStatusCode.BadRequest
+            ) {}
+
+        val disciplina = turma.getDisciplina(codigoDisciplina) ?: return@get call.respondHtml(
+            HttpStatusCode.BadRequest
+        ) {}
+
+        val inscricoes = turma.inscricoes(disciplina).sortedBy { it.nomeAluno }
 
         call.respondHTML(status = HttpStatusCode.OK) {
-            tableInscricoesDisciplina(inscricoes, codigo, turma)
+            tableInscricoesDisciplina(inscricoes, turma, disciplina)
         }
     }
 
