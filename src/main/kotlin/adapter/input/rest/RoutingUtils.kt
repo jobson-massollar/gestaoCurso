@@ -11,7 +11,9 @@ suspend fun RoutingCall.respondHTML(status: HttpStatusCode, fragment: FlowConten
         respondHtmlFragment(status = status, fragment)
     }
     else {
-        respondHtmlTemplate(MainPageTemplate(), status = status) {
+        val version = application.environment.config.property("app.version").getString()
+
+        respondHtmlTemplate(MainPageTemplate(version), status = status) {
             pageBody {
                 mainContent {
                     fragment()

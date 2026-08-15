@@ -8,7 +8,9 @@ import io.ktor.server.routing.get
 
 fun Routing.mainRoutes() {
     get("/") {
-        call.respondHtmlTemplate(MainPageTemplate(), status = HttpStatusCode.OK) {
+        val version = call.application.environment.config.property("app.version").getString()
+
+        call.respondHtmlTemplate(MainPageTemplate(version), status = HttpStatusCode.OK) {
         }
     }
 }

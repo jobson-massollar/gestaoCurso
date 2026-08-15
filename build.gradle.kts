@@ -1,4 +1,5 @@
 import org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier
+import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     application
@@ -19,6 +20,7 @@ kotlin {
     jvmToolchain(23)
 }
 
+// Define a JRE, o nome e a tag na imagem do docker
 ktor {
     docker {
         jreVersion = JavaVersion.VERSION_23
@@ -48,6 +50,7 @@ dependencies {
     testImplementation(ktorLibs.server.testHost)
 }
 
+// Define a visibilidade das propriedades que serão documentadas
 dokka {
     dokkaSourceSets.configureEach {
         documentedVisibilities.set(

@@ -8,10 +8,12 @@ import adapter.input.rest.INSCRICOES_ROUTE
 import adapter.input.rest.SITUACAO_IRREGULAR_ROUTE
 import adapter.input.rest.TURMAS_ROUTE
 import io.ktor.htmx.html.*
+import io.ktor.server.application.Application
+import io.ktor.server.engine.applicationEnvironment
 import io.ktor.server.html.*
 import kotlinx.html.*
 
-class MainPageTemplate: Template<HTML> {
+class MainPageTemplate(private val version: String): Template<HTML> {
 
     val pageBody = TemplatePlaceholder<PageBodyTemplate>()
 
@@ -34,12 +36,12 @@ class MainPageTemplate: Template<HTML> {
         }
 
         body {
-            insert(PageBodyTemplate(), pageBody)
+            insert(PageBodyTemplate(version), pageBody)
         }
     }
 }
 
-class PageBodyTemplate: Template<FlowContent> {
+class PageBodyTemplate(private val version: String): Template<FlowContent> {
 
     val mainContent = Placeholder<FlowContent>()
 
@@ -99,7 +101,7 @@ class PageBodyTemplate: Template<FlowContent> {
                         id = "about_modal"
                         div(classes = "modal-box") {
                             h3(classes = "text-lg font-bold") { +"Gestão do BSI" }
-                            p(classes = "py-4") { +"Versão beta 0.1" }
+                            p(classes = "py-4") { +"Versão ${version}" }
                             div(classes = "modal-action") {
                                 form {
                                     attributes["method"] = "dialog"
@@ -113,8 +115,13 @@ class PageBodyTemplate: Template<FlowContent> {
 
             // Título
             div(classes = "navbar-center") {
-                span(classes = "text-xl font-bold") {
-                    +"Gestão do BSI"
+                div(classes="flex items-start") {
+                    span(classes = "text-3xl font-bold") {
+                        +"Gestão do BSI"
+                    }
+                    span(classes = "ml-4 text-sm") {
+                        +"v${version}"
+                    }
                 }
             }
 
