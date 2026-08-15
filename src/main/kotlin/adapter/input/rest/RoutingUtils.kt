@@ -12,10 +12,6 @@ suspend fun ApplicationCall.respondHTML(status: HttpStatusCode, fragment: FlowCo
     respond(status, fragment)
 }
 
-//suspend fun ApplicationCall.respondError(fragment: FlowContent.() -> Unit) {
-//    respond(HttpStatusCode.OK, fragment)
-//}
-
 suspend fun ApplicationCall.respondBadRequest() {
     respond(HttpStatusCode.OK) {
         h1 { +"Ooops! Algum parâmetro dessa chamada é inválido!" }

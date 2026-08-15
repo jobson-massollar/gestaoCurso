@@ -21,16 +21,12 @@ import kotlin.text.replace
 const val DIARIO_ROUTE = "/diario"
 const val DOWNLOAD_DIARIO_ROUTE = "/diario/download"
 
-private data class DiarioParameters(val codigoTurma: String?, val versao: String?, val codigoDisciplina: String?)
+private data class DiarioParameters(val codigoTurma: String, val versao: String, val codigoDisciplina: String)
 
 fun Route.diarioRoutes() {
 
     get("$DIARIO_ROUTE/{turma}/{versao}/{codigo}") {
         val params = call.getDiarioParameters()
-
-        if (params.codigoTurma.isNullOrBlank() || params.versao.isNullOrBlank() || params.codigoDisciplina.isNullOrBlank()) {
-            return@get call.respondBadRequest()
-        }
 
         val turma =
             RepositoryFactory.get(TurmaRepository::class).findByCode(params.codigoTurma) ?: return@get call.respondBadRequest()
@@ -53,10 +49,6 @@ fun Route.diarioRoutes() {
     get("$DOWNLOAD_DIARIO_ROUTE/{turma}/{versao}/{codigo}") {
         val params = call.getDiarioParameters()
 
-        if (params.codigoTurma.isNullOrBlank() || params.versao.isNullOrBlank() || params.codigoDisciplina.isNullOrBlank()) {
-            return@get call.respondBadRequest()
-        }
-
         val turma =
             RepositoryFactory.get(TurmaRepository::class).findByCode(params.codigoTurma) ?: return@get call.respondBadRequest()
 
@@ -77,9 +69,9 @@ fun Route.diarioRoutes() {
 
 private fun RoutingCall.getDiarioParameters(): DiarioParameters =
     DiarioParameters(
-        this.parameters["turma"],
-        this.parameters["versao"]?.replace('-', '/'),
-        this.parameters["codigo"]
+        this.parameters["turma"]?:"",
+        (this.parameters["versao"]?:"").replace('-', '/'),
+        this.parameters["codigo"]?:""
     )
 
 private fun ItemDiario.toCsv() = "${this.matricula};${this.nome};${this.aluno?.let { "${it.versao}" } ?: "-"};${this.aluno?.let { "${it.email}" } ?: "-"}"

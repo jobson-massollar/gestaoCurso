@@ -68,12 +68,8 @@ fun Route.inscricoesRoutes() {
     }
 
     get("$INSCRICOES_ROUTE/{codigo}/{turma}") {
-        val codigoDisciplina = call.parameters["codigo"]
-        val codigoTurma = call.parameters["turma"]
-
-        if (codigoTurma.isNullOrBlank() || codigoDisciplina.isNullOrBlank()) {
-            return@get call.respondBadRequest()
-        }
+        val codigoDisciplina = call.parameters["codigo"]?:""
+        val codigoTurma = call.parameters["turma"]?:""
 
         val turma =
             RepositoryFactory.get(TurmaRepository::class).findByCode(codigoTurma) ?: return@get call.respondBadRequest()

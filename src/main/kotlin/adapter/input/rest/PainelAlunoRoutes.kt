@@ -12,7 +12,7 @@ const val PAINEL_ALUNO_ROUTE = "/painel"
 
 fun Routing.painelAlunoRoutes() {
     get("$PAINEL_ALUNO_ROUTE/{matricula}") {
-        val matricula = call.parameters["matricula"] ?: return@get call.respondBadRequest()
+        val matricula = call.parameters["matricula"]?: ""
 
         val aluno = RepositoryFactory.get(AlunoRepository::class).findByMatricula(matricula)
 
