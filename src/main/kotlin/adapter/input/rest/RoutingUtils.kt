@@ -12,9 +12,9 @@ suspend fun ApplicationCall.respondHTML(status: HttpStatusCode, fragment: FlowCo
     respond(status, fragment)
 }
 
-suspend fun ApplicationCall.respondBadRequest(fragment: FlowContent.() -> Unit) {
-    respond(HttpStatusCode.OK, fragment)
-}
+//suspend fun ApplicationCall.respondError(fragment: FlowContent.() -> Unit) {
+//    respond(HttpStatusCode.OK, fragment)
+//}
 
 suspend fun ApplicationCall.respondBadRequest() {
     respond(HttpStatusCode.OK) {

@@ -10,6 +10,7 @@ import io.ktor.server.html.respondHtml
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.datetime.format
+import kotlinx.html.h1
 import main.collator
 import main.currentDateTime
 import main.fileTimestampFormat
@@ -51,7 +52,7 @@ fun Route.inscricoesRoutes() {
     }
 
     get("$INSCRICOES_ROUTE/{matricula}") {
-        val matricula = call.parameters["matricula"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) { }
+        val matricula = call.parameters["matricula"] ?: return@get call.respondBadRequest()
 
         val aluno = RepositoryFactory.get(AlunoRepository::class).findByMatricula(matricula)
 
@@ -61,25 +62,23 @@ fun Route.inscricoesRoutes() {
             }
         }
         else
-            call.respondHtml(HttpStatusCode.NotFound) {}
+            call.respondHTML(HttpStatusCode.OK) {
+                h1 { +"Aluno com matrícula $matricula não encontrado!"}
+            }
     }
 
     get("$INSCRICOES_ROUTE/{codigo}/{turma}") {
-        val codigoDisciplina = call.parameters["codigo"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) { }
-        val codigoTurma = call.parameters["turma"] ?: return@get call.respondHtml(HttpStatusCode.BadRequest) { }
+        val codigoDisciplina = call.parameters["codigo"]
+        val codigoTurma = call.parameters["turma"]
 
         if (codigoTurma.isNullOrBlank() || codigoDisciplina.isNullOrBlank()) {
-            return@get call.respondHtml(HttpStatusCode.BadRequest) {}
+            return@get call.respondBadRequest()
         }
 
         val turma =
-            RepositoryFactory.get(TurmaRepository::class).findByCode(codigoTurma) ?: return@get call.respondHtml(
-                HttpStatusCode.BadRequest
-            ) {}
+            RepositoryFactory.get(TurmaRepository::class).findByCode(codigoTurma) ?: return@get call.respondBadRequest()
 
-        val disciplina = turma.getDisciplina(codigoDisciplina) ?: return@get call.respondHtml(
-            HttpStatusCode.BadRequest
-        ) {}
+        val disciplina = turma.getDisciplina(codigoDisciplina) ?: return@get call.respondBadRequest()
 
         val inscricoes = turma.inscricoes(disciplina).sortedBy { it.nomeAluno }
 
