@@ -19,6 +19,14 @@ kotlin {
     jvmToolchain(23)
 }
 
+ktor {
+    docker {
+        jreVersion = JavaVersion.VERSION_23
+        localImageName.set("gestao-bsi-ktor-docker-image")
+        imageTag.set(project.version.toString())
+    }
+}
+
 dependencies {
     implementation(ktorLibs.serialization.kotlinx.json)
     implementation(ktorLibs.server.config.yaml)

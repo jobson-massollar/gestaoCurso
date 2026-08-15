@@ -1,6 +1,6 @@
 ktor:
   deployment:
-    port: 8080
+    port: "$APP_PORT:8081"
   application:
     modules:
       - main.SerializationKt.configureSerialization
@@ -8,6 +8,6 @@ ktor:
       - main.RoutingKt.configureRouting
       - main.AppKt.configureApp
 postgres:
-  url: jdbc:postgresql://localhost:5432/BSI
+  url: "$DB_URL:jdbc:postgresql://localhost:5432/BSI"
   user: postgres
   password: 1234

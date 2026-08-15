@@ -35,7 +35,42 @@ If the server starts successfully, you'll see the following output:
 2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
 ```
 
-## Funcionalidades (TODO)
+## Container do PostgreSQL
+
+1. O container do PostgreSQL deve estar rodando na rede **_portgresql-network_**
+2. O container do PostgreSQL deve se chamar **_postgresql-db_**
+
+Se necessário, executar o comando abaixo para **criar** a rede virtual e **conectar** o container do PostgreSQL na rede correta:
+
+~~~
+docker network create postgresql-network
+docker network connect postgresql-network postgresql-db
+~~~
+
+Caso esses nomes sejam alterados, os respectivos nomes também deverão ser alterados nos comandos de deploy no Docker.
+
+## Deploy da app Gestão BSI no Docker
+
+1. Gerar a imagem docker (a imagem será gerada com a mesma versão do projeto)
+
+~~~
+gradlew buildImage
+~~~
+
+2. Ir para a pasta do projeto
+
+3. Carregar a imagem
+
+~~~
+docker load -i build/jib-image.tar
+~~~
+4. Subir o container
+
+~~~
+docker run -d -p 8080:8080 --name gestao-bsi-ktor --network  postgresql-network  -e DB_URL=jdbc:postgresql://postgresql-db:5432/BSI -e APP_PORT=8080 -d gestao-bsi-ktor-docker-image:1.0.0
+~~~
+
+## Funcionalidades
 
 * Diário: lista de alunos inscritos em uma disciplina (DONE)
 * Download de turmas
