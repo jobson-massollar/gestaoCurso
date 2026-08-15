@@ -29,17 +29,13 @@ fun Route.diarioRoutes() {
         val params = call.getDiarioParameters()
 
         if (params.codigoTurma.isNullOrBlank() || params.versao.isNullOrBlank() || params.codigoDisciplina.isNullOrBlank()) {
-            return@get call.respondHtml(HttpStatusCode.BadRequest) {}
+            return@get call.respondBadRequest()
         }
 
         val turma =
-            RepositoryFactory.get(TurmaRepository::class).findByCode(params.codigoTurma) ?: return@get call.respondHtml(
-                HttpStatusCode.BadRequest
-            ) {}
+            RepositoryFactory.get(TurmaRepository::class).findByCode(params.codigoTurma) ?: return@get call.respondBadRequest()
 
-        val disciplina = turma.getDisciplina(params.versao, params.codigoDisciplina) ?: return@get call.respondHtml(
-            HttpStatusCode.BadRequest
-        ) {}
+        val disciplina = turma.getDisciplina(params.versao, params.codigoDisciplina) ?: return@get call.respondBadRequest()
 
         val itensDiario = turma.itensDiario(disciplina)
 
@@ -58,17 +54,13 @@ fun Route.diarioRoutes() {
         val params = call.getDiarioParameters()
 
         if (params.codigoTurma.isNullOrBlank() || params.versao.isNullOrBlank() || params.codigoDisciplina.isNullOrBlank()) {
-            return@get call.respondHtml(HttpStatusCode.BadRequest) {}
+            return@get call.respondBadRequest()
         }
 
         val turma =
-            RepositoryFactory.get(TurmaRepository::class).findByCode(params.codigoTurma) ?: return@get call.respondHtml(
-                HttpStatusCode.BadRequest
-            ) {}
+            RepositoryFactory.get(TurmaRepository::class).findByCode(params.codigoTurma) ?: return@get call.respondBadRequest()
 
-        val disciplina = turma.getDisciplina(params.versao, params.codigoDisciplina) ?: return@get call.respondHtml(
-            HttpStatusCode.BadRequest
-        ) {}
+        val disciplina = turma.getDisciplina(params.versao, params.codigoDisciplina) ?: return@get call.respondBadRequest()
 
         val itensDiario = turma.itensDiario(disciplina)
 

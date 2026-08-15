@@ -39,6 +39,7 @@ dependencies {
     implementation(ktorLibs.htmx)
     implementation(ktorLibs.htmx.html)
     implementation(ktorLibs.server.netty)
+    implementation(ktorLibs.server.statusPages)
     implementation(libs.exposed.core)
     implementation(libs.exposed.dao)
     implementation(libs.exposed.jdbc)

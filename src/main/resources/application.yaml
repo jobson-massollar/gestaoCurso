@@ -5,6 +5,7 @@ ktor:
     modules:
       - main.SerializationKt.configureSerialization
       - main.ExposedKt.configureExposed
+      - main.StatusPageKt.configureStatusPage
       - main.RoutingKt.configureRouting
       - main.AppKt.configureApp
 app:
