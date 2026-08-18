@@ -73,7 +73,7 @@ goto :fim
 echo.
 echo [5] Executando o container %CONTAINER_NAME%
 
-docker run -d -p 8080:8080 --name %CONTAINER_NAME% --network  postgresql-network  -e DB_URL=jdbc:postgresql://postgresql-db:5432/BSI -e APP_PORT=8080 -d gestao-bsi-ktor-docker-image:1.0.0
+docker run -d -p 8080:8080 --name %CONTAINER_NAME% --network  postgresql-network  -e DB_URL=jdbc:postgresql://postgresql-db:5432/BSI -e APP_PORT=8080 -e TZ=America/Sao_Paulo -d gestao-bsi-ktor-docker-image:1.0.0
 
 @rem ============================================================
 @rem Verifica se o container está rodando

@@ -133,6 +133,9 @@ CREATE TABLE extensoes_prazo (
 
 insert into extensoes_prazo (id, matricula, prazo) values('6a83ac01-01ee-4b72-9c6f-debfe81076a9', '20161210019', 2);
 insert into extensoes_prazo (id, matricula, prazo) values('90c75518-8892-456d-8bee-879a95c3b1f4', '20171210008', 2);
+insert into extensoes_prazo (id, matricula, prazo) values('6036be95-6f8c-4125-baf8-f5bfdf153f54', '20151210023', 1);
+insert into extensoes_prazo (id, matricula, prazo) values('739e44fa-bc8c-4363-bf63-a0e37e351502', '20151210018', 2);
+
 
 /*----------------------------------------------------------------------------------
  Disciplinas que possuem equivalentes na grade do BSI (não contam na carga horária

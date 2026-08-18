@@ -94,7 +94,13 @@ private fun findAlunosExtensao(): List<Aluno> =
     RepositoryFactory.get(AlunoRepository::class)
         .findByFilter(AlunoFilter.ACTIVE)
         .filter { ! it.estaFormado && it.ultimoPeriodoCursado.numero >= 11 }
-        .sortedByDescending { it.ultimoPeriodoCursado.numero }
+        .sortedWith { a1, a2 ->
+            if (a2.ultimoPeriodoCursado.numero != a1.ultimoPeriodoCursado.numero)
+                a2.ultimoPeriodoCursado.numero - a1.ultimoPeriodoCursado.numero
+            else
+                a1.periodoLimite.compareTo(a2.periodoLimite)
+        }
+        //.sortedByDescending { it.ultimoPeriodoCursado.numero }
 
 private fun findAlunosColacao() : List<Aluno> =
     RepositoryFactory.get(AlunoRepository::class)
