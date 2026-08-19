@@ -117,54 +117,71 @@ fun FlowContent.tableTotalizacaoInscricoes(totalizacoes: List<TotalizacaoInscric
     }
 }
 
-fun FlowContent.tableInscricoesDisciplina(inscricoes: List<Inscricao>, turma: Turma, disciplina: Disciplina) {
+fun FlowContent.tableInscricoesDisciplinaBSI(inscricoes: List<Inscricao>, turma: Turma, disciplina: Disciplina) {
     title("Inscrições - ${disciplina.codigo} - ${disciplina.nome} (${turma.codigo})", backButton = true) {
+        tableInscricoes(inscricoes)
+    }
+}
 
-        if (inscricoes.isEmpty()) {
-            p(classes = "text-base") { +"Nenhuma inscrição foi encontrada!" }
-            return@title
-        }
+fun FlowContent.tableInscricoesDisciplina(inscricoes: List<Inscricao>, codigoTurma: String, codigoDisciplina: String) {
+    title("Inscrições - ${codigoDisciplina} - ${inscricoes[0].nome} (${codigoTurma})", backButton = true) {
+        tableInscricoes(inscricoes)
+    }
+}
 
-        div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
-            table(classes = "table table-zebra table-sm") {
-                thead {
-                    tr(classes = "bg-base-300") {
-                        th(classes = "text-center") { +"#" }
-                        th(classes = "text-center") { +"Matrícula" }
-                        th { +"Nome" }
-                        th(classes = "text-center") { +"Currículo" }
-                        th { +"E-mail" }
-                        th { +"Situação" }
-                        th(classes = "text-center") { +"Solicitação" }
-                        th(classes = "text-center") { +"Processamento" }
-                        th { +" " }
-                    }
+private fun FlowContent.tableInscricoes(inscricoes: List<Inscricao>) {
+    if (inscricoes.isEmpty()) {
+        p(classes = "text-base") { +"Nenhuma inscrição foi encontrada!" }
+        return
+    }
+
+    div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
+        table(classes = "table table-zebra table-sm") {
+            thead {
+                tr(classes = "bg-base-300") {
+                    th(classes = "text-center") { +"#" }
+                    th(classes = "text-center") { +"Matrícula" }
+                    th { +"Nome" }
+                    th(classes = "text-center") { +"Currículo" }
+                    th { +"E-mail" }
+                    th { +"Situação" }
+                    th(classes = "text-center") { +"Solicitação" }
+                    th(classes = "text-center") { +"Processamento" }
+                    th { +" " }
                 }
-                tbody {
-                    inscricoes.forEachIndexed { i, inscricao ->
-                        tr {
-                            td(classes = "text-center") { +(i+1).toString() }
-                            td(classes = "text-center") { +inscricao.matricula }
-                            td { +inscricao.nomeAluno }
-                            td(classes = "text-center") { +(inscricao.aluno?.let { "${it.versao}" } ?: "-") }
-                            td { +(inscricao.aluno?.let { "${it.email}" } ?: "-") }
-                            td { +inscricao.descricao }
-                            td(classes = "text-center") { +"${dateFormat.format(inscricao.dataSolicitacao)} ${timeFormat.format(inscricao.horaSolicitacao)}" }
-                            td(classes = "text-center") { +(inscricao.dataProcessamento?.let { dateFormat.format(it) } ?: "") }
-                            td(classes = "gap-4") {
-                                smallButton(
-                                    "Painel",
-                                    "$PAINEL_ALUNO_ROUTE/${inscricao.matricula}",
-                                    "#main-container",
-                                    ! inscricao.matricula.ehAlunoBSI
+            }
+            tbody {
+                inscricoes.forEachIndexed { i, inscricao ->
+                    tr {
+                        td(classes = "text-center") { +(i + 1).toString() }
+                        td(classes = "text-center") { +inscricao.matricula }
+                        td { +inscricao.nomeAluno }
+                        td(classes = "text-center") { +(inscricao.aluno?.let { "${it.versao}" } ?: "-") }
+                        td { +(inscricao.aluno?.let { "${it.email}" } ?: "-") }
+                        td { +inscricao.descricao }
+                        td(classes = "text-center") {
+                            +"${dateFormat.format(inscricao.dataSolicitacao)} ${
+                                timeFormat.format(
+                                    inscricao.horaSolicitacao
                                 )
-                                smallButton(
-                                    "Histórico",
-                                    "$HISTORICO_ROUTE/${inscricao.matricula}",
-                                    "#main-container",
-                                    ! inscricao.matricula.ehAlunoBSI
-                                )
-                            }
+                            }"
+                        }
+                        td(classes = "text-center") {
+                            +(inscricao.dataProcessamento?.let { dateFormat.format(it) } ?: "")
+                        }
+                        td(classes = "gap-4") {
+                            smallButton(
+                                "Painel",
+                                "$PAINEL_ALUNO_ROUTE/${inscricao.matricula}",
+                                "#main-container",
+                                !inscricao.matricula.ehAlunoBSI
+                            )
+                            smallButton(
+                                "Histórico",
+                                "$HISTORICO_ROUTE/${inscricao.matricula}",
+                                "#main-container",
+                                !inscricao.matricula.ehAlunoBSI
+                            )
                         }
                     }
                 }

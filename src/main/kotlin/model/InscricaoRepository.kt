@@ -7,7 +7,7 @@ class InscricaoRepository : Repository<Inscricao, IDAO.IInscricaoDAO, InscricaoD
 
     override val dao: IDAO.IInscricaoDAO = DAOFactory.getDAO(DAOFactory.Type.INSCRICAO)
 
-    // fun findByDisciplina(codigo: String, turma: String) = createEntityList(dao.findByDisciplina(codigo, turma))
+    fun findByCodeTurmaDisciplina(codigoTurma: String, codigoDisciplina: String) = createEntityList(dao.findByCodeTurmaDisciplina(codigoTurma, codigoDisciplina))
 
     fun findByAluno(aluno: Aluno) = createEntityList(dao.findByAluno(aluno))
 

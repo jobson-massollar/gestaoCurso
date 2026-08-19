@@ -181,7 +181,7 @@ CREATE INDEX itens_diario_versao_codigo_idx ON public.itens_diario USING btree (
 -- CREATE INDEX itens_diario_matricula_idc ON public.itens_diario USING btree (matricula);
 
 /*----------------------------------------------------------------------------------
- Inscrições em disciplinas (não é usado atualmente)
+ Inscrições em disciplinas
  ----------------------------------------------------------------------------------*/
 
 DROP TABLE inscricoes;
@@ -205,6 +205,18 @@ CREATE TABLE inscricoes (
 CREATE INDEX inscricoes_codigo ON public.inscricoes USING btree (codigo);
 CREATE INDEX inscricoes_matricula ON public.inscricoes USING btree (matricula);
 CREATE INDEX inscricoes_situacao ON public.inscricoes USING btree (situacao);
+
+/*----------------------------------------------------------------------------------
+ Log de importações
+ ----------------------------------------------------------------------------------*/
+
+DROP TABLE log_importacoes;
+
+CREATE TABLE log_importacoes (
+    id uuid NOT NULL,
+    dt_processamento date NOT NULL,
+    CONSTRAINT log_importacoes PRIMARY KEY (id)
+);
 
 /*----------------------------------------------------------------------------------
  Disciplinas únicas com somatório de horas e créditos
@@ -345,6 +357,9 @@ update itens_historico ih set horas = 90 where ih.codigo = 'ATC0021';
 update itens_historico ih set horas = 180 where ih.codigo = 'ATC0010';
 update itens_historico ih set horas = 45 where ih.codigo = 'ATC0031';
 update itens_historico ih set horas = 60 where ih.codigo = 'ATC0100';
+
+-- Insere data/hora da importacão no log
+insert into log_importacao (id, dt_processamento) values (uuid_generate_v4(), NOW());
 
 end;
 $procedure$

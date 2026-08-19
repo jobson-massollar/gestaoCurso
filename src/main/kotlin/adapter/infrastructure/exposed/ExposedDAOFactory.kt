@@ -25,5 +25,6 @@ object ExposedDAOFactory : IDAOFactory {
             DAOFactory.Type.DIARIO -> ItemDiarioExposedDAO() as T
             DAOFactory.Type.INSCRICAO -> InscricaoExposedDAO() as T
             DAOFactory.Type.TOTAL_INSCRICAO -> TotalizacaoInscricaoExposedDAO() as T
+            DAOFactory.Type.LOG_IMPORTACAO-> LogImportacaoExposedDAO() as T
         }
 }

@@ -11,9 +11,13 @@ import io.ktor.htmx.html.*
 import io.ktor.server.application.Application
 import io.ktor.server.engine.applicationEnvironment
 import io.ktor.server.html.*
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.format
 import kotlinx.html.*
+import main.UITimestampFormat
+import main.fileTimestampFormat
 
-class MainPageTemplate(private val version: String): Template<HTML> {
+class MainPageTemplate(private val version: String, private val ultimaImportacao: LocalDateTime?): Template<HTML> {
 
     val pageBody = TemplatePlaceholder<PageBodyTemplate>()
 
@@ -36,16 +40,18 @@ class MainPageTemplate(private val version: String): Template<HTML> {
         }
 
         body {
-            insert(PageBodyTemplate(version), pageBody)
+            insert(PageBodyTemplate(version, ultimaImportacao), pageBody)
         }
     }
 }
 
-class PageBodyTemplate(private val version: String): Template<FlowContent> {
+class PageBodyTemplate(private val version: String, private val ultimaImportacao: LocalDateTime?): Template<FlowContent> {
 
     val mainContent = Placeholder<FlowContent>()
 
     override fun FlowContent.apply() {
+        val dtHoraImportacao = ultimaImportacao?.format(UITimestampFormat)
+
         // Spinner de espera das requisições ao backend
         // Fica oculto e só é apresentado durante as requisições
         div(classes = "htmx-indicator fixed inset-0 flex items-center justify-center z-50") {
@@ -101,7 +107,8 @@ class PageBodyTemplate(private val version: String): Template<FlowContent> {
                         id = "about_modal"
                         div(classes = "modal-box") {
                             h3(classes = "text-lg font-bold") { +"Gestão do BSI" }
-                            p(classes = "py-4") { +"Versão ${version}" }
+                            p(classes = "py-4") { +"Versão $version" }
+                            p { +"Importação: $dtHoraImportacao" }
                             div(classes = "modal-action") {
                                 form {
                                     attributes["method"] = "dialog"
@@ -133,8 +140,12 @@ class PageBodyTemplate(private val version: String): Template<FlowContent> {
             }
         }
 
+        div(classes = "text-right text-sm mt-2 mr-5") {
+            +(dtHoraImportacao?:"")
+        }
+
         // Área central da página onde os conteúdos serão renderizados
-        div(classes = "w-dwv h-fit m-5") {
+        div(classes = "w-dwv h-fit mx-5 mt-2") {
             id = "main-container"
 
             insert(mainContent)

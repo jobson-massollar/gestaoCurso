@@ -4,6 +4,7 @@ import adapter.input.ui.observacoes
 import adapter.input.ui.tableInscricoesAluno
 import adapter.input.ui.tableTotalizacaoInscricoes
 import adapter.input.ui.tableInscricoesDisciplina
+import adapter.input.ui.tableInscricoesDisciplinaBSI
 import adapter.input.ui.tableInscricoesIrregulares
 import io.ktor.http.*
 import io.ktor.server.html.respondHtml
@@ -71,15 +72,26 @@ fun Route.inscricoesRoutes() {
         val codigoDisciplina = call.parameters["codigo"]?:""
         val codigoTurma = call.parameters["turma"]?:""
 
-        val turma =
-            RepositoryFactory.get(TurmaRepository::class).findByCode(codigoTurma) ?: return@get call.respondBadRequest()
+        val turma = RepositoryFactory.get(TurmaRepository::class).findByCode(codigoTurma)
 
-        val disciplina = turma.getDisciplina(codigoDisciplina) ?: return@get call.respondBadRequest()
+        // Se for uma turma do BSI com inscritos, vai ser encontrada no repositório de turmas
+        // Se não for do BSI ou se não tiver inscritos, busca as inscrições diretamente no
+        // repositório de inscrições pela turma/disciplina
+        if (turma != null) {
+            val disciplina = turma.getDisciplina(codigoDisciplina) ?: return@get call.respondBadRequest()
 
-        val inscricoes = turma.inscricoes(disciplina).sortedBy { it.nomeAluno }
+            val inscricoes = turma.inscricoes(disciplina).sortedBy { it.nomeAluno }
 
-        call.respondHTML(status = HttpStatusCode.OK) {
-            tableInscricoesDisciplina(inscricoes, turma, disciplina)
+            call.respondHTML(status = HttpStatusCode.OK) {
+                tableInscricoesDisciplinaBSI(inscricoes, turma, disciplina)
+            }
+        }
+        else {
+            val inscricoes = RepositoryFactory.get(InscricaoRepository::class).findByCodeTurmaDisciplina(codigoTurma, codigoDisciplina)
+
+            call.respondHTML(status = HttpStatusCode.OK) {
+                tableInscricoesDisciplina(inscricoes, codigoTurma, codigoDisciplina)
+            }
         }
     }
 

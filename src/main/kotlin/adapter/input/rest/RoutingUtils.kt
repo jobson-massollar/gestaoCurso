@@ -7,6 +7,8 @@ import io.ktor.server.html.*
 import io.ktor.server.routing.*
 import kotlinx.html.FlowContent
 import kotlinx.html.h1
+import model.LogImportacaoRepository
+import model.RepositoryFactory
 
 suspend fun ApplicationCall.respondHTML(status: HttpStatusCode, fragment: FlowContent.() -> Unit) {
     respond(status, fragment)
@@ -24,8 +26,9 @@ suspend private fun ApplicationCall.respond(status: HttpStatusCode, fragment: Fl
     }
     else {
         val version = application.environment.config.property("app.version").getString()
+        val ultimaImportacao = RepositoryFactory.get(LogImportacaoRepository::class).findLast()?.dtProcessamento
 
-        respondHtmlTemplate(MainPageTemplate(version), status = status) {
+        respondHtmlTemplate(MainPageTemplate(version, ultimaImportacao), status = status) {
             pageBody {
                 mainContent {
                     fragment()

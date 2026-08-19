@@ -36,6 +36,21 @@ val fileTimestampFormat: DateTimeFormat<LocalDateTime>
         second()
     }
 
+val UITimestampFormat: DateTimeFormat<LocalDateTime>
+    get() = LocalDateTime.Format {
+        day()
+        char('/')
+        monthNumber()
+        char('/')
+        year()
+        char(' ')
+        hour()
+        char(':')
+        minute()
+        char(':')
+        second()
+    }
+
 val dateFormat = LocalDate.Format {
     day()
     char('/')

@@ -13,13 +13,13 @@ import services.domain.persistence.IDAO
 
 class InscricaoExposedDAO: IDAO.IInscricaoDAO {
 
-//    override fun findByDisciplina(codigo: String, turma: String): List<InscricaoDTO> =
-//        transaction {
-//            Inscricoes
-//                .selectAll()
-//                .where { (Inscricoes.codigo eq codigo) and (Inscricoes.turma eq turma) }
-//                .map { createDTO(it) }
-//        }
+    override fun findByCodeTurmaDisciplina(codigoTurma: String, codigoDisciplina: String): List<InscricaoDTO> =
+        transaction {
+            Inscricoes
+                .selectAll()
+                .where { (Inscricoes.codigo eq codigoDisciplina) and (Inscricoes.turma eq codigoTurma) }
+                .map { createDTO(it) }
+        }
 
     override fun findByAluno(aluno: Aluno): List<InscricaoDTO> =
         transaction {
