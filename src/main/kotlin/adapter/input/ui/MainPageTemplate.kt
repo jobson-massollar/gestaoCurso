@@ -29,14 +29,13 @@ class MainPageTemplate(private val version: String, private val ultimaImportacao
             title { +"Gestão do BSI" }
             meta(name = "viewport", content = "width=device-width, initial-scale=1.0")
             meta(name="charset", content = "utf-8")
+            link(rel = "icon", href = "/static/img/favicon.png", type = "image/png")
             link(href="https://cdn.jsdelivr.net/npm/daisyui@5.7.16", rel="stylesheet", type = "text/css")
             link(href="https://cdn.jsdelivr.net/npm/daisyui@5.7.16/themes.css", rel="stylesheet", type = "text/css")
             script(src = "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4") {}
             script(src = "https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-beta6", crossorigin = ScriptCrossorigin.anonymous) {}
             script(src = "https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-beta6/dist/ext/hx-download.js") {}
-            //script(src = "https://unpkg.com/htmx.org@2.0.7", crossorigin = ScriptCrossorigin.anonymous) {}
             script(src = "https://cdn.jsdelivr.net/npm/sweetalert2@11") {}
-            //script(src = "/static/script/util.js") {}
         }
 
         body {
