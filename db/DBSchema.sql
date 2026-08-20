@@ -358,7 +358,14 @@ update itens_historico ih set horas = 180 where ih.codigo = 'ATC0010';
 update itens_historico ih set horas = 45 where ih.codigo = 'ATC0031';
 update itens_historico ih set horas = 60 where ih.codigo = 'ATC0100';
 
+-- Aluno fora do BSI tem informação da sua grade no diário, mas essa informação é usada
+-- para localizar os alunos de uma turma (versão, código da turma, código da disciplina)
+-- Para localizar esses alunos corretamente em uma turma, converte as suas grades para '2023/2'
+
+update itens_diario set versao='2023/2' where substring(matricula, 6, 3) <> '210';
+
 -- Insere data/hora da importacão no log
+
 insert into log_importacao (id, dt_processamento) values (uuid_generate_v4(), NOW());
 
 end;

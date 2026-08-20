@@ -91,7 +91,13 @@ class PageBodyTemplate(private val version: String, private val ultimaImportacao
                             mainMenuItem(INSCRICOES_ROUTE, "Inscrições")
                         }
                         li {
-                            mainMenuItem(TURMAS_ROUTE, "Turmas")
+                            mainMenuItem(TURMAS_ROUTE, "Turmas e Diários de Classe")
+                        }
+                        li {
+                            mainMenuItem(TURMAS_ROUTE, "Disciplinas 2008/1")
+                        }
+                        li {
+                            mainMenuItem(TURMAS_ROUTE, "Disciplinas 2023/2")
                         }
                         li {
                             a {
