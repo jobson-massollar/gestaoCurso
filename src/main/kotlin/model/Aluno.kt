@@ -109,9 +109,16 @@ class Aluno private constructor(val matricula: String,
         itensAprovados.obrigatorias.map { it.disciplina }
     }
 
-    val disciplinasObrigatoriasACursar: List<Disciplina> by lazy {
-        (disciplinasObrigatoriasFaltantes - disciplinasObrigatoriasMatriculadas.toSet())
+    // Todas as disciplinas obrigatórias que o aluno já tem os pré-requisitos
+    val disciplinasObrigatoriasPodeCursar: List<Disciplina> by lazy {
+        disciplinasObrigatoriasFaltantes
             .filter { disciplinasObrigatoriasAprovadas.containsAll(it.preRequisitos) }
+    }
+
+    // Todas as disciplinas obrigatórias que o aluno já tem os pré-requisitos
+    // e ainda não está matriculado
+    val disciplinasObrigatoriasPodeMatricular: List<Disciplina> by lazy {
+        disciplinasObrigatoriasPodeCursar - disciplinasObrigatoriasMatriculadas.toSet()
     }
 
     val disciplinasObrigatoriasMatriculadas: List<Disciplina> by lazy {
@@ -199,7 +206,7 @@ class Aluno private constructor(val matricula: String,
 
         // Se não está matriculado em todas as obrigatórias possíveis, então está irregular
         if (itensAprovados.obrigatorias.size + itensMatriculados.obrigatorias.size < grade.qtdObrigatorias &&
-            disciplinasObrigatoriasACursar.isNotEmpty()) {
+            disciplinasObrigatoriasPodeMatricular.isNotEmpty()) {
             return@lazy true
         }
 

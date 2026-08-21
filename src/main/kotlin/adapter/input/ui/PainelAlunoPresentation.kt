@@ -2,7 +2,6 @@ package adapter.input.ui
 
 import adapter.input.rest.HISTORICO_ROUTE
 import adapter.input.rest.INSCRICOES_ROUTE
-import adapter.input.rest.PAINEL_ALUNO_ROUTE
 import kotlinx.html.*
 import main.collator
 import model.*
@@ -24,7 +23,8 @@ fun FlowContent.painelAluno(aluno: Aluno) {
         tableObrigatoriasFaltantes(
             "Obrigatórias que Faltam (${obrigatoriasFaltantes.size})",
             obrigatoriasFaltantes,
-            aluno.itensMatriculados
+            aluno.itensMatriculados,
+            aluno.disciplinasObrigatoriasPodeCursar
         )
 
         tableDisciplinas("Matriculadas (${matriculadas.size})", matriculadas)
@@ -134,7 +134,12 @@ private fun FlowContent.cardPeriodos(aluno: Aluno) {
     }
 }
 
-private fun FlowContent.tableObrigatoriasFaltantes(title: String, disciplinas: List<Disciplina>, matriculadas: List<ItemHistorico>) {
+private fun FlowContent.tableObrigatoriasFaltantes(
+    title: String,
+    disciplinas: List<Disciplina>,
+    matriculadas: List<ItemHistorico>,
+    obrigatoriasACursar: List<Disciplina>
+) {
     if (disciplinas.isEmpty()) return
     div(classes = "mb-4 shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
         h2(classes = "m-2 text-base-content/50 font-bold") { +title }
@@ -142,11 +147,12 @@ private fun FlowContent.tableObrigatoriasFaltantes(title: String, disciplinas: L
         table(classes = "table table-zebra table-sm") {
             thead {
                 tr(classes = "bg-base-300") {
-                    th(classes = "text-center w-1/10") { +"Código" }
-                    th(classes = "w-6/10") { +"Nome" }
-                    th(classes = "text-center w-1/10") { +"Matriculada" }
-                    th(classes = "text-center w-1/10") { +"Período" }
-                    th(classes = "text-center w-1/10") { +"Horas" }
+                    th(classes = "text-center w-1/11") { +"Código" }
+                    th(classes = "w-6/11") { +"Nome" }
+                    th(classes = "text-center w-1/11") { +"Pode cursar" }
+                    th(classes = "text-center w-1/11") { +"Matriculada" }
+                    th(classes = "text-center w-1/11") { +"Período" }
+                    th(classes = "text-center w-1/11") { +"Horas" }
                 }
             }
             tbody {
@@ -155,6 +161,7 @@ private fun FlowContent.tableObrigatoriasFaltantes(title: String, disciplinas: L
                         tr {
                             td(classes = "text-center") { +disciplina.codigo  }
                             td { +disciplina.nome }
+                            td(classes = "text-center") { +"${if (obrigatoriasACursar.contains(disciplina)) "🔓" else "" }" }
                             td(classes = "text-center") { +if (matriculadas.any { m -> m.codigo == disciplina.codigo }) "✅" else "-" }
                             td(classes = "text-center") { +"${disciplina.periodo}" }
                             td(classes = "text-center") { +"${disciplina.horas}" }

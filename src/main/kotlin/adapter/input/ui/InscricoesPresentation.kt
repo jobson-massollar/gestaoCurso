@@ -13,9 +13,6 @@ import adapter.input.rest.INSCRICAO_SORTING_VAGAS_ASC
 import adapter.input.rest.INSCRICAO_SORTING_VAGAS_DESC
 import adapter.input.rest.INSCRICOES_ROUTE
 import adapter.input.rest.PAINEL_ALUNO_ROUTE
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.format.char
 import kotlinx.html.*
 import main.dateFormat
 import main.timeFormat
@@ -245,7 +242,7 @@ fun FlowContent.tableInscricoesIrregulares(alunos: List<Aluno>) {
                         th { +"E-mail" }
                         th(classes = "text-center") { +"Matriculado" }
                         th(classes = "text-center") { +"Trancamentos" }
-                        th { +"Pode Cursar" }
+                        th { +"Pode Matricular" }
                         th { +" " }
                     }
                 }
@@ -303,8 +300,8 @@ val Aluno.observacoes: List<String>
     get() {
         val observacoes = mutableListOf<String>()
 
-        if (disciplinasObrigatoriasACursar.isNotEmpty())
-            observacoes.add("${disciplinasObrigatoriasACursar.size} obrigatórias")
+        if (disciplinasObrigatoriasPodeMatricular.isNotEmpty())
+            observacoes.add("${disciplinasObrigatoriasPodeMatricular.size} obrigatórias")
 
         if (horasOptativasFaltantes > 0)
             observacoes.add("${horasOptativasFaltantes}h de optativas")
