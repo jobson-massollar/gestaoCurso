@@ -59,7 +59,7 @@ class Aluno private constructor(val matricula: String,
                         else
                             StatusPeriodo.NaoMatriculado(p, isAcimaLimite, isPandemia, if (isPandemia) 0 else i++)
 
-                    historicoPeriodo[0].isTrancamento ->
+                    historicoPeriodo.any { it.isTrancamento } ->
                         StatusPeriodo.Trancado(p, isAcimaLimite, isPandemia)
 
                     else ->
@@ -197,7 +197,7 @@ class Aluno private constructor(val matricula: String,
     val estaTrancado: Boolean by lazy {
         val cursadas = historico.cursadas(Periodo.ATUAL)
 
-        cursadas.size == 1 && cursadas[0].codigo == "TRT0001"
+        cursadas.any { it.isTrancamento }
     }
 
     val estaIrregular: Boolean by lazy {
