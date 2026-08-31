@@ -16,13 +16,14 @@ fun Route.disciplinaRoutes() {
 
     get("$DISCIPLINA_ROUTE/{versao}") {
         val versao = call.parameters["versao"]?.replace('-', '/') ?: return@get call.respondBadRequest()
+        val sorting = call.request.queryParameters["sort"] ?: DISCIPLINA_SORTING_NOME_ASC
 
         val disciplinas = RepositoryFactory.get(DisciplinaRepository::class).findAll()
             .filter { it.isObrigatoria && it.versao == versao }
-            .sortedWith { d1, d2 -> collator.compare(d1.nome, d2.nome)  }
+            .sortedWith(getDisciplinaSortingByValue(sorting).comparator)
 
         call.respondHTML(HttpStatusCode.OK) {
-            tableObrigatorias(versao, disciplinas)
+            tableObrigatorias(disciplinas, versao, sorting)
         }
     }
 }

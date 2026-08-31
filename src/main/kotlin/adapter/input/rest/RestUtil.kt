@@ -2,6 +2,7 @@ package adapter.input.rest
 
 import services.application.AlunoFilter
 import services.application.AlunoSorting
+import services.application.DisciplinaSorting
 import services.application.InscricaoSorting
 
 const val ALUNO_SORTING_MATRICULA_ASC = "matricula"
@@ -47,6 +48,20 @@ fun getInscricaoSortingByValue(value: String) =
         INSCRICAO_SORTING_VAGAS_ASC -> InscricaoSorting.VAGAS_ASCENDING
         INSCRICAO_SORTING_VAGAS_DESC -> InscricaoSorting.VAGAS_DESCENDING
         else -> InscricaoSorting.DISCIPLINA_ASCENDING
+    }
+
+const val DISCIPLINA_SORTING_NOME_ASC = "nome"
+const val DISCIPLINA_SORTING_NOME_DESC = "-nome"
+const val DISCIPLINA_SORTING_APTOS_ASC = "aptos"
+const val DISCIPLINA_SORTING_APTOS_DESC = "-aptos"
+
+fun getDisciplinaSortingByValue(value: String) =
+    when(value) {
+        DISCIPLINA_SORTING_NOME_ASC -> DisciplinaSorting.NAME_ASCENDING
+        DISCIPLINA_SORTING_NOME_DESC -> DisciplinaSorting.NAME_DESCENDING
+        DISCIPLINA_SORTING_APTOS_ASC -> DisciplinaSorting.ELIGIBLE_ASCENDING
+        DISCIPLINA_SORTING_APTOS_DESC -> DisciplinaSorting.ELIGIBLE_DESCENDING
+        else -> DisciplinaSorting.NAME_ASCENDING
     }
 
 //fun getValueByAlunoSorting(sorting: AlunoSorting) =
