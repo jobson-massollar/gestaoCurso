@@ -17,6 +17,9 @@ sealed interface IDAO<E: Entity, T: EntityDTO<E>> {
         fun findInscricoesIrregulares(): List<AlunoDTO>
         fun findByDiario(diario: ItemDiario): AlunoDTO?
         fun findByInscricao(inscricao: Inscricao): AlunoDTO?
+        fun findByDisciplina(disciplina: Disciplina): List<AlunoDTO>
+        fun findPodemCursar(disciplina: Disciplina): List<AlunoDTO>
+        fun findBySituacaoInscricao(disciplina: Disciplina, situacao: Int): List<AlunoDTO>
     }
 
     interface IItemHistoricoDAO: IDAO<ItemHistorico, ItemHistoricoDTO> {

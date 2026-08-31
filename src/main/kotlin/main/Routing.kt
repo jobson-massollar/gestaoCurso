@@ -18,5 +18,6 @@ fun Application.configureRouting() {
         situacaoIrregularRoutes()
         turmaRoutes()
         diarioRoutes()
+        disciplinaRoutes()
     }
 }

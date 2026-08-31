@@ -1,5 +1,6 @@
 package model
 
+
 class Disciplina private constructor(val versao: String,
                                      val codigo: String,
                                      val nome: String,
@@ -9,10 +10,24 @@ class Disciplina private constructor(val versao: String,
                                      val tipo: String,
                                      val inscritos: Int): Entity() {
 
-    private val cacheItensDiario = mutableMapOf<String, List<ItemDiario>>()
+    // private val cacheItensDiario = mutableMapOf<String, List<ItemDiario>>()
+
+    val isObrigatoria: Boolean = tipo == "Obrigatória";
 
     val preRequisitos by lazy {
         RepositoryFactory.get(DisciplinaRepository::class).findPreRequisitos(this)
+    }
+
+    val matriculadosCurso by lazy {
+        RepositoryFactory.get(AlunoRepository::class).findByDisciplina(this)
+    }
+
+    val podemCursar by lazy {
+        RepositoryFactory.get(AlunoRepository::class).findPodemCursar(this)
+    }
+
+    val recusadosFaltaVaga by lazy {
+        RepositoryFactory.get(AlunoRepository::class).findBySituacaoInscricao(this, FALTA_VAGA)
     }
 
 //    fun itensDiario(turma: String): List<ItemDiario> =

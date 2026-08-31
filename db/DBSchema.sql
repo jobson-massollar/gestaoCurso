@@ -318,6 +318,49 @@ from inscricoes
 group by codigo, nome, turma;
 
 /*----------------------------------------------------------------------------------
+ Matrículas de alunos e códigos de disciplinas que eles estão aptos a cursar 
+ (tem os pré-requisitos), mas não estão matriculados
+ ----------------------------------------------------------------------------------*/
+create or replace view vw_alunos_aptos_disciplinas as
+select T.matricula, T.codigo
+from (
+	select AD.matricula, AD.codigo,
+	count(CASE WHEN pr.codigo_pre_req is not null and ihpr.codigo IS NULL THEN 1 END) over (partition by AD.matricula, AD.codigo) as qtd_pendente
+	from (
+		select va.matricula, vd.codigo
+		from vw_alunos_ativos va
+		cross join vw_disciplinas vd
+		where va.versao = '2023/2' and vd.versao = '2023/2' and vd.tipo = 'Obrigatória'
+	) AD
+	left join (
+		select ih.matricula, ih.codigo
+		from itens_historico ih
+		where ih.ano > 2014 and ih.versao ='2023/2' and (ih.situacao = 1 or ih.situacao = 4 or ih.situacao = 7 or ih.situacao = 8 or ih.situacao = 11 or ih.situacao = 10)
+	) APR on AD.matricula = APR.matricula and AD.codigo = APR.codigo
+	left join pre_requisitos pr on pr.codigo = AD.codigo
+	left join itens_historico ihpr on ihpr.matricula = AD.matricula and ihpr.codigo = pr.codigo_pre_req  and ihpr.versao = '2023/2' and (ihpr.situacao = 1 or ihpr.situacao = 4 or ihpr.situacao = 7 or ihpr.situacao = 8 or ihpr.situacao = 11)
+	where APR.matricula is null
+) T
+where T.qtd_pendente = 0
+group by T.matricula, T.codigo;
+
+/*----------------------------------------------------------------------------------
+ Situação final das inscrições de alunos do BSI nas disciplinas do BSI
+ ----------------------------------------------------------------------------------*/
+create or replace view vw_situacao_final_inscricoes as
+select insc.*
+from(
+    select insc.matricula, insc.codigo, max(insc.dt_solicitacao + insc.hora_solicitacao) as dh_solicitacao
+    from inscricoes insc
+    inner join vw_disciplinas vd on vd.codigo = insc.codigo
+    where substring(insc.matricula, 6, 3) = '210'
+    group by insc.matricula, insc.nome_aluno, insc.codigo, insc.nome
+    order by insc.nome, insc.nome_aluno
+) T
+inner join inscricoes insc on insc.matricula  = T.matricula and insc.codigo = T.codigo and (insc.dt_solicitacao + insc.hora_solicitacao) = T.dh_solicitacao
+order by insc.nome, insc.nome_aluno
+
+/*----------------------------------------------------------------------------------
   Complementa os dados vindos da importação, calculando novos campos para facilitar
   o processamento e evitar a criação de muitas views
  ----------------------------------------------------------------------------------*/

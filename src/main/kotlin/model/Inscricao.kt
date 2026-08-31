@@ -3,6 +3,14 @@ package model
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
+const val ACEITA = 2
+const val MATRICULA_CANCELADA = 3
+const val FALTA_PRE_REQ = 4
+const val JA_MATRICULADO = 7
+const val FALTA_VAGA = 9
+const val TRANCAMENTO_TOTAL = 15
+const val SOLICITACAO_CANCELADA = 99
+
 class Inscricao private constructor(val matricula: String,
                                     val nomeAluno: String,
                                     val codigo: String,

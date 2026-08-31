@@ -1,6 +1,7 @@
 package adapter.infrastructure.exposed
 
 import model.AlunoDTO
+import model.Disciplina
 import model.Inscricao
 import model.ItemDiario
 import org.jetbrains.exposed.v1.core.JoinType
@@ -140,6 +141,48 @@ class AlunoExposedDAO: IAlunoDAO {
                 .map {
                     createDTO(AlunosAtivos, it)
                 }.firstOrNull()
+        }
+
+    override fun findByDisciplina(disciplina: Disciplina): List<AlunoDTO> =
+        transaction {
+            AlunosAtivos
+                .join(ItensDiario, JoinType.INNER) {
+                    AlunosAtivos.matricula eq ItensDiario.matricula
+                }
+                .select(AlunosAtivos.columns)
+                .where { ItensDiario.codigo eq disciplina.codigo }
+                .map {
+                    createDTO(AlunosAtivos, it)
+                }.toList()
+        }
+
+    override fun findPodemCursar(disciplina: Disciplina): List<AlunoDTO> =
+        transaction {
+            AlunosAtivos
+                .join(AlunosAptosDisciplinas, JoinType.INNER) {
+                    AlunosAtivos.matricula eq AlunosAptosDisciplinas.matricula
+                }
+                .select(AlunosAtivos.columns)
+                .where { AlunosAptosDisciplinas.codigo eq disciplina.codigo }
+                .map {
+                    createDTO(AlunosAtivos, it)
+                }.toList()
+        }
+
+    override fun findBySituacaoInscricao(disciplina: Disciplina, situacao: Int): List<AlunoDTO> =
+        transaction {
+            AlunosAtivos
+                .join(SituacaoFinalInscricoes, JoinType.INNER) {
+                    AlunosAtivos.matricula eq SituacaoFinalInscricoes.matricula
+                }
+                .select(AlunosAtivos.columns)
+                .where {
+                    (SituacaoFinalInscricoes.codigo eq disciplina.codigo) and
+                    (SituacaoFinalInscricoes.situacao eq situacao)
+                }
+                .map {
+                    createDTO(AlunosAtivos, it)
+                }.toList()
         }
 
     private fun findWithSearch(table: AlunosBase, search: String): List<AlunoDTO> {

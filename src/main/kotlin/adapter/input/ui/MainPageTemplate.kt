@@ -3,6 +3,7 @@ package adapter.input.ui
 import adapter.input.rest.ALUNOS_COLACAO_ROUTE
 import adapter.input.rest.ALUNOS_EXTENSAO_ROUTE
 import adapter.input.rest.ALUNOS_ROUTE
+import adapter.input.rest.DISCIPLINA_ROUTE
 import adapter.input.rest.INSCRICOES_IRREGULARES_ROUTE
 import adapter.input.rest.INSCRICOES_ROUTE
 import adapter.input.rest.SITUACAO_IRREGULAR_ROUTE
@@ -93,11 +94,11 @@ class PageBodyTemplate(private val version: String, private val ultimaImportacao
                         li {
                             mainMenuItem(TURMAS_ROUTE, "Turmas e Diários de Classe")
                         }
+//                        li {
+//                            mainMenuItem("$DISCIPLINA_ROUTE/2008-1", "Disciplinas 2008/1")
+//                        }
                         li {
-                            mainMenuItem(TURMAS_ROUTE, "Disciplinas 2008/1")
-                        }
-                        li {
-                            mainMenuItem(TURMAS_ROUTE, "Disciplinas 2023/2")
+                            mainMenuItem("$DISCIPLINA_ROUTE/2023-2", "Disciplinas Obrigatórias 2023/2")
                         }
                         li {
                             a {
