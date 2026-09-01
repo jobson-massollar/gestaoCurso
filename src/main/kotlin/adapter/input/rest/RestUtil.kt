@@ -4,6 +4,7 @@ import services.application.AlunoFilter
 import services.application.AlunoSorting
 import services.application.DisciplinaSorting
 import services.application.InscricaoSorting
+import services.application.TotalizacaoInscricaoSorting
 
 const val ALUNO_SORTING_MATRICULA_ASC = "matricula"
 const val ALUNO_SORTING_MATRICULA_DESC = "-matricula"
@@ -37,17 +38,31 @@ const val INSCRICAO_SORTING_ACEITOS_DESC = "-aceitos"
 const val INSCRICAO_SORTING_VAGAS_ASC = "vagas"
 const val INSCRICAO_SORTING_VAGAS_DESC = "-vagas"
 
-fun getInscricaoSortingByValue(value: String) =
+fun getTotalizacaoInscricaoSortingByValue(value: String) =
     when (value) {
-        INSCRICAO_SORTING_DISCIPLINA_ASC -> InscricaoSorting.DISCIPLINA_ASCENDING
-        INSCRICAO_SORTING_DISCIPLINA_DESC -> InscricaoSorting.DISCIPLINA_DESCENDING
-        INSCRICAO_SORTING_SOLICITADOS_ASC -> InscricaoSorting.SOLICITADOS_ASCENDING
-        INSCRICAO_SORTING_SOLICITADOS_DESC -> InscricaoSorting.SOLICITADOS_DESCENDING
-        INSCRICAO_SORTING_ACEITOS_ASC -> InscricaoSorting.ACEITOS_ASCENDING
-        INSCRICAO_SORTING_ACEITOS_DESC -> InscricaoSorting.ACEITOS_DESCENDING
-        INSCRICAO_SORTING_VAGAS_ASC -> InscricaoSorting.VAGAS_ASCENDING
-        INSCRICAO_SORTING_VAGAS_DESC -> InscricaoSorting.VAGAS_DESCENDING
-        else -> InscricaoSorting.DISCIPLINA_ASCENDING
+        INSCRICAO_SORTING_DISCIPLINA_ASC -> TotalizacaoInscricaoSorting.DISCIPLINA_ASCENDING
+        INSCRICAO_SORTING_DISCIPLINA_DESC -> TotalizacaoInscricaoSorting.DISCIPLINA_DESCENDING
+        INSCRICAO_SORTING_SOLICITADOS_ASC -> TotalizacaoInscricaoSorting.SOLICITADOS_ASCENDING
+        INSCRICAO_SORTING_SOLICITADOS_DESC -> TotalizacaoInscricaoSorting.SOLICITADOS_DESCENDING
+        INSCRICAO_SORTING_ACEITOS_ASC -> TotalizacaoInscricaoSorting.ACEITOS_ASCENDING
+        INSCRICAO_SORTING_ACEITOS_DESC -> TotalizacaoInscricaoSorting.ACEITOS_DESCENDING
+        INSCRICAO_SORTING_VAGAS_ASC -> TotalizacaoInscricaoSorting.VAGAS_ASCENDING
+        INSCRICAO_SORTING_VAGAS_DESC -> TotalizacaoInscricaoSorting.VAGAS_DESCENDING
+        else -> TotalizacaoInscricaoSorting.DISCIPLINA_ASCENDING
+    }
+
+const val INSCRICAO_SORTING_NOME_ASC = "nome"
+const val INSCRICAO_SORTING_NOME_DESC = "-nome"
+const val INSCRICAO_SORTING_PRIORIDADE_ASC = "prioridade"
+const val INSCRICAO_SORTING_PRIORIDADE_DESC = "-prioridade"
+
+fun getInscricaoSortingByValue(value: String) =
+    when(value) {
+        INSCRICAO_SORTING_NOME_ASC -> InscricaoSorting.NOME_ASCENDING
+        INSCRICAO_SORTING_NOME_DESC -> InscricaoSorting.NOME_DESCENDING
+        INSCRICAO_SORTING_PRIORIDADE_ASC -> InscricaoSorting.PRIORIDADE_ASCENDING
+        INSCRICAO_SORTING_PRIORIDADE_DESC -> InscricaoSorting.PRIORIDADE_DESCENDING
+        else -> InscricaoSorting.NOME_ASCENDING
     }
 
 const val DISCIPLINA_SORTING_NOME_ASC = "nome"

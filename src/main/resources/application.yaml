@@ -9,7 +9,7 @@ ktor:
       - main.RoutingKt.configureRouting
       - main.AppKt.configureApp
 app:
-  version: "1.0.3"
+  version: "1.0.4"
 postgres:
   url: "$DB_URL:jdbc:postgresql://localhost:5432/BSI"
   user: postgres

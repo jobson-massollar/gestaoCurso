@@ -16,6 +16,7 @@ class Inscricao private constructor(val matricula: String,
                                     val codigo: String,
                                     val nome: String,
                                     val turma: String,
+                                    val prioridade: Int,
                                     val situacao: Int,
                                     val descricao: String,
                                     val ano: Int,
@@ -37,7 +38,7 @@ class Inscricao private constructor(val matricula: String,
     override fun hashCode() = (matricula + codigo).hashCode()
 
     companion object {
-        fun of(matricula: String, nomeAluno: String, codigo: String, nome: String, turma: String, situacao: Int, descricao: String, ano: Int, periodo: Int, dataSolicitacao: LocalDate, horaSolicitacao: LocalTime, dataProcessaento: LocalDate?) =
-            Inscricao(matricula, nomeAluno, codigo, nome, turma, situacao, descricao, ano, periodo, dataSolicitacao, horaSolicitacao, dataProcessaento)
+        fun of(matricula: String, nomeAluno: String, codigo: String, nome: String, turma: String, prioridade: Int, situacao: Int, descricao: String, ano: Int, periodo: Int, dataSolicitacao: LocalDate, horaSolicitacao: LocalTime, dataProcessaento: LocalDate?) =
+            Inscricao(matricula, nomeAluno, codigo, nome, turma, prioridade, situacao, descricao, ano, periodo, dataSolicitacao, horaSolicitacao, dataProcessaento)
     }
 }

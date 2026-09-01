@@ -11,6 +11,7 @@ abstract class InscricoesBase(name: String): Table(name) {
     val codigo = varchar("codigo", 10)
     val nome = varchar("nome", 100)
     val turma = varchar("turma", 10)
+    val prioridade = integer("prioridade")
     val situacao = integer("situacao")
     val descricao = varchar("descricao", 50)
     val ano = integer("ano")

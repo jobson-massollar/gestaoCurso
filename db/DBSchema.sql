@@ -1,6 +1,8 @@
 /*----------------------------------------------------------------------------------
  Exclusão das views na ordem correta
  ----------------------------------------------------------------------------------*/
+drop view if exists vw_alunos_aptos_disciplinas;
+drop view if exists vw_situacao_final_inscricoes;
 drop view if exists vw_obrigatorias_faltantes;
 drop view if exists vw_disciplinas_cursadas;
 drop view if exists vw_alunos_ativos;
@@ -10,7 +12,7 @@ drop view if exists vw_itens_diario;
 drop view if exists vw_disciplinas;
 drop view if exists vw_total_inscricoes;
 
-DROP TABLE departamentos;
+DROP TABLE IF EXISTS departamentos;
 
 CREATE TABLE departamentos (
     id uuid NOT NULL,
@@ -24,7 +26,7 @@ CREATE TABLE departamentos (
  Alunos
  ----------------------------------------------------------------------------------*/
 
-DROP TABLE alunos;
+DROP TABLE IF EXISTS alunos;
 
 CREATE TABLE alunos (
     id uuid NOT NULL,
@@ -53,7 +55,7 @@ CREATE TABLE alunos (
  Disciplinas
  ----------------------------------------------------------------------------------*/
 
-DROP TABLE disciplinas;
+DROP TABLE IF EXISTS disciplinas;
 
 CREATE TABLE disciplinas (
     id uuid NOT NULL,
@@ -76,7 +78,7 @@ CREATE INDEX disciplinas_versao_codigo_idx ON public.disciplinas USING btree (ve
  Pré-requisitos de disciplinas
  ----------------------------------------------------------------------------------*/
 
-DROP TABLE pre_requisitos;
+DROP TABLE IF EXISTS pre_requisitos;
 
 CREATE TABLE pre_requisitos (
     id uuid NOT NULL,
@@ -94,7 +96,7 @@ CREATE INDEX pre_requisitos_versao_codigo_pre_req_idx ON public.pre_requisitos U
  Itens do histórico
  ----------------------------------------------------------------------------------*/
 
-DROP TABLE itens_historico;
+DROP TABLE IF EXISTS itens_historico;
 
 CREATE TABLE itens_historico (
     id uuid NOT NULL,
@@ -121,7 +123,7 @@ CREATE INDEX itens_historico_matricula_idx ON public.itens_historico USING btree
  Extensões de prazo (NÃO é importado)
  ----------------------------------------------------------------------------------*/
 
-DROP TABLE extensoes_prazo;
+DROP TABLE IF EXISTS extensoes_prazo;
 
 CREATE TABLE extensoes_prazo (
     id uuid NOT NULL,
@@ -142,7 +144,7 @@ insert into extensoes_prazo (id, matricula, prazo) values('739e44fa-bc8c-4363-bf
  se cursadas pelo aluno) (NÃO é importado)
  ----------------------------------------------------------------------------------*/
 
-DROP TABLE disciplinas_equivalentes;
+DROP TABLE IF EXISTS disciplinas_equivalentes;
 
 CREATE TABLE disciplinas_equivalentes (
     id uuid NOT NULL,
@@ -163,7 +165,7 @@ insert into disciplinas_equivalentes(id, versao, codigo, nome) values('cbc50c52-
  Itens do diário
  ----------------------------------------------------------------------------------*/
 
-DROP TABLE itens_diario;
+DROP TABLE IF EXISTS itens_diario;
 
 CREATE TABLE itens_diario (
     id uuid NOT NULL,
@@ -184,7 +186,7 @@ CREATE INDEX itens_diario_versao_codigo_idx ON public.itens_diario USING btree (
  Inscrições em disciplinas
  ----------------------------------------------------------------------------------*/
 
-DROP TABLE inscricoes;
+DROP TABLE IF EXISTS inscricoes;
 
 CREATE TABLE inscricoes (
     id uuid NOT NULL,
@@ -193,6 +195,7 @@ CREATE TABLE inscricoes (
     codigo varchar(10) NOT NULL,
 	nome varchar(100) NOT NULL,
     turma varchar(10) NOT NULL,
+    prioridade int4 NOT NULL,
     situacao int4 NOT NULL,
     descricao varchar(50) NOT NULL,
     ano int4 NOT NULL,
@@ -210,11 +213,11 @@ CREATE INDEX inscricoes_situacao ON public.inscricoes USING btree (situacao);
  Log de importações
  ----------------------------------------------------------------------------------*/
 
-DROP TABLE log_importacoes;
+DROP TABLE IF EXISTS log_importacao;
 
-CREATE TABLE log_importacoes (
+CREATE TABLE log_importacao (
     id uuid NOT NULL,
-    dt_processamento date NOT NULL,
+    dt_processamento datetime NOT NULL,
     CONSTRAINT log_importacoes PRIMARY KEY (id)
 );
 
@@ -358,14 +361,14 @@ from(
     order by insc.nome, insc.nome_aluno
 ) T
 inner join inscricoes insc on insc.matricula  = T.matricula and insc.codigo = T.codigo and (insc.dt_solicitacao + insc.hora_solicitacao) = T.dh_solicitacao
-order by insc.nome, insc.nome_aluno
+order by insc.nome, insc.nome_aluno;
 
 /*----------------------------------------------------------------------------------
   Complementa os dados vindos da importação, calculando novos campos para facilitar
   o processamento e evitar a criação de muitas views
  ----------------------------------------------------------------------------------*/
 
-drop procedure if exists public.complementar_dados();
+drop procedure if exists complementar_dados();
 
 create or replace procedure complementar_dados()
  language plpgsql

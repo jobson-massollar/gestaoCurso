@@ -7,7 +7,6 @@ import adapter.input.ui.tableInscricoesDisciplina
 import adapter.input.ui.tableInscricoesDisciplinaBSI
 import adapter.input.ui.tableInscricoesIrregulares
 import io.ktor.http.*
-import io.ktor.server.html.respondHtml
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.datetime.format
@@ -71,6 +70,7 @@ fun Route.inscricoesRoutes() {
     get("$INSCRICOES_ROUTE/{codigo}/{turma}") {
         val codigoDisciplina = call.parameters["codigo"]?:""
         val codigoTurma = call.parameters["turma"]?:""
+        val sorting = call.request.queryParameters["sort"]?: INSCRICAO_SORTING_NOME_ASC
 
         val turma = RepositoryFactory.get(TurmaRepository::class).findByCode(codigoTurma)
 
@@ -80,17 +80,20 @@ fun Route.inscricoesRoutes() {
         if (turma != null) {
             val disciplina = turma.getDisciplina(codigoDisciplina) ?: return@get call.respondBadRequest()
 
-            val inscricoes = turma.inscricoes(disciplina).sortedBy { it.nomeAluno }
+            val inscricoes = turma.inscricoes(disciplina)
+                .sortedWith(getInscricaoSortingByValue(sorting).comparator)
 
             call.respondHTML(status = HttpStatusCode.OK) {
-                tableInscricoesDisciplinaBSI(inscricoes, turma, disciplina)
+                tableInscricoesDisciplinaBSI(inscricoes, turma, disciplina,sorting)
             }
         }
         else {
-            val inscricoes = RepositoryFactory.get(InscricaoRepository::class).findByCodeTurmaDisciplina(codigoTurma, codigoDisciplina)
+            val inscricoes = RepositoryFactory.get(InscricaoRepository::class)
+                .findByCodeTurmaDisciplina(codigoTurma, codigoDisciplina)
+                .sortedWith(getInscricaoSortingByValue(sorting).comparator)
 
             call.respondHTML(status = HttpStatusCode.OK) {
-                tableInscricoesDisciplina(inscricoes, codigoTurma, codigoDisciplina)
+                tableInscricoesDisciplina(inscricoes, codigoTurma, codigoDisciplina, sorting)
             }
         }
     }
@@ -117,7 +120,7 @@ fun Route.inscricoesRoutes() {
 }
 
 private fun findTotalizacaoInscricoes(sorting: String) : List<TotalizacaoInscricao> {
-    val comparator = getInscricaoSortingByValue(sorting).comparator
+    val comparator = getTotalizacaoInscricaoSortingByValue(sorting).comparator
 
     return RepositoryFactory.get(TotalizacaoInscricaoRepository::class).findTotalizacoes().sortedWith(comparator)
 }

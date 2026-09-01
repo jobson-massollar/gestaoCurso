@@ -48,6 +48,7 @@ class InscricaoExposedDAO: IDAO.IInscricaoDAO {
             codigo = row[Inscricoes.codigo],
             nome = row[Inscricoes.nome],
             turma = row[Inscricoes.turma],
+            prioridade = row[Inscricoes.prioridade],
             situacao = row[Inscricoes.situacao],
             descricao = row[Inscricoes.descricao],
             ano = row[Inscricoes.ano],

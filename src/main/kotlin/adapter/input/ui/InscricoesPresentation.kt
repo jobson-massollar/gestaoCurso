@@ -1,5 +1,8 @@
 package adapter.input.ui
 
+import adapter.input.rest.DISCIPLINA_ROUTE
+import adapter.input.rest.DISCIPLINA_SORTING_NOME_ASC
+import adapter.input.rest.DISCIPLINA_SORTING_NOME_DESC
 import adapter.input.rest.DOWNLOAD_INSCRICOES_IRREGULARES_ROUTE
 import adapter.input.rest.DOWNLOAD_INSCRICOES_ROUTE
 import adapter.input.rest.HISTORICO_ROUTE
@@ -7,6 +10,10 @@ import adapter.input.rest.INSCRICAO_SORTING_ACEITOS_ASC
 import adapter.input.rest.INSCRICAO_SORTING_ACEITOS_DESC
 import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_ASC
 import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_DESC
+import adapter.input.rest.INSCRICAO_SORTING_NOME_ASC
+import adapter.input.rest.INSCRICAO_SORTING_NOME_DESC
+import adapter.input.rest.INSCRICAO_SORTING_PRIORIDADE_ASC
+import adapter.input.rest.INSCRICAO_SORTING_PRIORIDADE_DESC
 import adapter.input.rest.INSCRICAO_SORTING_SOLICITADOS_ASC
 import adapter.input.rest.INSCRICAO_SORTING_SOLICITADOS_DESC
 import adapter.input.rest.INSCRICAO_SORTING_VAGAS_ASC
@@ -57,7 +64,7 @@ fun FlowContent.tableTotalizacaoInscricoes(totalizacoes: List<TotalizacaoInscric
                                     INSCRICAO_SORTING_DISCIPLINA_DESC
                                 )
                             }
-                            th(classes = "text-right") {
+                            th(classes = "text-center") {
                                 +"Solicitadas"
                                 sortingButtons(
                                     INSCRICOES_ROUTE,
@@ -66,7 +73,7 @@ fun FlowContent.tableTotalizacaoInscricoes(totalizacoes: List<TotalizacaoInscric
                                     INSCRICAO_SORTING_SOLICITADOS_DESC
                                 )
                             }
-                            th(classes = "text-right") {
+                            th {
                                 +"Aceitas"
                                 sortingButtons(
                                     INSCRICOES_ROUTE,
@@ -75,7 +82,7 @@ fun FlowContent.tableTotalizacaoInscricoes(totalizacoes: List<TotalizacaoInscric
                                     INSCRICAO_SORTING_ACEITOS_DESC
                                 )
                             }
-                            th(classes = "text-right") {
+                            th {
                                 +"Falta de Vagas"
                                 sortingButtons(
                                     INSCRICOES_ROUTE,
@@ -84,8 +91,8 @@ fun FlowContent.tableTotalizacaoInscricoes(totalizacoes: List<TotalizacaoInscric
                                     INSCRICAO_SORTING_VAGAS_DESC
                                 )
                             }
-                            th(classes = "text-right") { +"Falta de Pré-req" }
-                            th(classes = "text-right") { +"Canceladas" }
+                            th { +"Falta de Pré-req" }
+                            th { +"Canceladas" }
                             th { +" " }
                         }
                     }
@@ -95,11 +102,11 @@ fun FlowContent.tableTotalizacaoInscricoes(totalizacoes: List<TotalizacaoInscric
                                 td(classes = "text-center") { +disciplina.turma }
                                 td(classes = "text-center") { +disciplina.codigo }
                                 td { +disciplina.nome }
-                                td(classes = "text-right") { +disciplina.solicitados.toString() }
-                                td(classes = "text-right") { +disciplina.aceitos.toString() }
-                                td(classes = "text-right") { +disciplina.faltaVagas.toString() }
-                                td(classes = "text-right") { +disciplina.faltaPreRequisito.toString() }
-                                td(classes = "text-right") { +disciplina.cancelados.toString() }
+                                td(classes = "text-center") { +disciplina.solicitados.toString() }
+                                td(classes = "text-center") { +disciplina.aceitos.toString() }
+                                td(classes = "text-center") { +disciplina.faltaVagas.toString() }
+                                td(classes = "text-center") { +disciplina.faltaPreRequisito.toString() }
+                                td(classes = "text-center") { +disciplina.cancelados.toString() }
                                 td {
                                     smallButton("Alunos",
                                         "$INSCRICOES_ROUTE/${disciplina.codigo}/${disciplina.turma}",
@@ -114,71 +121,97 @@ fun FlowContent.tableTotalizacaoInscricoes(totalizacoes: List<TotalizacaoInscric
     }
 }
 
-fun FlowContent.tableInscricoesDisciplinaBSI(inscricoes: List<Inscricao>, turma: Turma, disciplina: Disciplina) {
+fun FlowContent.tableInscricoesDisciplinaBSI(inscricoes: List<Inscricao>, turma: Turma, disciplina: Disciplina, currentSorting: String) {
     title("Inscrições - ${disciplina.codigo} - ${disciplina.nome} (${turma.codigo})", backButton = true) {
-        tableInscricoes(inscricoes)
+        tableInscricoes(inscricoes, turma.codigo, disciplina.codigo, currentSorting)
     }
 }
 
-fun FlowContent.tableInscricoesDisciplina(inscricoes: List<Inscricao>, codigoTurma: String, codigoDisciplina: String) {
-    title("Inscrições - ${codigoDisciplina} - ${inscricoes[0].nome} (${codigoTurma})", backButton = true) {
-        tableInscricoes(inscricoes)
+fun FlowContent.tableInscricoesDisciplina(inscricoes: List<Inscricao>, codigoTurma: String, codigoDisciplina: String, currentSorting: String) {
+    title("Inscrições - $codigoDisciplina - ${inscricoes[0].nome} (${codigoTurma})", backButton = true) {
+        tableInscricoes(inscricoes, codigoTurma, codigoDisciplina, currentSorting)
     }
 }
 
-private fun FlowContent.tableInscricoes(inscricoes: List<Inscricao>) {
+private fun FlowContent.tableInscricoes(inscricoes: List<Inscricao>, codigoTurma: String, codigoDisciplina: String, currentSorting: String) {
     if (inscricoes.isEmpty()) {
         p(classes = "text-base") { +"Nenhuma inscrição foi encontrada!" }
         return
     }
 
-    div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
-        table(classes = "table table-zebra table-sm") {
-            thead {
-                tr(classes = "bg-base-300") {
-                    th(classes = "text-center") { +"#" }
-                    th(classes = "text-center") { +"Matrícula" }
-                    th { +"Nome" }
-                    th(classes = "text-center") { +"Currículo" }
-                    th { +"E-mail" }
-                    th { +"Situação" }
-                    th(classes = "text-center") { +"Solicitação" }
-                    th(classes = "text-center") { +"Processamento" }
-                    th { +" " }
+    form {
+        name = INSCRICOES_FORM
+        hiddenInput {
+            name = "sort"
+            value = currentSorting
+        }
+
+        div(classes = "shadow-sm overflow-x-auto rounded-box border border-base-content/50 bg-base-100") {
+            table(classes = "table table-zebra table-sm") {
+                thead {
+                    tr(classes = "bg-base-300") {
+                        th(classes = "text-center") { +"#" }
+                        th(classes = "text-center") { +"Matrícula" }
+                        th {
+                            +"Nome"
+                            sortingButtons(
+                                "$INSCRICOES_ROUTE/$codigoDisciplina/$codigoTurma",
+                                INSCRICOES_FORM,
+                                INSCRICAO_SORTING_NOME_ASC,
+                                INSCRICAO_SORTING_NOME_DESC
+                            )
+                        }
+                        th(classes = "text-center") { +"Currículo" }
+                        th { +"E-mail" }
+                        th {
+                            +"Prioridade"
+                            sortingButtons(
+                                "$INSCRICOES_ROUTE/$codigoDisciplina/$codigoTurma",
+                                INSCRICOES_FORM,
+                                INSCRICAO_SORTING_PRIORIDADE_ASC,
+                                INSCRICAO_SORTING_PRIORIDADE_DESC
+                            )
+                        }
+                        th { +"Situação" }
+                        th(classes = "text-center") { +"Solicitação" }
+                        th(classes = "text-center") { +"Processamento" }
+                        th { +" " }
+                    }
                 }
-            }
-            tbody {
-                inscricoes.forEachIndexed { i, inscricao ->
-                    tr {
-                        td(classes = "text-center") { +(i + 1).toString() }
-                        td(classes = "text-center") { +inscricao.matricula }
-                        td { +inscricao.nomeAluno }
-                        td(classes = "text-center") { +(inscricao.aluno?.let { "${it.versao}" } ?: "-") }
-                        td { +(inscricao.aluno?.let { "${it.email}" } ?: "-") }
-                        td { +inscricao.descricao }
-                        td(classes = "text-center") {
-                            +"${dateFormat.format(inscricao.dataSolicitacao)} ${
-                                timeFormat.format(
-                                    inscricao.horaSolicitacao
+                tbody {
+                    inscricoes.forEachIndexed { i, inscricao ->
+                        tr {
+                            td(classes = "text-center") { +(i + 1).toString() }
+                            td(classes = "text-center") { +inscricao.matricula }
+                            td { +inscricao.nomeAluno }
+                            td(classes = "text-center") { +(inscricao.aluno?.let { "${it.versao}" } ?: "-") }
+                            td { +(inscricao.aluno?.let { "${it.email}" } ?: "-") }
+                            td(classes = "text-center") { +inscricao.prioridade.toString() }
+                            td { +inscricao.descricao }
+                            td(classes = "text-center") {
+                                +"${dateFormat.format(inscricao.dataSolicitacao)} ${
+                                    timeFormat.format(
+                                        inscricao.horaSolicitacao
+                                    )
+                                }"
+                            }
+                            td(classes = "text-center") {
+                                +(inscricao.dataProcessamento?.let { dateFormat.format(it) } ?: "")
+                            }
+                            td(classes = "gap-4") {
+                                smallButton(
+                                    "Painel",
+                                    "$PAINEL_ALUNO_ROUTE/${inscricao.matricula}",
+                                    "#main-container",
+                                    !inscricao.matricula.ehAlunoBSI
                                 )
-                            }"
-                        }
-                        td(classes = "text-center") {
-                            +(inscricao.dataProcessamento?.let { dateFormat.format(it) } ?: "")
-                        }
-                        td(classes = "gap-4") {
-                            smallButton(
-                                "Painel",
-                                "$PAINEL_ALUNO_ROUTE/${inscricao.matricula}",
-                                "#main-container",
-                                !inscricao.matricula.ehAlunoBSI
-                            )
-                            smallButton(
-                                "Histórico",
-                                "$HISTORICO_ROUTE/${inscricao.matricula}",
-                                "#main-container",
-                                !inscricao.matricula.ehAlunoBSI
-                            )
+                                smallButton(
+                                    "Histórico",
+                                    "$HISTORICO_ROUTE/${inscricao.matricula}",
+                                    "#main-container",
+                                    !inscricao.matricula.ehAlunoBSI
+                                )
+                            }
                         }
                     }
                 }
