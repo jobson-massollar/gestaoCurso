@@ -1,10 +1,6 @@
 package adapter.input.rest
 
-import services.application.AlunoFilter
-import services.application.AlunoSorting
-import services.application.DisciplinaSorting
-import services.application.InscricaoSorting
-import services.application.TotalizacaoInscricaoSorting
+import services.application.*
 
 const val ALUNO_SORTING_MATRICULA_ASC = "matricula"
 const val ALUNO_SORTING_MATRICULA_DESC = "-matricula"

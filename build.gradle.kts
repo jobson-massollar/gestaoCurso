@@ -1,5 +1,4 @@
 import org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier
-import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     application

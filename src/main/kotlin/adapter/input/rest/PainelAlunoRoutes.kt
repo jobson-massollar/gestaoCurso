@@ -2,7 +2,6 @@ package adapter.input.rest
 
 import adapter.input.ui.painelAluno
 import io.ktor.http.*
-import io.ktor.server.html.*
 import io.ktor.server.routing.*
 import kotlinx.html.h1
 import model.AlunoRepository

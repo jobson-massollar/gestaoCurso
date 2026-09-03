@@ -1,9 +1,8 @@
 package adapter.input.rest
 
-import adapter.input.ui.observacoes
 import adapter.input.ui.tableTurmas
 import io.ktor.http.*
-import io.ktor.server.response.respondText
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.datetime.format
 import main.collator

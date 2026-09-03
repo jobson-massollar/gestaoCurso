@@ -1,8 +1,8 @@
 package adapter.input.ui
 
 import adapter.input.rest.HISTORICO_ROUTE
-import adapter.input.rest.SituacaoIrregular
 import adapter.input.rest.PAINEL_ALUNO_ROUTE
+import adapter.input.rest.SituacaoIrregular
 import kotlinx.html.*
 import model.Aluno
 import model.trancados

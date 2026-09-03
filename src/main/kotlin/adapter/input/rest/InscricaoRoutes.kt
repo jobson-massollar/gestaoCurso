@@ -1,11 +1,6 @@
 package adapter.input.rest
 
-import adapter.input.ui.observacoes
-import adapter.input.ui.tableInscricoesAluno
-import adapter.input.ui.tableTotalizacaoInscricoes
-import adapter.input.ui.tableInscricoesDisciplina
-import adapter.input.ui.tableInscricoesDisciplinaBSI
-import adapter.input.ui.tableInscricoesIrregulares
+import adapter.input.ui.*
 import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -14,14 +9,7 @@ import kotlinx.html.h1
 import main.collator
 import main.currentDateTime
 import main.fileTimestampFormat
-import model.Aluno
-import model.AlunoRepository
-import model.InscricaoRepository
-import model.RepositoryFactory
-import model.TotalizacaoInscricao
-import model.TotalizacaoInscricaoRepository
-import model.TurmaRepository
-import model.trancados
+import model.*
 
 const val INSCRICOES_ROUTE = "/inscricoes"
 const val DOWNLOAD_INSCRICOES_ROUTE = "/inscricoes/download"

@@ -1,10 +1,9 @@
 package main
 
 import adapter.input.rest.respondHTML
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.Application
-import io.ktor.server.application.install
-import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.statuspages.*
 import kotlinx.html.h1
 
 fun Application.configureStatusPage() {

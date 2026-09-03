@@ -1,25 +1,7 @@
 package adapter.input.ui
 
-import adapter.input.rest.DISCIPLINA_ROUTE
-import adapter.input.rest.DISCIPLINA_SORTING_APTOS_ASC
-import adapter.input.rest.DISCIPLINA_SORTING_APTOS_DESC
-import adapter.input.rest.DISCIPLINA_SORTING_NOME_ASC
-import adapter.input.rest.DISCIPLINA_SORTING_NOME_DESC
-import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_ASC
-import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_DESC
-import adapter.input.rest.INSCRICOES_ROUTE
-import kotlinx.html.FlowContent
-import kotlinx.html.div
-import kotlinx.html.form
-import kotlinx.html.hiddenInput
-import kotlinx.html.p
-import kotlinx.html.span
-import kotlinx.html.table
-import kotlinx.html.tbody
-import kotlinx.html.td
-import kotlinx.html.th
-import kotlinx.html.thead
-import kotlinx.html.tr
+import adapter.input.rest.*
+import kotlinx.html.*
 import model.Disciplina
 
 const val DISCIPLINAS_FORM = "disciplinas"

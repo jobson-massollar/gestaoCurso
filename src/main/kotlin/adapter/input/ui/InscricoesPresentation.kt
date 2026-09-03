@@ -1,36 +1,10 @@
 package adapter.input.ui
 
-import adapter.input.rest.DISCIPLINA_ROUTE
-import adapter.input.rest.DISCIPLINA_SORTING_NOME_ASC
-import adapter.input.rest.DISCIPLINA_SORTING_NOME_DESC
-import adapter.input.rest.DOWNLOAD_INSCRICOES_IRREGULARES_ROUTE
-import adapter.input.rest.DOWNLOAD_INSCRICOES_ROUTE
-import adapter.input.rest.HISTORICO_ROUTE
-import adapter.input.rest.INSCRICAO_SORTING_ACEITOS_ASC
-import adapter.input.rest.INSCRICAO_SORTING_ACEITOS_DESC
-import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_ASC
-import adapter.input.rest.INSCRICAO_SORTING_DISCIPLINA_DESC
-import adapter.input.rest.INSCRICAO_SORTING_NOME_ASC
-import adapter.input.rest.INSCRICAO_SORTING_NOME_DESC
-import adapter.input.rest.INSCRICAO_SORTING_PRIORIDADE_ASC
-import adapter.input.rest.INSCRICAO_SORTING_PRIORIDADE_DESC
-import adapter.input.rest.INSCRICAO_SORTING_SOLICITADOS_ASC
-import adapter.input.rest.INSCRICAO_SORTING_SOLICITADOS_DESC
-import adapter.input.rest.INSCRICAO_SORTING_VAGAS_ASC
-import adapter.input.rest.INSCRICAO_SORTING_VAGAS_DESC
-import adapter.input.rest.INSCRICOES_ROUTE
-import adapter.input.rest.PAINEL_ALUNO_ROUTE
+import adapter.input.rest.*
 import kotlinx.html.*
 import main.dateFormat
 import main.timeFormat
-import model.Aluno
-import model.Disciplina
-import model.Grade
-import model.Inscricao
-import model.TotalizacaoInscricao
-import model.Turma
-import model.ehAlunoBSI
-import model.trancados
+import model.*
 
 const val INSCRICOES_FORM = "inscricoes"
 

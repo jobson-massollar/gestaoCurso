@@ -1,10 +1,9 @@
 package adapter.input.rest
 
 import adapter.input.ui.MainPageTemplate
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.html.respondHtmlTemplate
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.get
+import io.ktor.http.*
+import io.ktor.server.html.*
+import io.ktor.server.routing.*
 import model.LogImportacaoRepository
 import model.RepositoryFactory
 

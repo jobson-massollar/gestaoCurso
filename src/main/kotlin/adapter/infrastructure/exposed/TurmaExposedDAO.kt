@@ -1,7 +1,6 @@
 package adapter.infrastructure.exposed
 
 import model.DisciplinaDTO
-import model.Turma
 import model.TurmaDisciplinaDTO
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq

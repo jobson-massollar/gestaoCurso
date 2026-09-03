@@ -2,26 +2,6 @@ package model
 
 import model.Grade.Grade2023
 
-const val APROVADO = 1
-const val REPROVADO_POR_NOTA = 2
-const val REPROVADO_POR_FALTA = 3
-const val DISPENSA_COM_NOTA = 4
-const val TRANCAMENTO = 5
-const val SEM_NOTA = 6
-const val DISPENSA_SEM_NOTA = 7
-const val APROVADO_SEM_NOTA = 8
-const val REPROVADO_SEM_NOTA = 9
-const val MATRICULADO = 10
-const val APROVEITAMENTO = 11
-const val TRANCAMENTO_GERAL = 12
-
-const val OBRIGATORIA = "Obrigatória"
-const val OPTATIVA = "Optativa"
-const val COMPLEMENTAR = "Complementar"
-const val ELETIVA = "Eletiva"
-const val ANTIGA = "Antiga"
-const val OUTRA = "Outra"
-
 class ItemHistorico private constructor(val matricula: String,
                                         val ano: Int,
                                         val periodo: Int,
@@ -29,24 +9,30 @@ class ItemHistorico private constructor(val matricula: String,
                                         val versao: String,
                                         val codigo: String,
                                         val nome: String,
-                                        val situacao: Int,
+                                        val situacao: StatusItemHistorico,
                                         val descricao: String,
                                         val nota: Float?,
                                         val creditos: Int,
                                         val horas: Int,
-                                        val tipo: String): Entity() {
+                                        val tipo: TipoDisciplina): Entity() {
 
-    val isAprovado = situacao == APROVADO || situacao == DISPENSA_SEM_NOTA || situacao == DISPENSA_COM_NOTA || situacao == APROVADO_SEM_NOTA || situacao == APROVEITAMENTO
-    val isReprovado = situacao == REPROVADO_POR_NOTA || situacao == REPROVADO_POR_FALTA || situacao == REPROVADO_SEM_NOTA
-    val isTrancamento = situacao == TRANCAMENTO_GERAL
-    val isMatriculado = situacao == MATRICULADO
+    val isAprovado = situacao == StatusItemHistorico.APROVADO ||
+                     situacao == StatusItemHistorico.DISPENSA_SEM_NOTA ||
+                     situacao == StatusItemHistorico.DISPENSA_COM_NOTA ||
+                     situacao == StatusItemHistorico.APROVADO_SEM_NOTA ||
+                     situacao == StatusItemHistorico.APROVEITAMENTO
+    val isReprovado = situacao ==  StatusItemHistorico.REPROVADO_POR_NOTA ||
+                      situacao ==  StatusItemHistorico.REPROVADO_POR_FALTA ||
+                      situacao ==  StatusItemHistorico.REPROVADO_SEM_NOTA
+    val isTrancamento = situacao ==  StatusItemHistorico.TRANCAMENTO_GERAL
+    val isMatriculado = situacao ==  StatusItemHistorico.MATRICULADO
 
     val disciplina by lazy {
         RepositoryFactory.get(DisciplinaRepository::class).findByItemHistorico(this);
     }
 
     companion object {
-        fun of (matricula: String, ano: Int, periodo: Int, descPeriodo: String, versao: String, codigo: String, nome: String, situacao: Int, descricao: String, nota: Float?, creditos: Int, horas: Int, tipo:String): ItemHistorico =
+        fun of (matricula: String, ano: Int, periodo: Int, descPeriodo: String, versao: String, codigo: String, nome: String, situacao:  StatusItemHistorico, descricao: String, nota: Float?, creditos: Int, horas: Int, tipo:TipoDisciplina): ItemHistorico =
             ItemHistorico(matricula, ano, periodo, descPeriodo, versao, codigo, nome, situacao, descricao, nota, creditos, horas, tipo)
     }
 
@@ -63,19 +49,19 @@ class ItemHistorico private constructor(val matricula: String,
 }
 
 val List<ItemHistorico>.obrigatorias: List<ItemHistorico>
-    get() = this.filter { it.tipo == OBRIGATORIA }
+    get() = this.filter { it.tipo == TipoDisciplina.OBRIGATORIA }
 
 val List<ItemHistorico>.optativas: List<ItemHistorico>
-    get() = this.filter { it.tipo == OPTATIVA }
+    get() = this.filter { it.tipo == TipoDisciplina.OPTATIVA }
 
 val List<ItemHistorico>.complementares: List<ItemHistorico>
-    get() = this.filter { it.tipo == COMPLEMENTAR }
+    get() = this.filter { it.tipo == TipoDisciplina.COMPLEMENTAR }
 
 val List<ItemHistorico>.eletivas: List<ItemHistorico>
-    get() = this.filter { it.tipo == ELETIVA }
+    get() = this.filter { it.tipo == TipoDisciplina.ELETIVA }
 
 val List<ItemHistorico>.eletivasAproveitadas: List<ItemHistorico>
-    get() = this.filter { it.tipo == ELETIVA }.sortedByDescending { it.horas }.take(2)
+    get() = this.filter { it.tipo == TipoDisciplina.ELETIVA }.sortedByDescending { it.horas }.take(2)
 
 val List<ItemHistorico>.horasEletivasAproveitadas: Int
     get() = minOf(this.sumOf { it.horas }, Grade2023.horasEletivas)

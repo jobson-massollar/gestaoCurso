@@ -1,14 +1,10 @@
 package adapter.input.rest
 
 import adapter.input.ui.tableObrigatorias
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
-import main.collator
+import io.ktor.http.*
+import io.ktor.server.routing.*
 import model.DisciplinaRepository
 import model.RepositoryFactory
-import kotlin.text.replace
 
 const val DISCIPLINA_ROUTE = "/disciplina"
 

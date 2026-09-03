@@ -1,22 +1,12 @@
 package adapter.input.ui
 
-import adapter.input.rest.ALUNOS_COLACAO_ROUTE
-import adapter.input.rest.ALUNOS_EXTENSAO_ROUTE
-import adapter.input.rest.ALUNOS_ROUTE
-import adapter.input.rest.DISCIPLINA_ROUTE
-import adapter.input.rest.INSCRICOES_IRREGULARES_ROUTE
-import adapter.input.rest.INSCRICOES_ROUTE
-import adapter.input.rest.SITUACAO_IRREGULAR_ROUTE
-import adapter.input.rest.TURMAS_ROUTE
+import adapter.input.rest.*
 import io.ktor.htmx.html.*
-import io.ktor.server.application.Application
-import io.ktor.server.engine.applicationEnvironment
 import io.ktor.server.html.*
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format
 import kotlinx.html.*
 import main.UITimestampFormat
-import main.fileTimestampFormat
 
 class MainPageTemplate(private val version: String, private val ultimaImportacao: LocalDateTime?): Template<HTML> {
 

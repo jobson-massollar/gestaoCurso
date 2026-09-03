@@ -3,15 +3,7 @@ package adapter.input.ui
 import adapter.input.rest.DOWNLOAD_DIARIO_ROUTE
 import adapter.input.rest.HISTORICO_ROUTE
 import adapter.input.rest.PAINEL_ALUNO_ROUTE
-import kotlinx.html.FlowContent
-import kotlinx.html.div
-import kotlinx.html.p
-import kotlinx.html.table
-import kotlinx.html.tbody
-import kotlinx.html.td
-import kotlinx.html.th
-import kotlinx.html.thead
-import kotlinx.html.tr
+import kotlinx.html.*
 import model.Disciplina
 import model.ItemDiario
 import model.Turma

@@ -2,9 +2,8 @@ package adapter.input.rest
 
 import adapter.input.ui.MainPageTemplate
 import io.ktor.http.*
-import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.*
 import io.ktor.server.html.*
-import io.ktor.server.routing.*
 import kotlinx.html.FlowContent
 import kotlinx.html.h1
 import model.LogImportacaoRepository

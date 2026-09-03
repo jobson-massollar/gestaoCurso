@@ -24,10 +24,10 @@ class ItemHistoricoDTO(id: Uuid?,
         versao,
         codigo,
         nome,
-        situacao,
+        StatusItemHistorico.fromCodigo(situacao),
         descricao,
         nota,
         creditos,
         horas,
-        tipo)
+        TipoDisciplina.fromDescricao(tipo))
 }
