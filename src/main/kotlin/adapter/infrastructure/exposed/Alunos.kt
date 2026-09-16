@@ -9,6 +9,7 @@ abstract class AlunosBase(name: String): Table(name) {
     val nome = varchar("nome", 100)
     val sexo = char("sexo")
     val dataNascimento = date("dt_nasc").nullable()
+    val cpf = varchar("cpf", 11).uniqueIndex()
     val versao = varchar("versao", 6)
     val ingresso = varchar("ingresso", 100)
     val logradouro = varchar("logradouro", 100)

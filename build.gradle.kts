@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "org.unirio.bsi.coordenacao"
-version = "1.0.4"
+version = "1.0.5"
 
 application {
     mainClass = "io.ktor.server.netty.EngineMain"

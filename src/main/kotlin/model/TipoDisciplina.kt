@@ -6,6 +6,9 @@ enum class TipoDisciplina(val descricao: String) {
     COMPLEMENTAR("Complementar"),
     ELETIVA("Eletiva"),
     ANTIGA("Antiga"),
+    EQUIVALENTE("Equivalente"),
+    TRANCAMENTO("Trancamento"),
+    COMPLEMENTAR_GRD("Disciplina Complementar de Graduação"),
     OUTRA("Outra");
 
     companion object {

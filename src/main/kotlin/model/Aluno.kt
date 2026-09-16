@@ -18,6 +18,7 @@ class Aluno private constructor(val matricula: String,
                                 val nome: String,
                                 val sexo: Char,
                                 val dataNascimento: LocalDate?,
+                                val cpf: String,
                                 val versao: String,
                                 val ingresso: String,
                                 val logradouro: String,
@@ -238,7 +239,7 @@ class Aluno private constructor(val matricula: String,
     override fun hashCode() = matricula.hashCode()
 
     companion object {
-        fun of(matricula: String, nome: String, sexo: Char, dataNascimento: LocalDate?, versao: String, ingresso: String, logradouro: String, numero: String, complemento: String, bairro: String, cidade: String, cep: String, telefone1: String, telefone2: String, email: String, evasao: String, dataEvasao: LocalDate?, trancamentos: Int, prazoExtensao: Int) =
-            Aluno(matricula, nome, sexo, dataNascimento, versao, ingresso, logradouro, numero, complemento, bairro, cidade, cep, telefone1, telefone2, email, evasao, dataEvasao, trancamentos, prazoExtensao)
+        fun of(matricula: String, nome: String, sexo: Char, dataNascimento: LocalDate?, cpf: String, versao: String, ingresso: String, logradouro: String, numero: String, complemento: String, bairro: String, cidade: String, cep: String, telefone1: String, telefone2: String, email: String, evasao: String, dataEvasao: LocalDate?, trancamentos: Int, prazoExtensao: Int) =
+            Aluno(matricula, nome, sexo, dataNascimento, cpf, versao, ingresso, logradouro, numero, complemento, bairro, cidade, cep, telefone1, telefone2, email, evasao, dataEvasao, trancamentos, prazoExtensao)
     }
 }

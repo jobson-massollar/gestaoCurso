@@ -13,6 +13,7 @@ import main.fileTimestampFormat
 import model.Aluno
 import model.AlunoRepository
 import model.RepositoryFactory
+import model.obrigatorias
 import services.application.AlunoFilter
 
 const val ALUNOS_ROUTE = "/alunos"
@@ -43,7 +44,7 @@ fun Routing.alunoRoutes() {
         }
 
         call.respondText(ContentType.Text.CSV, HttpStatusCode.OK) {
-            "Matricula;Nome;Versao;E-mail;Sexo;Data de nascimento;Trancamento;Prazo de Extensão;Ingresso;Evasão;Data de evasão;Logradouro;Numero;Complemento;Bairro;Cidade;CEP;Telefone1;Telefone2\n" +
+            "Matricula;Cpf;Nome;Versao;E-mail;Sexo;Data de nascimento;% curso;Trancamento;Prazo de Extensão;Ingresso;Evasão;Data de evasão;Logradouro;Numero;Complemento;Bairro;Cidade;CEP;Telefone1;Telefone2\n" +
             alunos.joinToString(separator = "\n") { it.toAlunoCsv() }
         }
     }
@@ -108,6 +109,6 @@ private fun findAlunosColacao() : List<Aluno> =
         .filter { it.estaFormado }
         .sortedBy { it.nome }
 
-private fun Aluno.toAlunoCsv() = "${matricula};${nome};${versao};${email};${sexo};${dataNascimento};${trancamentos};${prazoExtensao};${ingresso};${evasao};${dataEvasao?:""};${logradouro};${numero};${complemento};${bairro};${cidade};${cep};${telefone1};${telefone2}"
+private fun Aluno.toAlunoCsv() = "${matricula};${cpf};${nome};${versao};${email};${sexo};${dataNascimento};${itensAprovados.obrigatorias.sumOf { it.horas } * 100 / 3000};${trancamentos};${prazoExtensao};${ingresso};${evasao};${dataEvasao?:""};${logradouro};${numero};${complemento};${bairro};${cidade};${cep};${telefone1};${telefone2}"
 
 private fun Aluno.toExtensaoCsv() = "${matricula};${nome};${versao};${email};${periodoLimite};${ultimoPeriodoCursado.numero};${prazoExtensao}"

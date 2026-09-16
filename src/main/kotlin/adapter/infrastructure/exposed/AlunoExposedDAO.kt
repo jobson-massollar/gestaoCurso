@@ -198,6 +198,7 @@ class AlunoExposedDAO: IAlunoDAO {
         row[alunos.nome],
         row[alunos.sexo],
         row[alunos.dataNascimento],
+            row[alunos.cpf],
         row[alunos.versao],
         row[alunos.ingresso],
         row[alunos.logradouro],

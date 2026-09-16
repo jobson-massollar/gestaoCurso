@@ -34,6 +34,7 @@ CREATE TABLE alunos (
     nome varchar(100) NOT NULL,
     sexo bpchar(1) NOT NULL,
     dt_nasc date NULL,
+    cpf varchar(11) NOT NULL,
     versao varchar(6) NOT NULL,
     logradouro varchar(100) NOT NULL,
     numero varchar(10) NOT NULL,
@@ -43,7 +44,7 @@ CREATE TABLE alunos (
     cep varchar(10) NOT NULL,
     telefone1 varchar(20) NOT NULL,
     telefone2 varchar(20) NOT NULL,
-    email varchar(40) DEFAULT ''::character varying NOT NULL,
+    email varchar(40) NOT NULL,
     ingresso varchar(100) NOT NULL,
     evasao varchar(100) NOT NULL,
     dt_evasao date NULL,
@@ -217,7 +218,7 @@ DROP TABLE IF EXISTS log_importacao;
 
 CREATE TABLE log_importacao (
     id uuid NOT NULL,
-    dt_processamento datetime NOT NULL,
+    dt_processamento timestamp NOT NULL,
     CONSTRAINT log_importacoes PRIMARY KEY (id)
 );
 
