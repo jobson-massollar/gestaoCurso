@@ -41,7 +41,7 @@ private fun FlowContent.tableDisciplinas(title: String, historico: List<ItemHist
                             td(classes = "text-center") { +item.codigo }
                             td { +item.nome }
                             td(classes = "text-center") { +"${item.horas}" }
-                            td(classes = "text-center") { +item.descricao.take(3) }
+                            td { +item.situacao.descricao }
                             td(classes = "text-right") { +(item.nota?.format(2) ?: "") }
                         }
                     }

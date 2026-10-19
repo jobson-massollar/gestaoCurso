@@ -50,15 +50,17 @@ fun Routing.alunoRoutes() {
     }
 
     get(ALUNOS_EXTENSAO_ROUTE) {
-        val alunos = findAlunosExtensao()
+        val periodo = call.queryParameters["semester"]?.toInt() ?: 11;
+        val alunos = findAlunosExtensao(periodo)
 
         call.respondHTML(status = HttpStatusCode.OK) {
-            tableExtensao(alunos)
+            tableExtensao(alunos, periodo)
         }
     }
 
     get(DOWNLOAD_ALUNOS_EXTENSAO_ROUTE) {
-        val alunos = findAlunosExtensao()
+        val periodo = call.queryParameters["semester"]?.toInt() ?: 11;
+        val alunos = findAlunosExtensao(periodo)
 
         call.response.headers.apply {
             append("Content-Disposition", "attachment; filename=\"alunos para extensao ${currentDateTime().format(fileTimestampFormat)}.csv\"")
@@ -91,10 +93,10 @@ private fun findAlunos(sorting: String, filter: String, search: String): List<Al
         .findByFilter(getAlunoFilterByValue(filter), search)
         .sortedWith(getAlunoSortingByValue(sorting).comparator)
 
-private fun findAlunosExtensao(): List<Aluno> =
+private fun findAlunosExtensao(periodo: Int): List<Aluno> =
     RepositoryFactory.get(AlunoRepository::class)
         .findByFilter(AlunoFilter.ACTIVE)
-        .filter { ! it.estaFormado && it.ultimoPeriodoCursado.numero >= 11 }
+        .filter { ! it.estaFormado && it.ultimoPeriodoCursado.numero >= periodo }
         .sortedWith { a1, a2 ->
             if (a2.ultimoPeriodoCursado.numero != a1.ultimoPeriodoCursado.numero)
                 a2.ultimoPeriodoCursado.numero - a1.ultimoPeriodoCursado.numero

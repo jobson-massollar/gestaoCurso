@@ -138,7 +138,8 @@ insert into extensoes_prazo (id, matricula, prazo) values('6a83ac01-01ee-4b72-9c
 insert into extensoes_prazo (id, matricula, prazo) values('90c75518-8892-456d-8bee-879a95c3b1f4', '20171210008', 2);
 insert into extensoes_prazo (id, matricula, prazo) values('6036be95-6f8c-4125-baf8-f5bfdf153f54', '20151210023', 1);
 insert into extensoes_prazo (id, matricula, prazo) values('739e44fa-bc8c-4363-bf63-a0e37e351502', '20151210018', 2);
-
+insert into extensoes_prazo (id, matricula, prazo) values('05cbb9b4-7611-4f01-944a-5c9db42f04ef', '20181210031', 2);
+insert into extensoes_prazo (id, matricula, prazo) values('ac800a58-4ecd-4af4-aa9f-5ab1e39a1aa3', '20162210002', 2);
 
 /*----------------------------------------------------------------------------------
  Disciplinas que possuem equivalentes na grade do BSI (não contam na carga horária
