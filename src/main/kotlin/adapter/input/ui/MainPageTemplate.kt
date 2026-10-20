@@ -7,6 +7,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format
 import kotlinx.html.*
 import main.UITimestampFormat
+import model.PeriodoAtual
 
 class MainPageTemplate(private val version: String, private val ultimaImportacao: LocalDateTime?): Template<HTML> {
 
@@ -113,6 +114,14 @@ class PageBodyTemplate(private val version: String, private val ultimaImportacao
                             }
                         }
                     }
+                }
+                div(classes = "flex items-center") {
+                    button(classes="btn btn-xs ml-8") { unsafe { +MINUS_SVG } }
+                    span(classes="ml-2 text-xl") {
+                        +PeriodoAtual.periodo.toString()
+                    }
+                    button(classes="btn btn-xs ml-2") { unsafe { +PLUS_SVG } }
+
                 }
             }
 

@@ -25,7 +25,7 @@ fun FlowContent.tableExtensao(alunos: List<Aluno>, periodo: Int) {
         form {
             div(classes = "mb-4 shadow-sm rounded-box border border-base-content/50 bg-base-200 flex items-center") {
                 label(classes = "ml-4 mt-2 mb-2") { +"Períodos:" }
-                input(classes = "input validator w-15 ml-2 mt-2 mb-2") {
+                input(classes = "validator w-15 ml-2 mt-2 mb-2") {
                     attributes.hx {
                         get = ALUNOS_EXTENSAO_ROUTE
                         target = "#main-container"
