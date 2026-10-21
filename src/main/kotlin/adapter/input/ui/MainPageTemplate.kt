@@ -116,11 +116,17 @@ class PageBodyTemplate(private val version: String, private val ultimaImportacao
                     }
                 }
                 div(classes = "flex items-center") {
-                    button(classes="btn btn-xs ml-8") { unsafe { +MINUS_SVG } }
+                    a(classes="btn btn-xs ml-8") {
+                        href = "/minus"
+                        unsafe { +MINUS_SVG }
+                    }
                     span(classes="ml-2 text-xl") {
                         +PeriodoAtual.periodo.toString()
                     }
-                    button(classes="btn btn-xs ml-2") { unsafe { +PLUS_SVG } }
+                    a(classes="btn btn-xs ml-2") {
+                        href = "/plus"
+                        unsafe { +PLUS_SVG }
+                    }
 
                 }
             }

@@ -36,3 +36,21 @@ suspend private fun ApplicationCall.respond(status: HttpStatusCode, fragment: Fl
         }
     }
 }
+
+/** SOLUÇÃO
+
+suspend fun <T : Template<FlowContent>> ApplicationCall.respondHtmlPartialTemplate(
+    template: T,
+    status: HttpStatusCode = HttpStatusCode.OK,
+    body: T.() -> Unit = {},
+) = respondHtmlPartial(status) {
+    DIV(emptyMap(), this).apply(template, body)
+}
+
+// uso
+get("/fragment") {
+    call.respondHtmlPartialTemplate(PageBodyTemplate()) {
+        // placeholders
+    }
+}
+ **************************/

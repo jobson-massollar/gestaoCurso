@@ -4,8 +4,10 @@ import adapter.input.ui.tableAlunos
 import adapter.input.ui.tableColacao
 import adapter.input.ui.tableExtensao
 import io.ktor.http.*
+import io.ktor.server.html.respondHtmlPartial
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.util.getValue
 import kotlinx.datetime.format
 import main.appLocale
 import main.currentDateTime
